@@ -1,8 +1,8 @@
 <template>
   <div class="my-3">
-    <b-card :header="resource">
+    
       <b-data-table :resource="resource"></b-data-table>
-    </b-card>
+    
   </div>
 </template>
 

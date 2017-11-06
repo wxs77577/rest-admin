@@ -1,27 +1,40 @@
 <template>
-  <div class="data-table">
-    <b-table 
-    :sort-by.sync="sortBy"
-    :sort-desc.sync="sortDesc"
-    :no-local-sorting="true"
-    :fields="fields" 
-    :items="items"
-    >
-      <span v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
-        <template v-if="field.type == 'image'">
-          <img :src="row.value" />
+  <b-card :header="resource">
+    <div class="data-table">
+      <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
+        <span v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
+          
+          <template v-if="['image'].includes(field.type)">
+            <img :src="row.value" />
+          </template>
+          <template v-else-if="['audio', 'video'].includes(field.type)">
+            <component :is="field.type" :src="row.value" controls />
+          </template>
+          <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
+            <b-badge :variant="row.value ? 'success' : 'danger'">
+              {{String(!!row.value).toUpperCase()}}
+            </b-badge>
+          </template>
+          <template v-else-if="field.ref">
+            {{_.get(row.item, field.ref)}}
+          </template>
+          <template v-else-if="key === '_id'">
+            <span v-b-tooltip.hover.top.d100 :title="row.value">
+              {{row.value.substr(-6).toUpperCase()}}
+            </span>
+          </template>
+          <template v-else>
+            {{row.value}}
+          </template>
+        </span>
+        <template slot="actions" slot-scope="row">
+          <b-btn size="sm" @click.stop="show(row.item)">Details</b-btn>
         </template>
-        <template v-else>
-          {{row.value}}
-        </template>
-      </span>
-      <template slot="actions" slot-scope="row">
-        <b-btn size="sm" @click.stop="show(row.item)">Details</b-btn>
-      </template>
-      
-    </b-table>
-    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
-  </div>
+
+      </b-table>
+      <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+    </div>
+  </b-card>
 </template>
 
 <script>
@@ -41,7 +54,7 @@ export default {
   data() {
     return {
       page: 1,
-      perPage: 2,
+      perPage: 10,
       sortBy: null,
       sortDesc: true,
       fields: {},
@@ -52,6 +65,9 @@ export default {
     };
   },
   computed: {
+    with(){
+      return _.filter(_.map(this.fields, (v, k) => v.ref && v.ref.split('.').shift()))
+    },
     gridUri() {
       return this.resource + "/" + this.gridPath;
     },
@@ -76,7 +92,8 @@ export default {
         return {
           sort: this.sort,
           page: this.page,
-          perPage: this.perPage
+          perPage: this.perPage,
+          with: this.with,
         };
       },
       set(val) {
@@ -87,9 +104,9 @@ export default {
     }
   },
   watch: {
-    sort: "fetch",
-    page: "fetch",
-    "$route.params": "fetchAll",
+    "$route.params.resource": 'fetchGrid',
+    "$route.params.id": 'fetch',
+    "$route.query": 'fetch',
     query(val) {
       this.$router.push({
         query: {
@@ -100,8 +117,9 @@ export default {
   },
   methods: {
     fetchAll() {
-      this.fetch()
+      // this.fetch()
       this.fetchGrid()
+      // this.applyQuery()
     },
     fetch() {
       this.$http
@@ -123,6 +141,7 @@ export default {
           this.fields.actions = {}
         }
         this.choices = data.choices;
+        this.fetch()
       });
     },
     applyQuery() {
@@ -132,6 +151,10 @@ export default {
       }
       this.query = JSON.parse(query);
     },
+    get(item, path) {
+      const [model, field] = path.split('.')
+      return item[model][field]
+    },
     show(item) {
       this.$router.push({
         path: this.resource + '/' + item._id,
@@ -140,13 +163,13 @@ export default {
   },
   created() {
     this.fetchAll()
-    this.applyQuery();
+
   }
 };
 </script>
 
 <style>
 .data-table td img {
-  height: 3em;
+  max-height: 3em;
 }
 </style>

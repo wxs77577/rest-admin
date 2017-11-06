@@ -1,22 +1,29 @@
 export default {
   items: [
     {
-      name: 'Users',
+      name: '用户',
       url: '/users',
       icon: 'icon-user',
-      badge: {
-        variant: 'primary',
-        text: 'NEW'
-      }
     },
     {
-      name: 'Products',
-      url: '/products',
+      name: '分类',
+      url: '/categories',
       icon: 'icon-speedometer',
-      badge: {
-        variant: 'primary',
-        text: 'NEW'
-      }
+    },
+    {
+      name: '专栏',
+      url: '/courses',
+      icon: 'icon-speedometer',
+    },
+    {
+      name: '一条',
+      url: '/posts',
+      icon: 'icon-speedometer',
+    },
+    {
+      name: '新闻',
+      url: '/news',
+      icon: 'icon-speedometer',
     },
     {
       title: true,

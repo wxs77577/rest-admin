@@ -5,19 +5,16 @@
         <legend v-if="model._id">Edit: {{model._id}}</legend>
         
         <b-form-group v-for="(field, key) in fields" v-if="!ignoredFields.includes(key)" :key="key" :label="field.label" :label-for="'input_' + key" :description="field.hint">
-
-          <!-- <v-select v-if="['select', 'select2'].includes(field.type)" :options="choices[key]" 
-          :id="'input_' + key" v-bind="field" v-model="model[key]" /> -->
           
-           <b-form-select v-if="['select', 'select2'].includes(field.type)" :options="choices[key]" 
-          :id="'input_' + key" v-bind="field" v-model="model[key]" /> 
+          <b-form-select v-if="['select', 'select2'].includes(field.type)"
+          :id="'input_' + key" v-bind="field" v-model="model[key]" :title="model[key]" /> 
 
           <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model[key]">
-            <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.choices">{{choice.text}}</b-form-radio>
+            <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
           </b-form-radio-group>
 
           <b-form-checkbox-group v-else-if="['checkboxlist'].includes(field.type)" v-model="model[key]">
-            <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.choices">{{choice.text}}</b-form-checkbox>
+            <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox>
           </b-form-checkbox-group>
 
           <b-form-textarea v-else-if="['textarea'].includes(field.type)" :id="'input_' + key" v-model="model[key]" v-bind="field" :rows="field.rows || 3" />
@@ -44,11 +41,12 @@
 </template>
 
 <script>
-import vSelect from "vue-select"
 
 export default {
   name: "b-data-form",
-  components: {vSelect},
+  components: {
+
+  },
   props: {
     ignoredFields: {
       type: Array,

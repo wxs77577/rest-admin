@@ -5,7 +5,12 @@
     <div class="app-body">
       <b-sidebar :nav-items="nav.items"/>
       <main class="main">
-        <!-- <breadcrumb :list="list"/> -->
+        <ol class="breadcrumb" v-if="false">
+          <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
+            <span class="active" v-if="isLast(index)">{{ item }}</span>
+            <router-link :to="item" v-else>{{ item }}</router-link>
+          </li>
+        </ol>
         <div class="container-fluid">
           <router-view />
         </div>
@@ -35,7 +40,8 @@ export default {
   },
   data() {
     return {
-      nav: nav
+      nav: nav,
+      path: []
     }
   }
 }

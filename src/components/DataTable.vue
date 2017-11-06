@@ -2,31 +2,38 @@
   <b-card :header="resource">
     <div class="data-table">
       <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
-        <span v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
+        <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
           
           <template v-if="['image'].includes(field.type)">
             <img :src="row.value" />
           </template>
+
           <template v-else-if="['audio', 'video'].includes(field.type)">
             <component :is="field.type" :src="row.value" controls />
           </template>
+
           <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
             <b-badge :variant="row.value ? 'success' : 'danger'">
               {{String(!!row.value).toUpperCase()}}
             </b-badge>
           </template>
+
           <template v-else-if="field.ref">
             {{_.get(row.item, field.ref)}}
           </template>
+
           <template v-else-if="key === '_id'">
             <span v-b-tooltip.hover.top.d100 :title="row.value">
               {{row.value.substr(-6).toUpperCase()}}
             </span>
           </template>
+
           <template v-else>
             {{row.value}}
           </template>
-        </span>
+
+        </div>
+        
         <template slot="actions" slot-scope="row">
           <b-btn size="sm" @click.stop="show(row.item)">Details</b-btn>
         </template>
@@ -106,7 +113,8 @@ export default {
   watch: {
     "$route.params.resource": 'fetchGrid',
     "$route.params.id": 'fetch',
-    "$route.query": 'fetch',
+    "page": 'fetch',
+    "sort": 'fetch',
     query(val) {
       this.$router.push({
         query: {
@@ -116,11 +124,7 @@ export default {
     }
   },
   methods: {
-    fetchAll() {
-      // this.fetch()
-      this.fetchGrid()
-      // this.applyQuery()
-    },
+    
     fetch() {
       this.$http
         .get(this.resource, {
@@ -162,7 +166,7 @@ export default {
     }
   },
   created() {
-    this.fetchAll()
+    this.fetchGrid()
 
   }
 };

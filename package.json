@@ -11,14 +11,15 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
-    "bootstrap-vue": "^1.0.0-beta.9",
+    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap-vue": "^1.0.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "simple-line-icons": "^2.4.1",
+    "ueditor-static": "^1.4.331",
     "vue": "^2.5.2",
     "vue-notification": "^1.3.4",
-    "vue-router": "^3.0.1",
-    "vue-select": "sagalbot/vue-select"
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

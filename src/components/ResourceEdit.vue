@@ -1,7 +1,7 @@
 <template>
   <div class="my-3">
     <b-row>
-      <b-col cols="12" lg="6">
+      <b-col cols="12" xl="6">
        
           <b-data-form :resource="resource" :id="id"></b-data-form>
         

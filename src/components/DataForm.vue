@@ -3,11 +3,10 @@
     <div class="data-form">
       <b-form @submit.prevent="onSubmit">
         <legend v-if="model._id">Edit: {{model._id}}</legend>
-        
-        <b-form-group v-for="(field, key) in fields" v-if="!ignoredFields.includes(key)" :key="key" :label="field.label" :label-for="'input_' + key" :description="field.hint">
-          
-          <b-form-select v-if="['select', 'select2'].includes(field.type)"
-          :id="'input_' + key" v-bind="field" v-model="model[key]" :title="model[key]" /> 
+
+        <b-form-group :state="!hasError(key)" v-for="(field, key) in fields" v-if="!ignoredFields.includes(key)" :key="key" v-bind="field" :label-for="'input_' + key">
+
+          <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
 
           <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model[key]">
             <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
@@ -29,7 +28,8 @@
 
           <b-switch variant="success" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="'input_' + key" v-model="model[key]" />
 
-          <b-form-input v-else :id="'input_' + key" v-model="model[key]" />
+          <b-ueditor :state="!hasError(key)" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="'input_' + key" v-bind="field" v-model="model[key]" />
+          <b-form-input :state="!hasError(key)" v-else :id="'input_' + key" v-bind="field" v-model="model[key]" :formatter="getFormatter(field, model, key)" />
 
         </b-form-group>
 
@@ -42,10 +42,12 @@
 
 <script>
 
+import bUeditor from './UEditor'
+
 export default {
   name: "b-data-form",
   components: {
-
+    bUeditor
   },
   props: {
     ignoredFields: {
@@ -72,9 +74,11 @@ export default {
     return {
       choices: {},
       fields: {},
-      model: {}
+      model: {},
+      errors: []
     };
   },
+
   computed: {
     resourceUri() {
       return this.resource + "/" + this.id;
@@ -110,12 +114,27 @@ export default {
       }
       return URL.createObjectURL(file)
     },
+    getFormatter(field, model, key) {
+      let value = model[key]
+      if (field.format) {
+        return eval(field.format)
+      }
+      return v => v
+    },
     onSubmit() {
       this.$http[this.method](this.resourceUri, this.model).then(({ data }) => {
         this.model = data
         this.$notify('保存成功')
-        this.$router.go(-1)
+        this.errors = []
+        // this.$router.go(-1)
+      }).catch(({ data, status }) => {
+        if (status == 422) {
+          this.errors = data.error.message
+        }
       })
+    },
+    hasError(key) {
+      return _.find(this.errors, v => v.field == key)
     }
   },
   created() {

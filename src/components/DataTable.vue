@@ -35,7 +35,7 @@
         </div>
         
         <template slot="actions" slot-scope="row">
-          <b-btn size="sm" @click.stop="show(row.item)">Details</b-btn>
+          <b-btn size="sm" @click.stop="show(row.item)">编辑</b-btn>
         </template>
 
       </b-table>
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+
 export default {
   name: "b-data-table",
   props: {
@@ -61,7 +62,7 @@ export default {
   data() {
     return {
       page: 1,
-      perPage: 10,
+      perPage: 6,
       sortBy: null,
       sortDesc: true,
       fields: {},

@@ -1,0 +1,14 @@
+{
+  "name": "ueditor-static",
+  "version": "1.4.331",
+  "description": "ueditor static resource without server side",
+  "main": "ueditor.all.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "wu-xuesong@qq.com",
+  "license": "ISC",
+  "_from": "ueditor-static@1.4.331",
+  "_resolved": "http://registry.npm.taobao.org/ueditor-static/download/ueditor-static-1.4.331.tgz"
+}

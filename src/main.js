@@ -22,7 +22,24 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(Notifications)
 axios.defaults.baseURL = 'http://localhost:5555/admin/api/'
-
+axios.interceptors.response.use(response => {
+  
+  return response;
+}, ({ response }) => {
+  const {data, status} = response
+  
+  switch (status) {
+    case 422: 
+      Vue.prototype.$notify({
+        type: 'error',
+        title: '验证失败',
+        
+        text: data.error.message[0].message
+      })
+      break;
+  }
+  return Promise.reject(response);
+});
 Vue.prototype.$http = axios
 Vue.prototype._ = global._ = _
 

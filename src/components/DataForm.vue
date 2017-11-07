@@ -6,8 +6,16 @@
 
         <b-form-group :state="!hasError(key)" v-for="(field, key) in fields" v-if="!ignoredFields.includes(key)" :key="key" v-bind="field" :label-for="'input_' + key">
 
-          <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
-          <b-multi-select v-if="['select', 'select2'].includes(field.type) && field.multiple" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
+          <!-- <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" /> -->
+          <b-multi-select v-if="['select', 'select2'].includes(field.type)" 
+          track-by="value" label="text" 
+          
+          @input="model[key] = arguments[0].value" :value="model[key]" 
+          :id="'input_' + key" v-bind="field" 
+           :title="model[key]" >
+            
+              
+          </b-multi-select>
 
           <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model[key]">
             <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
@@ -49,6 +57,8 @@ import bUeditor from './UEditor'
 import Vue from 'vue'
 import BWyiswyg from './Wysiwyg'
 import Multiselect from 'vue-multiselect'
+
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 export default {
   name: "b-data-form",

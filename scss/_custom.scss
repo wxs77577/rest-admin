@@ -1,5 +1,8 @@
 // Here you can add other styles
-
+.header-fixed .app-header,
+.sidebar-fixed .sidebar{
+    z-index: 1000;
+}
 .custom-file-control::before {
     content: '选择文件' !important;
 }

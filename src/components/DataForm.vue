@@ -6,7 +6,8 @@
 
         <b-form-group :state="!hasError(key)" v-for="(field, key) in fields" v-if="!ignoredFields.includes(key)" :key="key" v-bind="field" :label-for="'input_' + key">
 
-          <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
+          <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
+          <b-multi-select v-if="['select', 'select2'].includes(field.type) && field.multiple" :value="getFormatter(field, model, key)(model[key])" :formatter="getFormatter(field, model, key)" :id="'input_' + key" v-bind="field" @input="model[key] = arguments[0]" :title="model[key]" />
 
           <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model[key]">
             <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
@@ -29,6 +30,8 @@
           <b-switch variant="success" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="'input_' + key" v-model="model[key]" />
 
           <b-ueditor :state="!hasError(key)" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="'input_' + key" v-bind="field" v-model="model[key]" />
+          <!-- <b-wysiwyg :state="!hasError(key)" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="'input_' + key" v-bind="field" v-model="model[key]" /> -->
+          
           <b-form-input :state="!hasError(key)" v-else :id="'input_' + key" v-bind="field" v-model="model[key]" :formatter="getFormatter(field, model, key)" />
 
         </b-form-group>
@@ -43,11 +46,16 @@
 <script>
 
 import bUeditor from './UEditor'
+import Vue from 'vue'
+import BWyiswyg from './Wysiwyg'
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: "b-data-form",
   components: {
-    bUeditor
+    bUeditor,
+    'b-multi-select': Multiselect,
+    'b-wysiwyg': BWyiswyg
   },
   props: {
     ignoredFields: {
@@ -124,6 +132,7 @@ export default {
     onSubmit() {
       this.$http[this.method](this.resourceUri, this.model).then(({ data }) => {
         this.model = data
+        this.$snotify.success('保存成功')
         this.$notify('保存成功')
         this.errors = []
         // this.$router.go(-1)
@@ -137,9 +146,15 @@ export default {
       return _.find(this.errors, v => v.field == key)
     }
   },
+  mounted(){
+    
+  },
   created() {
     this.fetchForm();
     this.fetch();
+
+    
+    
   }
 };
 </script>

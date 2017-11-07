@@ -18,7 +18,8 @@
       
     </div>
     <b-footer/>
-    <notifications />
+    <!-- <notifications /> -->
+    <vue-snotify />
   </div>
 </template>
 

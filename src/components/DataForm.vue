@@ -2,7 +2,7 @@
   <b-card :header="resource">
     <div class="data-form">
       <legend v-if="model._id">Edit: {{model._id}}</legend>
-      <b-form-builder :fields="fields" v-model="model" :action="resourceUri" :method="method"></b-form-builder>
+      <b-form-builder :fields="fields" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
     </div>
   </b-card>
 </template>
@@ -15,18 +15,12 @@ export default {
     bFormBuilder,
   },
   props: {
-    ignoredFields: {
-      type: Array,
-      default() {
-        return ['_id', 'created_at', 'updated_at', 'actions']
-      },
-      required: false
-    },
     resource: {
       type: String,
       required: true
     },
     id: {
+      default: '',
       required: true
     },
     formPath: {
@@ -61,6 +55,9 @@ export default {
   },
   methods: {
     fetch() {
+      if (this.isNew) {
+        return
+      }
       this.$http.get(this.resourceUri).then(({ data }) => {
         this.model = data;
       });

@@ -1,10 +1,17 @@
 <template>
-  <b-card :header="resource">
+  <b-card :header="header">
+    
     <div class="data-table">
-      <div class="mb-2">
-        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" method="get" :on-submit="onSearch"></b-form-builder>
+      <div class="py-1">
+        <b-btn :to="resourceUri + '/create'" variant="secondary">
+        新建
+        </b-btn>
+      </div>
+      <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
+        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />
       </div>
       <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
+        
         <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
           
           <template v-if="['image'].includes(field.type)">
@@ -27,7 +34,7 @@
 
           <template v-else-if="key === '_id'">
             <span v-b-tooltip.hover.top.d100 :title="row.value">
-              ***{{row.value.substr(-4).toUpperCase()}}
+              {{row.value.substr(-4).toUpperCase()}}
             </span>
           </template>
 
@@ -38,7 +45,8 @@
         </div>
         
         <template slot="actions" slot-scope="row">
-          <b-btn size="sm" @click.stop="show(row.item)">编辑</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="show(row.item)">编辑</b-btn>
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)">删除</b-btn>
         </template>
 
       </b-table>
@@ -48,11 +56,11 @@
 </template>
 
 <script>
-import bFormBuilder from './FormBuilder'
+import bFormBuilder from "./FormBuilder";
 
 export default {
   components: {
-    bFormBuilder,
+    bFormBuilder
   },
   props: {
     resource: {
@@ -69,25 +77,29 @@ export default {
     return {
       page: 1,
       perPage: 6,
-      sortBy: null,
-      sortDesc: true,
+      sortBy: '_id',
+      sortDesc: false,
       fields: {},
       filter: {},
       choices: {},
       totalRows: 0,
       items: [],
-      searchFields: {
-        title: {label: '标题'},
-      },
-      searchModel: {
-        
-      },
+      searchFields: {},
+      searchModel: {},
       where: {}
     };
   },
   computed: {
-    with(){
-      return _.filter(_.map(this.fields, (v, k) => v.ref && v.ref.split('.').shift()))
+    header() {
+      return `
+        ${this.$root.getNavItem(this.resource).name}
+        <small> ${this.resource.toUpperCase()} </small>
+      `
+    },
+    with() {
+      return _.filter(
+        _.map(this.fields, (v, k) => v.ref && v.ref.split(".").shift())
+      );
     },
     searchUri() {
       return this.resource;
@@ -121,33 +133,33 @@ export default {
           page: this.page,
           perPage: this.perPage,
           with: this.with,
-          where: this.where,
+          where: this.where
         };
       },
       set(val) {
         this.sort = val.sort;
         this.page = val.page;
         this.perPage = val.perPage;
-        this.where = val.where
+        this.where = val.where;
       }
     }
   },
   watch: {
-    "$route.params.resource": 'fetchGrid',
-    "$route.params.id": 'fetch',
-    "page": 'fetch',
-    "sort": 'fetch',
-    "where": 'fetch',
+    "$route.params.resource": "fetchGrid",
+    "$route.params.id": "fetch",
+    page: "fetch",
+    sort: "fetch",
+    where: "fetch",
     query(val) {
-      this.$router.push({
-        query: {
-          query: JSON.stringify(val)
-        }
-      });
+      this.$emit("change query", val);
+      // this.$router.push({
+      //   query: {
+      //     query: JSON.stringify(val)
+      //   }
+      // });
     }
   },
   methods: {
-    
     fetch() {
       this.$http
         .get(this.resourceUri, {
@@ -162,48 +174,62 @@ export default {
         });
     },
     fetchGrid() {
-      this.$route.query.query = {}
+      this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
         if (!this.fields.actions) {
-          this.fields.actions = {}
+          this.fields.actions = {};
         }
-        this.choices = data.choices;
-        this.fetch()
+        this.searchFields = data.searchFields;
+        this.searchModel = data.searchModel;
+        this.fetch();
       });
     },
     applyQuery() {
       const query = this.$route.query.query;
       if (!query) {
-        return
+        return;
       }
-      this.query = JSON.parse(query);
-      this.searchModel = this.where
+      this.query = _.isString(query) ? JSON.parse(query) : query;
+      // this.searchModel = this.where
     },
     get(item, path) {
-      const [model, field] = path.split('.')
-      return item[model][field]
+      const [model, field] = path.split(".");
+      return item[model][field];
     },
     show(item) {
       this.$router.push({
-        path: this.resource + '/' + item._id,
-      })
+        path: this.resource + "/" + item._id
+      });
     },
-    onSearch(){
-      this.where = this.searchModel
-      this.fetch()
+    remove(item) {
+      if (window.confirm('确定要删除吗？')) {
+        this.$http.delete(this.resourceUri + '/' + item._id).then(({data}) => {
+          this.$snotify.success('删除成功');
+          this.fetch()
+        })
+      }
     },
+    onSearch() {
+      console.log("search");
+
+      this.where = this.searchModel;
+      this.fetch();
+    }
   },
   created() {
-    this.fetchGrid()
-    this.applyQuery()
-    
+    this.fetchGrid();
+    // this.applyQuery();
   }
 };
 </script>
 
-<style>
-.data-table td img {
-  max-height: 3em;
+<style lang="scss">
+.data-table {
+  td img {
+    max-height: 3em;
+  }
+  .data-table-search {
+  }
 }
 </style>

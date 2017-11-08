@@ -6,27 +6,27 @@ export default {
     },
     {
       name: '用户',
-      url: '/users',
+      url: '/rest/users',
       icon: 'icon-user',
     },
     {
       name: '分类',
-      url: '/categories',
+      url: '/rest/categories',
       icon: 'icon-speedometer',
     },
     {
       name: '专栏',
-      url: '/courses',
+      url: '/rest/courses',
       icon: 'icon-speedometer',
     },
     {
       name: '一条',
-      url: '/posts',
+      url: '/rest/posts',
       icon: 'icon-speedometer',
     },
     {
       name: '新闻',
-      url: '/news',
+      url: '/rest/news',
       icon: 'icon-speedometer',
     },
     {
@@ -35,13 +35,18 @@ export default {
     },
     {
       name: '属性管理',
-      url: '/properties',
+      url: '/rest/properties',
       icon: 'icon-speedometer',
     },
     {
       name: '系统配置',
-      url: '/settings',
+      url: '/rest/settings',
       icon: 'icon-speedometer',
+    },
+    {
+      name: '注销',
+      url: '/login',
+      icon: 'icon-lock',
     },
   ]
 }

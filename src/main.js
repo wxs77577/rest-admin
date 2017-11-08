@@ -11,6 +11,8 @@ import _ from 'lodash'
 import Snotify from 'vue-snotify'
 import Vueditor from 'vueditor'
 import env from './env'
+import nav from './nav'
+
 Vue.use(Vuex)
 
 
@@ -38,12 +40,7 @@ axios.interceptors.response.use(response => {
   
   switch (status) {
     case 422: 
-      Vue.prototype.$notify({
-        type: 'error',
-        title: '验证失败',
-        
-        text: data.error.message[0].message
-      })
+      Vue.prototype.$snotify.error(data.error.message[0].message)
       break;
   }
   return Promise.reject(response);
@@ -51,10 +48,25 @@ axios.interceptors.response.use(response => {
 Vue.prototype.$http = axios
 Vue.prototype._ = global._ = _
 Vue.prototype.$config = global.config = env
+Vue.prototype.$nav = nav
 
+import Switch from './components/Switch.vue'
+Vue.component('b-switch', Switch)
+
+Vue.directive('model2', function (el, binding) {
+  el.value
+  el.oninput = e => {
+    this.$emit('input', e.target.value)
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  render: h => h(App)
+  render: h => h(App),
+  methods: {
+    getNavItem(url){
+      return _.find(this.$nav.items, {url: '/rest/' + url}) || {}
+    }
+  }
 })

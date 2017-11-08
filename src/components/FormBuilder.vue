@@ -1,41 +1,33 @@
 <template>
-  <b-form :inline="inline" @submit.prevent="onSubmit">
+  <b-form :inline="inline" @submit.prevent="handleSubmit">
 
-    <b-form-group :is="inline ? 'div' : 'b-form-group'" :state="!hasError(key)" v-for="(field, key) in fields" :key="key" v-bind="field" :label-for="'input_' + key">
+    <div v-if="!inline">
+      <b-form-group  :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
+        <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" />
+      </b-form-group>
+    </div>
 
-      <label :for="'input_' + key" v-if="inline">{{field.label}}</label>
-      <b-form-field v-model="model[key]" :field="field" />
-    </b-form-group>
+    <span class="d-flex" v-else >
+      <template v-for="(field, name) in fields">
+        <label :for="'input_' + name" class="m-1">{{field.label || name}}</label>
+        <b-form-field class="m-1" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" />
+      </template>
+    </span>
 
     <slot name="actions">
       <b-button type="submit" variant="primary">{{submitText}}</b-button>
-      <b-button type="button" variant="secondary" @click="$router.go(-1)">返回</b-button>
+      <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
     </slot>
   </b-form>
 </template>
 
 <script>
-
-import bUeditor from './UEditor'
-import Vue from 'vue'
-import bWyiswyg from './Wysiwyg'
-// import bMultiselect from 'vue-multiselect'
-
-import bSelect from './Select'
-// import bUploader from 'vue-upload-file'
-import bUploader from './Uploader'
-import bFormField from './FormField'
-
-// import 'vue-multiselect/dist/vue-multiselect.min.css'
-
+import Vue from "vue";
+import bFormField from "./FormField";
 export default {
   components: {
-    bUeditor,
-    bSelect,
-    // bMultiselect,
-    bWyiswyg,
-    bUploader,
-    bFormField,
+    
+    bFormField
   },
   props: {
     inline: {
@@ -44,104 +36,78 @@ export default {
     },
     value: {
       default() {
-        return {}
+        return {};
       }
     },
     fields: {
       required: true,
       default() {
-        return {}
+        return {};
       }
     },
     onSubmit: {
       type: Function,
-      default() {
-        return () => {
-          const methodName = String(this.method).toLowerCase()
-          this.$http[methodName](this.action, this.model).then(({ data }) => {
-            if (this.successMessage) {
-              this.$snotify.success(this.successMessage)
-            }
-            this.errors = []
-            this.$emit('success', data)
-          }).catch(({ data, status }) => {
-            if (status == 422) {
-              this.errors = data.error.message
-            }
-          })
-        }
-      }
+      required: false
     },
-    action: {
-
-    },
+    action: {},
     method: {
-      default: 'post'
+      default: "post"
     },
     submitText: {
-      default: '保存'
+      default: "保存"
     },
+    backText: {
+      default: "返回"
+    },
+    
     successMessage: {
-      default: '操作成功'
+      default: "操作成功"
     }
   },
   data() {
     return {
       model: {},
-      errors: [],
-
+      errors: []
     };
   },
   watch: {
     value(val) {
-      this.model = val
+      this.model = val;
     }
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
+    
 
-    preview(file) {
-      console.log(file);
-      if (!file) {
-        return
+    hasError(name) {
+      return _.find(this.errors, v => v.field == name);
+    },
+    
+    handleSubmit() {
+      if (this.onSubmit) {
+        return this.onSubmit(this.model);
       }
-      if (typeof file === 'string') {
-        return file
-      }
-      return URL.createObjectURL(file)
-    },
-    getFormatter(field, model, key) {
-      let value = model[key]
-      if (field.format) {
-        return eval(field.format)
-      }
-      return v => v
-    },
-
-
-    hasError(key) {
-      return _.find(this.errors, v => v.field == key)
-    },
-    upload(key) {
-      const fd = new FormData()
-      fd.append('file', this.model[key])
-      this.$http.post('upload', fd).then(({ data }) => {
-        Vue.set(this.model, key, data.url)
-      })
-    },
-    setSelectedValue(value, key) {
-      Vue.set(this.model, key, _.isObject(value) && false ? value.value : value)
-
+      const methodName = String(this.method).toLowerCase();
+      this.$http
+        [methodName](this.action, this.model)
+        .then(({ data }) => {
+          if (this.successMessage) {
+            this.$snotify.success(this.successMessage);
+          }
+          this.errors = [];
+          this.$emit("success", data);
+        })
+        .catch(({ data, status }) => {
+          if (status == 422) {
+            this.errors = data.error.message;
+          }
+        });
     }
   },
   mounted() {
-    this.model = this.value
+    this.model = this.value;
   },
-  created() {
-
-  }
+  created() {}
 };
 </script>
 

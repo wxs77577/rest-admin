@@ -1,6 +1,9 @@
 <template>
   <b-card :header="resource">
     <div class="data-table">
+      <div class="mb-2">
+        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" method="get" :on-submit="onSearch"></b-form-builder>
+      </div>
       <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
         <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
           
@@ -24,7 +27,7 @@
 
           <template v-else-if="key === '_id'">
             <span v-b-tooltip.hover.top.d100 :title="row.value">
-              {{row.value.substr(-6).toUpperCase()}}
+              ***{{row.value.substr(-4).toUpperCase()}}
             </span>
           </template>
 
@@ -45,9 +48,12 @@
 </template>
 
 <script>
+import bFormBuilder from './FormBuilder'
 
 export default {
-  name: "b-data-table",
+  components: {
+    bFormBuilder,
+  },
   props: {
     resource: {
       type: String,
@@ -69,12 +75,25 @@ export default {
       filter: {},
       choices: {},
       totalRows: 0,
-      items: []
+      items: [],
+      searchFields: {
+        title: {label: '标题'},
+      },
+      searchModel: {
+        
+      },
+      where: {}
     };
   },
   computed: {
     with(){
       return _.filter(_.map(this.fields, (v, k) => v.ref && v.ref.split('.').shift()))
+    },
+    searchUri() {
+      return this.resource;
+    },
+    resourceUri() {
+      return this.resource;
     },
     gridUri() {
       return this.resource + "/" + this.gridPath;
@@ -102,12 +121,14 @@ export default {
           page: this.page,
           perPage: this.perPage,
           with: this.with,
+          where: this.where,
         };
       },
       set(val) {
         this.sort = val.sort;
         this.page = val.page;
         this.perPage = val.perPage;
+        this.where = val.where
       }
     }
   },
@@ -116,6 +137,7 @@ export default {
     "$route.params.id": 'fetch',
     "page": 'fetch',
     "sort": 'fetch',
+    "where": 'fetch',
     query(val) {
       this.$router.push({
         query: {
@@ -128,7 +150,7 @@ export default {
     
     fetch() {
       this.$http
-        .get(this.resource, {
+        .get(this.resourceUri, {
           params: {
             query: this.query
           }
@@ -140,6 +162,7 @@ export default {
         });
     },
     fetchGrid() {
+      this.$route.query.query = {}
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
         if (!this.fields.actions) {
@@ -155,6 +178,7 @@ export default {
         return
       }
       this.query = JSON.parse(query);
+      this.searchModel = this.where
     },
     get(item, path) {
       const [model, field] = path.split('.')
@@ -164,11 +188,16 @@ export default {
       this.$router.push({
         path: this.resource + '/' + item._id,
       })
-    }
+    },
+    onSearch(){
+      this.where = this.searchModel
+      this.fetch()
+    },
   },
   created() {
     this.fetchGrid()
-
+    this.applyQuery()
+    
   }
 };
 </script>

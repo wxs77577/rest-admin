@@ -1,5 +1,5 @@
 <template>
-  <script :id="id" type="text/plain"></script>
+  <div :id="id" type="text/plain"></div>
 </template>
 
 <script>
@@ -26,6 +26,9 @@ export default {
       editor: null
     }
   },
+  watch: {
+    '$route': 'init',
+  },
   methods: {
     handleChange ({ target: { checked } }) {
       this.$emit('change', checked ? this.value : this.uncheckedValue)
@@ -37,15 +40,21 @@ export default {
       const editor = UE.getEditor(this.id, {
         UEDITOR_HOME_URL: '/static/ueditor/',
         serverUrl: this.$config.apiUri + 'ueditor',
-      });
+      })
+      this.editor = editor
       editor.addListener('contentchange',() => {
         this.$emit('input', editor.getContent())
-      });
+      })
       editor.ready(() => {
         editor.setContent(this.value)
       })
-      this.editor = editor
+    },
+    refresh(){
+      setTimeout(this.init, 200)
     }
+  },
+  beforeDestroy(){
+    this.editor.destroy()
   },
   mounted(){
     this.init()
@@ -55,6 +64,9 @@ export default {
 
 <style>
 .edui-default .edui-editor{
-  border-radius: 0;
+  border-radius: 0 !important;
+}
+.edui-default .edui-editor-breadcrumb span{
+  color:#666 !important;
 }
 </style>

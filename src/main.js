@@ -25,6 +25,8 @@ import '../scss/style.scss'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 // Vue.use(Notifications)
+
+import "vue-snotify/styles/material.css"
 Vue.use(Snotify)
 
 axios.defaults.baseURL = env.apiUri

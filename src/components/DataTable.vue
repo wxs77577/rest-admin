@@ -4,12 +4,14 @@
     <div class="data-table">
       <div class="py-1">
         <b-btn :to="resourceUri + '/create'" variant="secondary">
+        <i class="icon-pencil"></i>
         新建
         </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />
       </div>
+      <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
       <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
         
         <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
@@ -57,7 +59,7 @@
 
 <script>
 import bFormBuilder from "./FormBuilder";
-
+import {mapState, mapGetters} from 'vuex'
 export default {
   components: {
     bFormBuilder
@@ -75,6 +77,7 @@ export default {
   },
   data() {
     return {
+      pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
       perPage: 6,
       sortBy: '_id',
@@ -90,9 +93,11 @@ export default {
     };
   },
   computed: {
+    ...mapState(['nav']),
+    ...mapGetters(['currentNav']),
     header() {
       return `
-        ${this.$root.getNavItem(this.resource).name}
+        ${this.currentNav.name}
         <small> ${this.resource.toUpperCase()} </small>
       `
     },
@@ -145,8 +150,10 @@ export default {
     }
   },
   watch: {
-    "$route.params.resource": "fetchGrid",
-    "$route.params.id": "fetch",
+    "$route.params.resource"(){
+      this.pause = true
+      this.fetchGrid(true)
+    },
     page: "fetch",
     sort: "fetch",
     where: "fetch",
@@ -161,6 +168,9 @@ export default {
   },
   methods: {
     fetch() {
+      if (this.pause) {
+        return
+      }
       this.$http
         .get(this.resourceUri, {
           params: {
@@ -173,8 +183,8 @@ export default {
           this.perPage = data.perPage;
         });
     },
-    fetchGrid() {
-      this.query = {};
+    fetchGrid(fetchData = false) {
+      this.query = {}
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
         if (!this.fields.actions) {
@@ -182,7 +192,10 @@ export default {
         }
         this.searchFields = data.searchFields;
         this.searchModel = data.searchModel;
-        this.fetch();
+        this.pause = false
+        if (fetchData) {
+          this.fetch()
+        }
       });
     },
     applyQuery() {
@@ -211,15 +224,17 @@ export default {
       }
     },
     onSearch() {
-      console.log("search");
-
       this.where = this.searchModel;
       this.fetch();
     }
   },
+  mounted(){
+
+  },
   created() {
-    this.fetchGrid();
+    this.fetchGrid(true);
     // this.applyQuery();
+
   }
 };
 </script>

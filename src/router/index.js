@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store, {types} from '../store'
+
 import ResourceIndex from '../components/ResourceIndex'
 import ResourceEdit from '../components/ResourceEdit'
 import Login from '../components/Login'
@@ -8,12 +10,15 @@ import Home from '../components/Home'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        isPublic: true
+      }
     },
     {
       path: '/',
@@ -41,11 +46,15 @@ export default new Router({
         },
       ]
     },
-    
-    
-    
-    
-    
-    
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (!store.state.auth.token && !to.meta.isPublic) {
+    // console.log('no token');
+    return next({name: 'login'})
+  }
+  next()
+})
+
+export default router

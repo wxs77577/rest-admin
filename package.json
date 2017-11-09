@@ -14,6 +14,7 @@
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-vue": "^1.0.0",
     "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "simple-line-icons": "^2.4.1",
     "ueditor-static": "^1.4.331",
@@ -25,9 +26,11 @@
     "vue-select": "^2.3.0",
     "vue-snotify": "^2.0.3",
     "vue-upload-file": "^1.1.0",
+    "vue2-datepicker": "^1.6.0",
     "vue2-dropzone": "^3.0.0",
     "vueditor": "^0.2.8",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

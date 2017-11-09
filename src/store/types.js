@@ -1,0 +1,6 @@
+export default {
+  SET_AUTH: 'SET_AUTH',
+  GET_AUTH: 'GET_AUTH',
+  SET_NAV_ITEMS: 'SET_NAV_ITEMS',
+  GO_LOGIN: 'GO_LOGIN',
+}

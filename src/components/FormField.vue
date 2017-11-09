@@ -2,6 +2,7 @@
       <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" text-field="label" :value="getFormatter(field, value)(value)" :formatter="getFormatter(field, value)" :id="'input_' + name" v-bind="field" @input="model = arguments[0]" :title="value" />
       <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
       <!-- <b-multi-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="value = arguments[0].value" :value="value" :id="'input_' + name" v-bind="field" :title="value" /> -->
+      <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
       <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
         <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
@@ -31,15 +32,23 @@
 
       <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="'input_' + name" v-bind="field" v-model="model" />
 
-      <b-form-input :state="state" v-else :id="'input_' + name" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
+      <b-input-group v-else>
+        <b-input-group-addon v-if="field.icon || field.left">
+          <i :class="field.icon" v-if="field.icon"></i>
+          <span v-else v-html="field.left"></span>
+        </b-input-group-addon>
+        <b-form-input :state="state" :id="'input_' + name" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
+      </b-input-group>
 </template>
 
 <script>
+import bDatePicker from 'vue2-datepicker'
 import bUeditor from "./Ueditor";
 import Vue from "vue";
 export default {
   components: {
     bUeditor,
+    bDatePicker,
   },
   props: {
     value: {},

@@ -25,6 +25,7 @@
 import Vue from "vue";
 import bFormField from "./FormField";
 export default {
+  name: 'b-form-builder',
   components: {
     
     bFormField
@@ -99,7 +100,7 @@ export default {
         })
         .catch(({ data, status }) => {
           if (status == 422) {
-            this.errors = data.error.message;
+            this.errors = data.message;
           }
         });
     }

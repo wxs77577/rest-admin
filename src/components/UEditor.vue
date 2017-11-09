@@ -1,17 +1,22 @@
 <template>
-  <div :id="id" type="text/plain"></div>
+  <div :id="id" type="text/plain">
+  </div>
 </template>
 
 <script>
-import 'ueditor-static/ueditor.config'
-import 'ueditor-static/ueditor.all.min'
-import 'ueditor-static/lang/zh-cn/zh-cn'
-import 'ueditor-static/ueditor.parse.min'
+import '../../static/ueditor/ueditor.config'
+import '../../static/ueditor/ueditor.all'
+import '../../static/ueditor/lang/zh-cn/zh-cn'
+import '../../static/ueditor/ueditor.parse.min'
 import '../../static/ueditor/xiumi-ue-dialog-v5.js'
 import '../../static/ueditor/xiumi-ue-v5.css'
 
+import { mapState } from 'vuex'
+import $ from 'jquery'
+window.$ = $
+
 export default {
-  
+
   props: {
     id: {},
     value: {
@@ -19,9 +24,9 @@ export default {
     },
   },
   computed: {
-    
+    ...mapState(['config', 'auth'])
   },
-  data(){
+  data() {
     return {
       editor: null
     }
@@ -30,43 +35,45 @@ export default {
     '$route': 'init',
   },
   methods: {
-    handleChange ({ target: { checked } }) {
+    handleChange({ target: { checked } }) {
       this.$emit('change', checked ? this.value : this.uncheckedValue)
     },
-    update(event){
+    update(event) {
       this.$emit('input', event.target.value)
     },
-    init(){
+    init() {
       const editor = UE.getEditor(this.id, {
         UEDITOR_HOME_URL: '/static/ueditor/',
-        serverUrl: this.$config.apiUri + 'ueditor',
+        serverUrl: this.config.apiUri + 'ueditor?token=' + this.auth.token,
       })
       this.editor = editor
-      editor.addListener('contentchange',() => {
+      editor.addListener('contentchange', () => {
         this.$emit('input', editor.getContent())
       })
       editor.ready(() => {
         editor.setContent(this.value)
+        // editor.execCommand('serverparam', 'token', this.auth.token);
       })
     },
-    refresh(){
+    refresh() {
       setTimeout(this.init, 200)
     }
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.editor.destroy()
   },
-  mounted(){
+  mounted() {
     this.init()
   }
 }
 </script>
 
 <style>
-.edui-default .edui-editor{
+.edui-default .edui-editor {
   border-radius: 0 !important;
 }
-.edui-default .edui-editor-breadcrumb span{
-  color:#666 !important;
+
+.edui-default .edui-editor-breadcrumb span {
+  color: #666 !important;
 }
 </style>

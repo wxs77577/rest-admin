@@ -17,11 +17,11 @@ export default {
     [types.GET_AUTH]({ commit }) {
       let auth = {}
       try {
-        auth = JSON.parse(localStorage.getItem('auth'))
+        auth = JSON.parse(localStorage.getItem('auth')) || {}
       } catch (e) {
         auth = {
           token: null,
-          user: {}
+          user: null
         }
       }
       commit(types.SET_AUTH, auth)

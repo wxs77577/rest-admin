@@ -4,7 +4,7 @@
     <div class="data-table">
       <div class="py-1">
         <b-btn :to="resourceUri + '/create'" variant="secondary">
-        <i class="icon-pencil"></i>
+        <i class="icon-plus"></i>
         新建
         </b-btn>
       </div>

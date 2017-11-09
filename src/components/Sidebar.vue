@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'Vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'sidebar',
   

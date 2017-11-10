@@ -21,9 +21,14 @@ import "vue-snotify/styles/material.css"
 Vue.use(Snotify)
 
 import Switch from './components/Switch.vue'
-import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-switch', Switch)
+
+import FormField from './components/FormField.vue'
+Vue.component('b-form-field', FormField)
+
+import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
+
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)

@@ -8,11 +8,9 @@
 </template>
 
 <script>
-import bFormBuilder from './FormBuilder'
 
 export default {
   components: {
-    bFormBuilder,
   },
   props: {
     resource: {

@@ -3,14 +3,14 @@
 
     <div v-if="!inline">
       <b-form-group  :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
-        <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" />
+        <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>
 
     <span class="d-flex" v-else >
       <template v-for="(field, name) in fields">
-        <label :for="'input_' + name" class="m-1">{{field.label || name}}</label>
-        <b-form-field class="m-1" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" />
+        <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
+        <b-form-field class="m-1" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
       </template>
     </span>
 
@@ -23,14 +23,18 @@
 
 <script>
 import Vue from "vue";
-import bFormField from "./FormField";
+
 export default {
   name: 'b-form-builder',
   components: {
-    
-    bFormField
   },
   props: {
+    id: {
+      type: String,
+      default(){
+        return 'form_' + parseInt(Math.random() * 9999)
+      }
+    },
     inline: {
       type: Boolean,
       default: false

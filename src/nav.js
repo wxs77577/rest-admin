@@ -35,6 +35,11 @@ export default {
       icon: 'icon-list',
     },
     {
+      name: '广告',
+      url: '/rest/ads',
+      icon: 'icon-list',
+    },
+    {
       title: true,
       name: '系统设置',
     },

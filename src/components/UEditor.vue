@@ -44,6 +44,21 @@ export default {
     init() {
       const editor = UE.getEditor(this.id, {
         UEDITOR_HOME_URL: '/static/ueditor/',
+        toolbars: [
+          [
+            'fullscreen', 'source', 'undo', 'redo', 'bold', 'fontsize',
+            'simpleupload', //单图上传
+            'insertimage', //多图上传
+            'link', //超链接
+            'insertvideo', //视频
+            'justifyleft', //居左对齐
+            'justifyright', //居右对齐
+            'justifycenter', //居中对齐
+            'justifyjustify', //两端对齐
+            'forecolor', //字体颜色
+        'backcolor', //背景色
+          ]
+        ],
         serverUrl: this.config.apiUri + 'ueditor?token=' + this.auth.token,
       })
       this.editor = editor

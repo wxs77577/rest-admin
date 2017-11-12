@@ -40,7 +40,7 @@ export default {
     return {
       fields: {
         username: {placeholder: '用户名', icon: 'icon-user'},
-        password: {placeholder: '密码', icon: 'icon-lock'},
+        password: {placeholder: '密码', icon: 'icon-lock', type: 'password'},
       },
       model: {
         username: 'admin',

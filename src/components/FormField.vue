@@ -17,10 +17,12 @@
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
   <div v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)">
 
-    <b-form-file ref="file" :id="id" v-model="model" v-bind="field" @input="upload" />
+    <div class="">
+      <b-form-file ref="file" :id="id" v-model="model" v-bind="field" @input="upload" />
+      
+    </div>
     <div class="preview" v-show="value">
-      <b-img v-if="['image'].includes(field.type)" :alt="value + ' 不存在'" :src="preview(value)" v-b-modal="'modal_input_' + name" class="my-2" center fluid v-bind="field.preview" style="max-height: 300px;" />
-      <component controls :is="field.type" v-else-if="['audio', 'video'].includes(field.type)" :alt="value" :src="preview(value)" v-b-modal="'modal_input_' + name" class="my-2" center v-bind="field.preview" style="max-height: 300px;"></component>
+      <component controls :is="field.type == 'image' ? 'img' : field.type" v-if="['audio', 'video', 'image'].includes(field.type)" :alt="value" :src="preview(value)" v-b-modal="'modal_input_' + name" class="my-2" center v-bind="field.preview" style="max-height: 300px;max-width: 100%;" />
     </div>
 
     <b-modal :title="field.label" :id="'modal_input_' + name">
@@ -34,27 +36,30 @@
 
   <div v-else-if="field.fields">
     <div v-if="['array'].includes(field.type)">
-      <b-row>
-        <b-col v-for="(item, i) in model" :key="i" cols lg="6" xl="4">
-          <b-card>
-            <b-row slot="header" class="justify-content-between">
-              <b-col>No. {{i + 1}}</b-col>
-              <b-col right class="text-right">
-                <b-btn size="sm" @click="model.splice(i, 1);$snotify.success('删除成功')">
-                  <i class="icon-trash"></i> 删除</b-btn>
-              </b-col>
-            </b-row>
-            <b-form-group v-for="(child, key) in field.fields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
-              <b-form-field v-model="model[i][key]" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
-            </b-form-group>
-          </b-card>
-        </b-col>
-        <b-col cols lg="6" xl="4" class="d-flex align-items-center justify-content-center">
-          <b-btn size="lg" class="p-5" block @click="model = !model? [] : model; model.push({})">
-            <i class="fa fa-plus"></i>
-          </b-btn>
-        </b-col>
-      </b-row>
+      <b-draggable v-model="model">
+        <transition-group tag="div" class="row">
+          <b-col v-for="(item, i) in model" :key="i" cols :lg="6" :xl="4">
+            <b-card>
+              <b-row slot="header" class="justify-content-between">
+                <b-col>No. {{i + 1}}</b-col>
+                <b-col right class="text-right">
+                  <b-btn size="sm" @click="model.splice(i, 1);$snotify.success('删除成功')">
+                    <i class="icon-trash"></i> 删除</b-btn>
+                </b-col>
+              </b-row>
+
+              <b-form-group v-for="(child, key) in field.fields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
+                <b-form-field v-model="model[i][key]" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
+              </b-form-group>
+            </b-card>
+          </b-col>
+          <b-col cols lg="6" xl="4" :key="-1" class="d-flex align-items-center justify-content-center">
+            <b-btn size="lg" class="p-5" block @click="model = !model? [] : model; model.push({})">
+              <i class="fa fa-plus"></i>
+            </b-btn>
+          </b-col>
+        </transition-group>
+      </b-draggable>
     </div>
     <div v-else>
       <b-form-group v-for="(child, key) in field.fields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
@@ -73,15 +78,18 @@
 </template>
 
 <script>
-import bDatePicker from 'vue2-datepicker'
+import bDraggable from "vuedraggable";
+
+import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
 import Vue from "vue";
-import _ from 'lodash'
+import _ from "lodash";
 
 export default {
   components: {
     bUeditor,
     bDatePicker,
+    bDraggable
   },
   props: {
     id: {
@@ -90,28 +98,27 @@ export default {
     value: {},
     field: {},
     state: {},
-    name: {},
-    
+    name: {}
   },
   computed: {
-    description(){
+    description() {
       if (this.field.limit) {
-        const { width, height, size } = this.field.limit
-        return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`
+        const { width, height, size } = this.field.limit;
+        return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`;
       }
-      return field.description
+      return field.description;
     }
   },
   data() {
     return {
       model: this.value,
-      oldValue: null,
-    }
+      oldValue: null
+    };
   },
   watch: {
-    value: 'syncValue',
+    value: "syncValue",
     model(val) {
-      this.$emit('input', val)
+      this.$emit("input", val);
     }
   },
   methods: {
@@ -121,38 +128,48 @@ export default {
       }
       return v => v;
     },
-    reset(error){
+    reset(error) {
       if (error) {
-        this.$snotify.error(error)
+        this.$snotify.error(error);
       }
-      this.model = this.oldValue
-      return false
+      this.model = this.oldValue;
+      return false;
     },
     upload() {
       if (!this.model) {
-        return
+        return;
       }
       const fd = new FormData();
       fd.append("file", this.model);
-      const src = URL.createObjectURL(this.model)
-      const img = new Image()
-      img.src = src
-      img.onload = () => {
-        if (this.field.limit) {
-          const { width, height, size } = this.field.limit
-          if (this.model.size > size) {
-            return this.reset(`请上传小于${parseInt(size / 1024)}KB的文件`)
-          }
-          if (img.naturalHeight != height || img.naturalWidth != width) {
-            return this.reset(`请上传${width}x${height}像素的图片`)
-          }
-        }
+
+      const src = URL.createObjectURL(this.model);
+
+      const doUpload = () => {
         this.$http.post("upload", fd).then(({ data }) => {
-          this.model = data.url
+          this.model = data.url;
         });
+      };
+
+      const { width, height, size } = this.field.limit || {};
+
+      if (this.model.size > size) {
+        return this.reset(`请上传小于${parseInt(size / 1024)}KB的文件`);
       }
 
-
+      if (this.model.type.match(/^image/)) {
+        let file = new Image();
+        file.src = src;
+        file.onload = () => {
+          if (this.field.limit) {
+            if (file.naturalHeight != height || file.naturalWidth != width) {
+              return this.reset(`请上传${width}x${height}像素的图片`);
+            }
+          }
+          doUpload()
+        };
+      } else {
+        doUpload()
+      }
     },
     preview(file) {
       if (!file) {
@@ -164,18 +181,15 @@ export default {
       return URL.createObjectURL(file);
     },
     syncValue() {
-      this.model = this.value
+      this.model = this.value;
       if (!this.oldValue && this.value) {
-        this.oldValue = this.value
+        this.oldValue = this.value;
       }
     }
   },
   mounted() {
-    
-    this.syncValue()
+    this.syncValue();
   },
-  created(){
-    
-  }
+  created() {}
 };
 </script>

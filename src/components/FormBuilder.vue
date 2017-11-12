@@ -1,8 +1,8 @@
 <template>
   <b-form :inline="inline" @submit.prevent="handleSubmit">
 
-    <div v-if="!inline">
-      <b-form-group  :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
+    <div v-if="!inline" class="row">
+      <b-form-group :class="getClass(field)"  :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
         <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>
@@ -25,15 +25,18 @@
 import Vue from "vue";
 
 export default {
-  name: 'b-form-builder',
-  components: {
-  },
+  name: "b-form-builder",
+  components: {},
   props: {
     id: {
       type: String,
-      default(){
-        return 'form_' + parseInt(Math.random() * 9999)
+      default() {
+        return "form_" + parseInt(Math.random() * 9999);
       }
+    },
+    col: {
+      type: Number,
+      default: 12
     },
     inline: {
       type: Boolean,
@@ -64,7 +67,7 @@ export default {
     backText: {
       default: "返回"
     },
-    
+
     successMessage: {
       default: "操作成功"
     }
@@ -82,12 +85,17 @@ export default {
   },
   computed: {},
   methods: {
-    
-
+    getClass(field) {
+      const cols = field.cols ? field.cols : 12;
+      return [
+        "col-xl-" + cols, 
+        "col-lg-" + Math.min(12, cols * 2)
+      ];
+    },
     hasError(name) {
       return _.find(this.errors, v => v.field == name);
     },
-    
+
     handleSubmit() {
       if (this.onSubmit) {
         return this.onSubmit(this.model);

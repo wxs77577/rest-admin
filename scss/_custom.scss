@@ -6,6 +6,9 @@
 .custom-file-control::before {
   content: '选择文件' !important;
 }
+.custom-file-control::after {
+  content: '还未选择文件' !important;
+}
 .form-control{
   -webkit-appearance: none;
 }
@@ -14,4 +17,7 @@
 }
 [name="editorValue"]{
   display: none;
+}
+input.input{
+  border-radius: 0 !important;
 }

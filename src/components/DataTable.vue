@@ -16,38 +16,13 @@
         
         <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
           
-          <template v-if="['image'].includes(field.type)">
-            <img :src="row.value" />
-          </template>
-
-          <template v-else-if="['audio', 'video'].includes(field.type)">
-            <component :is="field.type" :src="row.value" controls />
-          </template>
-
-          <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
-            <b-badge :variant="row.value ? 'success' : 'danger'">
-              {{String(!!row.value).toUpperCase()}}
-            </b-badge>
-          </template>
-
-          <template v-else-if="field.ref">
-            {{_.get(row.item, field.ref)}}
-          </template>
-
-          <template v-else-if="key === '_id'">
-            <span v-b-tooltip.hover.top.d100 :title="row.value">
-              {{row.value.substr(-4).toUpperCase()}}
-            </span>
-          </template>
-
-          <template v-else>
-            {{row.value}}
-          </template>
+          <b-data-column :field="field" :name="key" :row="row"></b-data-column>
 
         </div>
         
         <template slot="actions" slot-scope="row">
-          <b-btn size="sm" variant="primary" @click.stop="show(row.item)">编辑</b-btn>
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)">查看</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)">编辑</b-btn>
           <b-btn size="sm" variant="second" @click.stop="remove(row.item)">删除</b-btn>
         </template>
 
@@ -59,10 +34,12 @@
 
 <script>
 import bFormBuilder from "./FormBuilder";
+import bDataColumn from "./DataColumn";
 import {mapState, mapGetters} from 'vuex'
 export default {
   components: {
-    bFormBuilder
+    bFormBuilder,
+    bDataColumn
   },
   props: {
     resource: {
@@ -213,6 +190,11 @@ export default {
     show(item) {
       this.$router.push({
         path: this.resource + "/" + item._id
+      });
+    },
+    edit(item) {
+      this.$router.push({
+        path: this.resource + "/" + item._id + '/edit'
       });
     },
     remove(item) {

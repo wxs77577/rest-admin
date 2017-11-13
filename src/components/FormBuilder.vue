@@ -1,18 +1,22 @@
 <template>
-  <b-form :inline="inline" @submit.prevent="handleSubmit">
+  <b-form :inline="inline" @submit.prevent="handleSubmit" v-if="inline">
+    <template v-for="(field, name) in fields">
+      <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
+      <b-form-field class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
+    </template>
+
+    <slot name="actions">
+      <b-button type="submit" variant="primary">{{submitText}}</b-button>
+      <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+    </slot>
+  </b-form>
+  <b-form :inline="inline" @submit.prevent="handleSubmit" v-else>
 
     <div v-if="!inline" class="row">
-      <b-form-group :class="getClass(field)"  :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
+      <b-form-group :class="getClass(field)" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
         <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>
-
-    <span class="d-flex" v-else >
-      <template v-for="(field, name) in fields">
-        <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
-        <b-form-field class="m-1" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
-      </template>
-    </span>
 
     <slot name="actions">
       <b-button type="submit" variant="primary">{{submitText}}</b-button>
@@ -88,7 +92,7 @@ export default {
     getClass(field) {
       const cols = field.cols ? field.cols : 12;
       return [
-        "col-xl-" + cols, 
+        "col-xl-" + cols,
         "col-lg-" + Math.min(12, cols * 2)
       ];
     },
@@ -102,7 +106,7 @@ export default {
       }
       const methodName = String(this.method).toLowerCase();
       this.$http
-        [methodName](this.action, this.model)
+      [methodName](this.action, this.model)
         .then(({ data }) => {
           if (this.successMessage) {
             this.$snotify.success(this.successMessage);
@@ -120,7 +124,7 @@ export default {
   mounted() {
     this.model = this.value;
   },
-  created() {}
+  created() { }
 };
 </script>
 

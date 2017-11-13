@@ -11,35 +11,48 @@
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />
       </div>
-      <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+      <b-row>
+        <b-col cols="8">
+          <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+        </b-col>
+        <b-col cols="4" class="text-right">
+          <p>共 <b>{{totalRows}}</b> 条数据</p>
+        </b-col>
+      </b-row>
       <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
         
-        <div v-for="(field, key) in fields" :key="key" :slot="key" slot-scope="row">
-          
-          <b-data-column :field="field" :name="key" :row="row"></b-data-column>
-
-        </div>
+        <template v-for="(field, key) in fields"  :slot="key" slot-scope="row">
+          <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id />
+        </template>
         
         <template slot="actions" slot-scope="row">
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)">查看</b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)">编辑</b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)">删除</b-btn>
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.show !== false">查看</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.edit !== false">编辑</b-btn>
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.remove !== false">删除</b-btn>
         </template>
 
       </b-table>
-      <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+
+      <b-row>
+        <b-col cols="8">
+          <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+        </b-col>
+        <b-col cols="4" class="text-right">
+          <p>共 <b>{{totalRows}}</b> 条数据</p>
+        </b-col>
+      </b-row>
     </div>
   </b-card>
 </template>
 
 <script>
 import bFormBuilder from "./FormBuilder";
-import bDataColumn from "./DataColumn";
+import bDataValue from "./DataValue";
 import {mapState, mapGetters} from 'vuex'
 export default {
   components: {
     bFormBuilder,
-    bDataColumn
+    bDataValue
   },
   props: {
     resource: {
@@ -165,7 +178,7 @@ export default {
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
         if (!this.fields.actions) {
-          this.fields.actions = {};
+          this.fields.actions = {}
         }
         this.searchFields = data.searchFields;
         this.searchModel = data.searchModel;

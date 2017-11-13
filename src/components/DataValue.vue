@@ -1,11 +1,11 @@
 <template>
   <div>
     <template v-if="['html'].includes(field.type)">
-      <div v-html="value"></div>
+      <div v-html="value" class="p-2" style="max-height:500px;overflow:scroll;border:1px solid #eee;"></div>
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
-      <img :src="value" />
+      <b-img-lazy :src="value" blank-color="#bbb" />
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
@@ -24,7 +24,7 @@
 
     <template v-else-if="name === '_id'">
       <span v-b-tooltip.hover.top.d100 :title="value">
-        {{value.substr(-4).toUpperCase()}}
+        {{String(shortId ? value.substr(-4) : value).toUpperCase()}}
       </span>
     </template>
 
@@ -35,21 +35,39 @@
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
-  name: 'b-data-column',
+  name: "b-data-value",
   props: {
-    field: {},
-    name: {},
-    model: {},
-    row: {}
+    field: {
+      required: true,
+      type: Object
+    },
+    name: {
+      required: true,
+      type: String,
+    },
+    model: {
+      required: true,
+      type: Object
+    },
+    shortId: {
+      required: false,
+      type: Boolean,
+      default: false
+    },
+    
   },
   computed: {
-    value(){
-      if (this.row) {
-        return this.row.value
+    value() {
+      let value = this.model[this.name]
+      if (this.field.options) {
+        const options = _.mapValues(_.keyBy(this.field.options, 'value'), 'text')
+        return options[value]
       }
-      return this.model[name]
+      return value;
     }
   }
-}
+};
 </script>

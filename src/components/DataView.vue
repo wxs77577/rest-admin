@@ -5,20 +5,19 @@
       <table class="table ">
         <tbody>
           <tr v-for="(field, key) in fields" :key="key">
-            <th width="100">{{field.label}}</th>
+            <th width="100">{{field.label || key}}</th>
             <td>
               <div v-if="['array'].includes(field.type)">
                 <b-table :items="model[key]" :fields="field.fields">
                   <div v-for="(child, k) in field.fields" :key="k" :slot="k" slot-scope="row">
 
-                    <b-data-column :field="child" :name="k" :model="row"></b-data-column>
+                    <b-data-value :field="child" :name="k" :model="row.item" />
 
                   </div>
                 </b-table>
               </div>
               <div v-else>
-                <b-data-column :field="field" :name="key" :model="model"></b-data-column>
-                <!-- {{model[key]}} -->
+                <b-data-value :field="field" :name="key" :model="model" />
               </div>
             </td>
           </tr>
@@ -32,12 +31,12 @@
 </template>
 
 <script>
-import bDataColumn from "./DataColumn";
+import bDataValue from "./DataValue";
 
 import { mapState, mapGetters } from 'vuex'
 export default {
   components: {
-    bDataColumn
+    bDataValue
   },
   props: {
     resource: {

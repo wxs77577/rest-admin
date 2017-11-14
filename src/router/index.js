@@ -5,6 +5,7 @@ import store, {types} from '../store'
 import ResourceIndex from '../components/ResourceIndex'
 import ResourceEdit from '../components/ResourceEdit'
 import ResourceShow from '../components/ResourceShow'
+import ResourceStat from '../components/ResourceStat'
 import Login from '../components/Login'
 import Layout from '../components/Layout'
 import Home from '../components/Home'
@@ -31,6 +32,11 @@ const router = new Router({
           component: Home,
         },
         {
+          path: '/rest/:resource/stat',
+          name: 'stat',
+          component: ResourceStat
+        },
+        {
           path: '/rest/:resource',
           name: 'index',
           component: ResourceIndex
@@ -45,6 +51,7 @@ const router = new Router({
           name: 'edit',
           component: ResourceEdit
         },
+        
         {
           path: '/rest/:resource/:id',
           name: 'show',

@@ -1,5 +1,5 @@
 <template>
-  <b-card :header="resource">
+  <b-card :header="header">
     <div class="data-form">
       <legend v-if="model._id">Edit: {{model._id}}</legend>
       <b-form-builder :fields="fields" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   components: {
@@ -49,7 +50,15 @@ export default {
     },
     method() {
       return this.isNew ? 'post' : 'put'
-    }
+    },
+    header() {
+      return `
+        ${this.currentNav.name}
+        <small> ${this.resource.toUpperCase()} </small>
+      `
+    },
+    ...mapState(['nav']),
+    ...mapGetters(['currentNav']),
   },
   methods: {
     fetch() {

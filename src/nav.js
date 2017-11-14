@@ -36,6 +36,11 @@ export default {
       icon: 'icon-basket',
     },
     {
+      name: '已售',
+      url: '/rest/order_items',
+      icon: 'icon-basket',
+    },
+    {
       name: '用户',
       url: '/rest/users',
       icon: 'icon-people',

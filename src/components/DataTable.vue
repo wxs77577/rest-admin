@@ -177,8 +177,13 @@ export default {
       this.query = {}
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
-        if (!this.fields.actions) {
+        if (!this.fields.actions && this.fields.actions !== false) {
           this.fields.actions = {}
+        }
+        if (this.fields.actions) {
+          if (!this.fields.actions.label) {
+            this.fields.actions.label = '操作'
+          }
         }
         this.searchFields = data.searchFields;
         this.searchModel = data.searchModel;

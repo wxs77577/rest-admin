@@ -5,7 +5,7 @@
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
-      <b-img-lazy :src="value" blank-color="#bbb" />
+      <b-img-lazy :src="value" blank-color="#bbb" style="max-height:5em" />
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">

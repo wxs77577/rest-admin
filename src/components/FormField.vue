@@ -140,7 +140,8 @@ export default {
         return;
       }
       const fd = new FormData();
-      fd.append("file", this.model);
+      fd.append("file", this.model)
+      fd.append("type", this.name)
 
       const src = URL.createObjectURL(this.model);
 

@@ -82,6 +82,11 @@ export default {
     },
     {
       name: '系统配置',
+      url: '/rest/options',
+      icon: 'icon-settings',
+    },
+    {
+      name: '系统配置',
       url: '/rest/settings',
       icon: 'icon-settings',
     },

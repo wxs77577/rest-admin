@@ -1,5 +1,5 @@
 <template>
-  <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="value" :formatter="getFormatter(field, value)" :id="id" v-bind="field" @input="model = arguments[0]" :title="value" />
+  <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="value" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
   <!-- <b-multi-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="value = arguments[0].value" :value="value" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
@@ -19,7 +19,7 @@
 
     <div class="">
       <b-form-file ref="file" :id="id" v-model="model" v-bind="field" @input="upload" />
-      
+
     </div>
     <div class="preview" v-show="value">
       <component controls :is="field.type == 'image' ? 'img' : field.type" v-if="['audio', 'video', 'image'].includes(field.type)" :alt="value" :src="preview(value)" v-b-modal="'modal_input_' + name" class="my-2" center v-bind="field.preview" style="max-height: 300px;max-width: 100%;" />
@@ -34,8 +34,12 @@
 
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
 
+  <div v-else-if="['json'].includes(field.type)">
+    <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
+  </div>
+
   <div v-else-if="field.fields">
-    <div v-if="['array'].includes(field.type)">
+    <div v-if="['array'].includes(field.type) || parent.isArray">
       <b-draggable v-model="model">
         <transition-group tag="div" class="row">
           <b-col v-for="(item, i) in model" :key="i" cols :lg="6" :xl="4">
@@ -48,7 +52,7 @@
                 </b-col>
               </b-row>
 
-              <b-form-group v-for="(child, key) in field.fields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
+              <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
                 <b-form-field v-model="model[i][key]" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
               </b-form-group>
             </b-card>
@@ -61,8 +65,16 @@
         </transition-group>
       </b-draggable>
     </div>
+    
+    <div v-else-if="['object'].includes(field.type)">
+      <b-card>
+        <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
+          <b-form-field v-model="model[key]" :name="key" :field="child" :id="`input_${name}_${key}`" />
+        </b-form-group>
+      </b-card>
+    </div>
     <div v-else>
-      <b-form-group v-for="(child, key) in field.fields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
+      <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
         <b-form-field v-model="model[key]" :name="key" :field="child" :id="`input_${name}_${key}`" />
       </b-form-group>
     </div>
@@ -95,12 +107,31 @@ export default {
     id: {
       required: true
     },
-    value: {},
+    parent: {},
+    value: {
+      
+    },
     field: {},
     state: {},
     name: {}
   },
   computed: {
+    myFields(){
+      if (typeof this.field.fields == 'string') {
+        const rel = this.parent[this.field.fields]
+        if (!rel) {
+          return {}
+        }
+        let ret = {}
+        try{
+          ret = JSON.parse(rel)
+        } catch (e) {
+          ret = {}
+        }
+        return ret
+      }
+      return this.field.fields
+    },
     description() {
       if (this.field.limit) {
         const { width, height, size } = this.field.limit;
@@ -110,8 +141,14 @@ export default {
     }
   },
   data() {
+
+    let defaultValue = this.value
+    if (['object', 'json'].includes(this.field.type) && !this.value) {
+      // defaultValue = {}
+    }
     return {
-      model: this.value,
+      options: this.field.options,
+      model: defaultValue,
       oldValue: null
     };
   },
@@ -186,11 +223,23 @@ export default {
       if (!this.oldValue && this.value) {
         this.oldValue = this.value;
       }
+    },
+    getAjaxOptions() {
+      if (!this.field.ajaxOptions) {
+        return
+      }
+      const { resource } = this.field.ajaxOptions
+      this.$http.get(resource + '/options', {
+        params: this.field.ajaxOptions
+      }).then(({ data }) => {
+        this.options = data
+      })
     }
   },
   mounted() {
     this.syncValue();
+    this.getAjaxOptions();
   },
-  created() {}
+  created() { }
 };
 </script>

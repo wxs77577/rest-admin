@@ -1,8 +1,8 @@
 <template>
-  <b-form :inline="inline" @submit.prevent="handleSubmit" v-if="inline">
+  <b-form :inline="true" @submit.prevent="handleSubmit" v-if="inline">
     <template v-for="(field, name) in fields">
       <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
-      <b-form-field class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
+      <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
     </template>
 
     <slot name="actions">
@@ -10,11 +10,12 @@
       <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
     </slot>
   </b-form>
-  <b-form :inline="inline" @submit.prevent="handleSubmit" v-else>
 
-    <div v-if="!inline" class="row">
+  <b-form :inline="false" @submit.prevent="handleSubmit" v-else>
+
+    <div class="row">
       <b-form-group :class="getClass(field)" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
-        <b-form-field v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+        <b-form-field :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>
 

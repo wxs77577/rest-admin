@@ -5,7 +5,7 @@
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
-      <b-img-lazy :src="value" blank-color="#bbb" style="max-height:5em" />
+      <b-img-lazy :src="value" blank-color="#bbb" v-bind="field" />
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
@@ -51,7 +51,7 @@ export default {
     },
     name: {
       required: true,
-      type: String,
+      type: String
     },
     model: {
       required: true,
@@ -61,15 +61,17 @@ export default {
       required: false,
       type: Boolean,
       default: false
-    },
-
+    }
   },
   computed: {
     value() {
-      let value = this.model[this.name]
+      let value = this.model[this.name];
       if (this.field.options) {
-        const options = _.mapValues(_.keyBy(this.field.options, 'value'), 'text')
-        return options[value]
+        const options = _.mapValues(
+          _.keyBy(this.field.options, "value"),
+          "text"
+        );
+        return options[value];
       }
       return value;
     }
@@ -86,7 +88,7 @@ export default {
 
   p {
     img {
-      max-width:100%;
+      max-width: 100%;
     }
   }
 }

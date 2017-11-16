@@ -1,7 +1,7 @@
 <template>
-  <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />
+  <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" /> -->
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
-  <!-- <b-multi-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="value = arguments[0].value" :value="value" :id="id" v-bind="field" :title="value" /> -->
+  <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :value="myValue" :id="id" v-bind="field" :title="value" />
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
   <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
@@ -42,9 +42,17 @@
     <div v-if="['array'].includes(field.type) || parent.isArray">
       <b-table hover bordered :items="model" :fields="myFields" v-if="parent.isTable">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
-          <!-- <b-data-value :field="child" :key="k" :name="k" :model="row.item" /> -->
           <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
-
+        </template>
+        <template slot="HEAD_actions" slot-scope="row">
+          <b-btn size="sm" @click="model.push({});">
+            <i class="icon-plus"></i> 添加
+          </b-btn>
+        </template>
+        <template slot="actions" slot-scope="row">
+          <b-btn size="sm" @click="model.splice(row.index, 1);$snotify.success('删除成功')">
+            <i class="icon-trash"></i> 删除
+          </b-btn>
         </template>
       </b-table>
       <b-draggable v-model="model" v-else>
@@ -99,15 +107,17 @@
 <script>
 import bDraggable from "vuedraggable";
 
-import bDatePicker from "vue2-datepicker";
-import bUeditor from "./UEditor";
+import bSelect from "vue-select"
+import bDatePicker from "vue2-datepicker"
+import bUeditor from "./UEditor"
 import Vue from "vue";
-import _ from "lodash";
+import _ from "lodash"
 
 export default {
   components: {
     bUeditor,
     bDatePicker,
+    bSelect,
     bDraggable
   },
   props: {
@@ -115,34 +125,38 @@ export default {
       required: true
     },
     parent: {},
-    value: {
-    },
+    value: {},
     field: {},
     state: {},
     name: {}
   },
   computed: {
     myValue() {
+      let ret = this.value
       if (this.field.multiple && !this.value) {
-        return [] 
+        ret = [];
       }
-      return this.value
+      
+      return ret;
     },
     myFields() {
-      if (typeof this.field.fields == 'string') {
-        const rel = this.parent[this.field.fields]
+      let fields = this.field.fields;
+      if (typeof fields == "string") {
+        const rel = this.parent[fields];
         if (!rel) {
-          return {}
+          return {};
         }
-        let ret = {}
         try {
-          ret = JSON.parse(rel)
+          fields = JSON.parse(rel);
         } catch (e) {
-          ret = {}
+          fields = {};
         }
-        return ret
       }
-      return this.field.fields
+      if (this.parent.isTable) {
+        fields.actions = {label: '操作'};
+      }
+
+      return fields;
     },
     description() {
       if (this.field.limit) {
@@ -150,12 +164,11 @@ export default {
         return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`;
       }
       return field.description;
-    }
+    },
   },
   data() {
-
-    let defaultValue = this.value
-    if (['object', 'json'].includes(this.field.type) && !this.value) {
+    let defaultValue = this.value;
+    if (["object", "json"].includes(this.field.type) && !this.value) {
       // defaultValue = {}
     }
     return {
@@ -167,6 +180,7 @@ export default {
   watch: {
     value: "syncValue",
     model(val) {
+      
       this.$emit("input", val);
     }
   },
@@ -189,8 +203,8 @@ export default {
         return;
       }
       const fd = new FormData();
-      fd.append("file", this.model)
-      fd.append("type", this.name)
+      fd.append("file", this.model);
+      fd.append("type", this.name);
 
       const src = URL.createObjectURL(this.model);
 
@@ -215,10 +229,10 @@ export default {
               return this.reset(`请上传${width}x${height}像素的图片`);
             }
           }
-          doUpload()
+          doUpload();
         };
       } else {
-        doUpload()
+        doUpload();
       }
     },
     preview(file) {
@@ -238,20 +252,22 @@ export default {
     },
     getAjaxOptions() {
       if (!this.field.ajaxOptions) {
-        return
+        return;
       }
-      const { resource } = this.field.ajaxOptions
-      this.$http.get(resource + '/options', {
-        params: this.field.ajaxOptions
-      }).then(({ data }) => {
-        this.options = data
-      })
+      const { resource } = this.field.ajaxOptions;
+      this.$http
+        .get(resource + "/options", {
+          params: this.field.ajaxOptions
+        })
+        .then(({ data }) => {
+          this.options = data;
+        });
     }
   },
   mounted() {
     this.syncValue();
     this.getAjaxOptions();
   },
-  created() { }
+  created() {}
 };
 </script>

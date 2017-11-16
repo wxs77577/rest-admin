@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="['html'].includes(field.type)">
-      <div v-html="value" class="p-2" style="max-height:500px;overflow:scroll;border:1px solid #eee;"></div>
+      <div v-html="value" class="p-2 data-value-html"></div>
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
@@ -14,12 +14,17 @@
 
     <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
       <b-badge :variant="value ? 'success' : 'danger'">
-        {{String(!!value).toUpperCase()}}
+        {{value ? 'Yes' : 'No'}}
       </b-badge>
     </template>
 
     <template v-else-if="field.ref">
-      {{_.get(model, field.ref)}}
+      <template v-if="field.multiple">
+        {{_.map(_.get(model, field.ref.split('.')[0]), field.ref.split('.')[1]).join('，')}}
+      </template>
+      <template v-else>
+        {{_.get(model, field.ref)}}
+      </template>
     </template>
 
     <template v-else-if="name === '_id'">
@@ -57,7 +62,7 @@ export default {
       type: Boolean,
       default: false
     },
-    
+
   },
   computed: {
     value() {
@@ -71,3 +76,18 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.data-value-html {
+  max-height: 500px;
+  max-width: 420px;
+  overflow-y: scroll;
+  border: 1px solid #eee;
+
+  p {
+    img {
+      max-width:100%;
+    }
+  }
+}
+</style>

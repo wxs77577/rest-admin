@@ -1,5 +1,5 @@
 <template>
-  <b-form-select v-if="['select', 'select2'].includes(field.type) && !field.multiple" :value="value" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />
+  <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
   <!-- <b-multi-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="value = arguments[0].value" :value="value" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
@@ -30,7 +30,7 @@
     </b-modal>
   </div>
 
-  <b-switch variant="success" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="id" v-model="model" />
+  <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="id" v-model="model" />
 
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
 
@@ -40,7 +40,14 @@
 
   <div v-else-if="field.fields">
     <div v-if="['array'].includes(field.type) || parent.isArray">
-      <b-draggable v-model="model">
+      <b-table hover bordered :items="model" :fields="myFields" v-if="parent.isTable">
+        <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
+          <!-- <b-data-value :field="child" :key="k" :name="k" :model="row.item" /> -->
+          <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
+
+        </template>
+      </b-table>
+      <b-draggable v-model="model" v-else>
         <transition-group tag="div" class="row">
           <b-col v-for="(item, i) in model" :key="i" cols :lg="6" :xl="4">
             <b-card>
@@ -65,7 +72,7 @@
         </transition-group>
       </b-draggable>
     </div>
-    
+
     <div v-else-if="['object'].includes(field.type)">
       <b-card>
         <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
@@ -109,21 +116,26 @@ export default {
     },
     parent: {},
     value: {
-      
     },
     field: {},
     state: {},
     name: {}
   },
   computed: {
-    myFields(){
+    myValue() {
+      if (this.field.multiple && !this.value) {
+        return [] 
+      }
+      return this.value
+    },
+    myFields() {
       if (typeof this.field.fields == 'string') {
         const rel = this.parent[this.field.fields]
         if (!rel) {
           return {}
         }
         let ret = {}
-        try{
+        try {
           ret = JSON.parse(rel)
         } catch (e) {
           ret = {}

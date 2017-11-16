@@ -5,7 +5,7 @@
       <table class="table ">
         <tbody>
           <tr v-for="(field, key) in fields" :key="key">
-            <th width="100">{{field.label || key}}</th>
+            <th style="min-width:120px">{{field.label || key}}</th>
             <td>
               <div v-if="['array'].includes(field.type)">
                 <b-table :items="model[key]" :fields="field.fields">

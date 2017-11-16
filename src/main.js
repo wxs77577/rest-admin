@@ -26,6 +26,9 @@ Vue.component('b-switch', Switch)
 import FormField from './components/FormField.vue'
 Vue.component('b-form-field', FormField)
 
+import DataValue from './components/DataValue.vue'
+Vue.component('b-data-value', DataValue)
+
 import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
 

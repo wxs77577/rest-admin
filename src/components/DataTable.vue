@@ -7,6 +7,10 @@
         <i class="icon-plus"></i>
         新建
         </b-btn>
+        <b-btn @click="fetchGrid" variant="success">
+        <i class="icon-refresh"></i>
+        刷新
+        </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />
@@ -25,7 +29,7 @@
           <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id />
         </template>
         
-        <template slot="actions" slot-scope="row">
+        <template slot="actions" slot-scope="row" >
           <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.show !== false">查看</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.edit !== false">编辑</b-btn>
           <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.remove !== false">删除</b-btn>
@@ -147,14 +151,19 @@ export default {
     page: "fetch",
     sort: "fetch",
     where: "fetch",
-    query(val) {
-      this.$emit("change query", val);
-      // this.$router.push({
-      //   query: {
-      //     query: JSON.stringify(val)
-      //   }
-      // });
-    }
+    "$route.query.query"(val){
+      console.log(val);
+      this.applyQuery()
+      this.fetch()
+    },
+    // query(val) {
+    //   this.$emit("change query", val);
+    //   // this.$router.push({
+    //   //   query: {
+    //   //     query: JSON.stringify(val)
+    //   //   }
+    //   // });
+    // }
   },
   methods: {
     fetch() {
@@ -164,7 +173,7 @@ export default {
       this.$http
         .get(this.resourceUri, {
           params: {
-            query: this.query
+            query: JSON.stringify(this.query)
           }
         })
         .then(({ data }) => {
@@ -189,6 +198,7 @@ export default {
         this.searchModel = data.searchModel;
         this.pause = false
         if (fetchData) {
+          this.applyQuery();
           this.fetch()
         }
       });
@@ -196,6 +206,7 @@ export default {
     applyQuery() {
       const query = this.$route.query.query;
       if (!query) {
+        this.query = {}
         return;
       }
       this.query = _.isString(query) ? JSON.parse(query) : query;
@@ -229,10 +240,12 @@ export default {
     }
   },
   mounted(){
-
+    this.fetchGrid(true);
+    
+    // console.log('mounted');
   },
   created() {
-    this.fetchGrid(true);
+    
     // this.applyQuery();
 
   }

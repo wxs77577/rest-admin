@@ -15,6 +15,10 @@
 *:focus, *:active{
   outline: none;
 }
+.page-item .page-link.active:focus{
+  box-shadow: none !important;
+
+}
 [name="editorValue"]{
   display: none;
 }

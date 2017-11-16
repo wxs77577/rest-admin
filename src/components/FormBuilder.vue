@@ -14,7 +14,7 @@
   <b-form :inline="false" @submit.prevent="handleSubmit" v-else>
 
     <div class="row">
-      <b-form-group :class="getClass(field)" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
+      <b-form-group :class="getClass(field)"  v-if="!field.showWhen || model[field.showWhen]" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
         <b-form-field :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>

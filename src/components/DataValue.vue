@@ -66,6 +66,9 @@ export default {
   computed: {
     value() {
       let value = this.model[this.name];
+      if (!value) {
+        return value
+      }
       if (this.field.options) {
         const options = _.mapValues(
           _.keyBy(this.field.options, "value"),

@@ -1,7 +1,7 @@
 <template>
-  <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" /> -->
+   <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" /> 
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
-  <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :value="myValue" :id="id" v-bind="field" :title="value" />
+  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :value="myValue" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
   <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">

@@ -1,25 +1,32 @@
 <template>
   <b-card :header="header">
     <div class="data-form">
-      <legend v-if="model._id">Edit: {{model._id}}</legend>
-      <b-form-builder :fields="fields" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
+      <div class="row">
+        <div class="col col-md-8">
+          <legend v-if="model._id">Edit: {{model._id}}</legend>
+        </div>
+        <div class="col col-md-4 text-right hidden-sm-down">
+          <b-btn @click="$router.go(-1)">返回</b-btn>
+          <b-btn variant="primary" @click="$refs.form.handleSubmit()">保存</b-btn>
+        </div>
+      </div>
+      <b-form-builder :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
     </div>
   </b-card>
 </template>
 
 <script>
-import {mapState, mapGetters} from 'vuex'
+import { mapState, mapGetters } from "vuex";
 
 export default {
-  components: {
-  },
+  components: {},
   props: {
     resource: {
       type: String,
       required: true
     },
     id: {
-      default: '',
+      default: "",
       required: true
     },
     formPath: {
@@ -33,8 +40,7 @@ export default {
       choices: {},
       fields: {},
       model: {},
-      errors: [],
-      
+      errors: []
     };
   },
 
@@ -46,45 +52,57 @@ export default {
       return this.resource + "/" + this.formPath;
     },
     isNew() {
-      return !this.id
+      return !this.id;
     },
     method() {
-      return this.isNew ? 'post' : 'put'
+      return this.isNew ? "post" : "put";
+    },
+    with() {
+      return _.filter(
+        _.map(this.fields, (v, k) => v.ref && v.ref.split(".").shift())
+      );
     },
     header() {
       return `
         ${this.currentNav.name}
         <small> ${this.resource.toUpperCase()} </small>
-      `
+      `;
     },
-    ...mapState(['nav']),
-    ...mapGetters(['currentNav']),
+    ...mapState(["nav"]),
+    ...mapGetters(["currentNav"])
   },
   methods: {
     fetch() {
       if (this.isNew) {
-        return
+        return;
       }
-      this.$http.get(this.resourceUri).then(({ data }) => {
-        this.model = data;
-      });
+      this.$http
+        .get(this.resourceUri, {
+          params: {
+            query: {
+              with: this.with
+            }
+          }
+        })
+        .then(({ data }) => {
+          this.model = data;
+        });
     },
     fetchForm() {
       this.$http.get(this.formUri).then(({ data }) => {
         this.fields = data.fields;
+
+        this.fetch();
       });
     },
-    
-    onSuccess() {
-      this.$router.go(-1)
-    },
-  },
-  mounted() {
 
+    onSuccess() {
+      this.$router.go(-1);
+    }
   },
+  mounted() {},
   created() {
     this.fetchForm();
-    this.fetch();
   }
 };
 </script>

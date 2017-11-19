@@ -66,7 +66,7 @@ export default {
         this.$emit('input', editor.getContent())
       })
       editor.ready(() => {
-        editor.setContent(this.value)
+        editor.setContent(this.value || '')
         // editor.execCommand('serverparam', 'token', this.auth.token);
       })
     },

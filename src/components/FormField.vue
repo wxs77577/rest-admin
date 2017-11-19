@@ -1,7 +1,7 @@
 <template>
-   <b-form-select v-if="['select', 'select2'].includes(field.type)" :value="myValue" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" /> 
-  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="label" v-bind="field" :value="value" @input="setSelectedValue(arguments[0], name)"></b-select> -->
-  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :value="myValue" :id="id" v-bind="field" :title="value" /> -->
+   <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />  -->
+  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :value="selected" @input="selected = arguments[0]"></b-select>
+  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
   <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
@@ -107,11 +107,11 @@
 <script>
 import bDraggable from "vuedraggable";
 
-import bSelect from "vue-select"
-import bDatePicker from "vue2-datepicker"
-import bUeditor from "./UEditor"
+import bSelect from "vue-select";
+import bDatePicker from "vue2-datepicker";
+import bUeditor from "./UEditor";
 import Vue from "vue";
-import _ from "lodash"
+import _ from "lodash";
 
 export default {
   components: {
@@ -131,13 +131,19 @@ export default {
     name: {}
   },
   computed: {
-    myValue() {
-      let ret = this.value
-      if (this.field.multiple && !this.value) {
-        ret = [];
+    selected: {
+      set(val) {
+        const sel = _.isArray(val) ? _.map(val, "value") : val.value;
+        // this.model = sel;
+        this.selectedValue = val
+        this.$emit('input', sel)
+      },
+      get() {
+        return this.selectedValue;
       }
-      
-      return ret;
+    },
+    isSelect() {
+      return ["select", "select2"].includes(this.field.type);
     },
     myFields() {
       let fields = this.field.fields;
@@ -153,7 +159,7 @@ export default {
         }
       }
       if (this.parent.isTable) {
-        fields.actions = {label: '操作'};
+        fields.actions = { label: "操作" };
       }
 
       return fields;
@@ -164,7 +170,7 @@ export default {
         return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`;
       }
       return field.description;
-    },
+    }
   },
   data() {
     let defaultValue = this.value;
@@ -174,17 +180,30 @@ export default {
     return {
       options: this.field.options,
       model: defaultValue,
-      oldValue: null
+      oldValue: null,
+      selectedValue: null
     };
   },
   watch: {
     value: "syncValue",
     model(val) {
-      
       this.$emit("input", val);
     }
   },
   methods: {
+    handleSelect(val) {
+      if (Array.isArray(val)) {
+        _.mapValues(val, v => {
+          v.label = v.replace();
+        });
+        this.model = _.map(val, "value");
+        console.log(val);
+
+        // this.selected =
+      } else {
+        this.model = val ? val.value : null;
+      }
+    },
     getFormatter(field, value) {
       if (field.format) {
         return eval(field.format);
@@ -246,8 +265,46 @@ export default {
     },
     syncValue() {
       this.model = this.value;
+      console.log('sync value', this.oldValue, this.name);
+      
       if (!this.oldValue && this.value) {
         this.oldValue = this.value;
+
+        let selectedValue = this.value;
+        const ref = this.field.ref;
+        if (ref) {
+          const [rel, field] = ref.split(".");
+          const key = "_id";
+
+          if (_.isArray(this.value)) {
+            selectedValue = [];
+            if (this.field.ajaxOptions) {
+              _.filter(this.parent[rel], v => {
+                if (this.value.includes(v[key])) {
+                  selectedValue.push({
+                    value: v[key],
+                    text: v[field]
+                  });
+                }
+              });
+            } else {
+              // console.log(this.field.options);
+              _.filter(this.field.options, v => {
+                if (this.value.includes(v.value)) {
+                  selectedValue.push(v);
+                }
+              });
+            }
+          } else {
+            selectedValue = {
+              value: this.value,
+              text: _.get(this.parent, ref)
+            };
+          }
+        }
+
+        console.log('sync selected value',this.oldValue, selectedValue);
+        this.selectedValue = selectedValue;
       }
     },
     getAjaxOptions() {

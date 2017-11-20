@@ -75,7 +75,7 @@ export default {
       page: 1,
       perPage: 6,
       sortBy: '_id',
-      sortDesc: false,
+      sortDesc: true,
       fields: {},
       filter: {},
       choices: {},

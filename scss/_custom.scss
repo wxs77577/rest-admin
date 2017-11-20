@@ -29,3 +29,18 @@
 input.input{
   border-radius: 0 !important;
 }
+
+.form-inline .multiselect{
+  display: inline-block;
+  width: auto;
+}
+
+.multiselect__tags{
+  border-radius: 0 !important;
+}
+.multiselect{
+  z-index: 9 !important;
+}
+.multiselect__content-wrapper{
+  
+}

@@ -9,11 +9,11 @@ export default {
       title: true,
       name: '内容管理',
     },
-    {
-      name: '新闻',
-      url: '/rest/news',
-      icon: 'icon-book-open',
-    },
+    // {
+    //   name: '新闻',
+    //   url: '/rest/news',
+    //   icon: 'icon-book-open',
+    // },
     
     {
       name: '专栏',
@@ -34,6 +34,11 @@ export default {
     {
       title: true,
       name: '运营管理',
+    },
+    {
+      name: '兑换码',
+      url: '/rest/vouchers',
+      icon: 'icon-key',
     },
     {
       name: '订单',
@@ -65,11 +70,6 @@ export default {
       name: '广告',
       url: '/rest/ads',
       icon: 'icon-camera',
-    },
-    {
-      name: '设备',
-      url: '/rest/devices',
-      icon: 'icon-screen-smartphone',
     },
 
     {
@@ -103,5 +103,26 @@ export default {
       url: '/login',
       icon: 'icon-login',
     },
+
+    {
+      title: true,
+      name: '底层数据',
+    },
+    {
+      name: '设备',
+      url: '/rest/devices',
+      icon: 'icon-screen-smartphone',
+    },
+    {
+      name: '短信记录',
+      url: '/rest/sms',
+      icon: 'icon-screen-smartphone',
+    },
+    {
+      name: '支付记录',
+      url: '/rest/pay_logs',
+      icon: 'icon-list',
+    },
+    
   ]
 }

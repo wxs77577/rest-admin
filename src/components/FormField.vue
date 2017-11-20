@@ -1,6 +1,6 @@
 <template>
    <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />  -->
-  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :value="selected" @input="selected = arguments[0]"></b-select>
+  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" :on-search="getAjaxOptions"></b-select>
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
@@ -107,7 +107,8 @@
 <script>
 import bDraggable from "vuedraggable";
 
-import bSelect from "vue-select";
+import bSelect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.min.css"
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
 import Vue from "vue";
@@ -307,14 +308,18 @@ export default {
         this.selectedValue = selectedValue;
       }
     },
-    getAjaxOptions() {
+    getAjaxOptions(q) {
       if (!this.field.ajaxOptions) {
         return;
       }
-      const { resource } = this.field.ajaxOptions;
+      const options = this.field.ajaxOptions;
+      if (!options.where) {
+        options.where = {}
+      }
+      options.where[options.text] = q
       this.$http
-        .get(resource + "/options", {
-          params: this.field.ajaxOptions
+        .get(options.resource + "/options", {
+          params: options
         })
         .then(({ data }) => {
           this.options = data;
@@ -323,7 +328,9 @@ export default {
   },
   mounted() {
     this.syncValue();
-    this.getAjaxOptions();
+    if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
+      // this.getAjaxOptions();
+    }
   },
   created() {}
 };

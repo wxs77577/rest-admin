@@ -1,5 +1,5 @@
 <template>
-  <div class="my-3">
+  <div>
     
       <b-data-table :resource="resource"></b-data-table>
     

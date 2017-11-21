@@ -3,7 +3,7 @@
     <b-header/>
     <div class="app-body">
       <b-sidebar />
-      <main class="main mt-4">
+      <main class="main p-3">
         <ol class="breadcrumb" v-if="false">
           <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
             <span class="active" v-if="isLast(index)">{{ item }}</span>

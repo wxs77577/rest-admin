@@ -9,12 +9,6 @@ export default {
       title: true,
       name: '内容管理',
     },
-    // {
-    //   name: '新闻',
-    //   url: '/rest/news',
-    //   icon: 'icon-book-open',
-    // },
-    
     {
       name: '专栏',
       url: '/rest/courses',

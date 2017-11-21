@@ -1,6 +1,6 @@
 <template>
    <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />  -->
-  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" :on-search="getAjaxOptions"></b-select>
+  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" @search-change="getAjaxOptions" :placeholder="field.placeholder || ''" selectLabel="" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
@@ -108,7 +108,7 @@
 import bDraggable from "vuedraggable";
 
 import bSelect from "vue-multiselect";
-import "vue-multiselect/dist/vue-multiselect.min.css"
+import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
 import Vue from "vue";
@@ -136,8 +136,8 @@ export default {
       set(val) {
         const sel = _.isArray(val) ? _.map(val, "value") : val.value;
         // this.model = sel;
-        this.selectedValue = val
-        this.$emit('input', sel)
+        this.selectedValue = val;
+        this.$emit("input", sel);
       },
       get() {
         return this.selectedValue;
@@ -179,7 +179,7 @@ export default {
       // defaultValue = {}
     }
     return {
-      options: this.field.options,
+      options: this.field.options || [],
       model: defaultValue,
       oldValue: null,
       selectedValue: null
@@ -266,47 +266,52 @@ export default {
     },
     syncValue() {
       this.model = this.value;
-      console.log('sync value', this.oldValue, this.name);
-      
       if (!this.oldValue && this.value) {
         this.oldValue = this.value;
 
-        let selectedValue = this.value;
-        const ref = this.field.ref;
-        if (ref) {
-          const [rel, field] = ref.split(".");
-          const key = "_id";
-
-          if (_.isArray(this.value)) {
-            selectedValue = [];
-            if (this.field.ajaxOptions) {
-              _.filter(this.parent[rel], v => {
-                if (this.value.includes(v[key])) {
-                  selectedValue.push({
-                    value: v[key],
-                    text: v[field]
-                  });
-                }
-              });
-            } else {
-              // console.log(this.field.options);
-              _.filter(this.field.options, v => {
-                if (this.value.includes(v.value)) {
-                  selectedValue.push(v);
-                }
-              });
-            }
-          } else {
-            selectedValue = {
-              value: this.value,
-              text: _.get(this.parent, ref)
-            };
-          }
+        if (this.isSelect) {
+          this.syncSelectedValue();
         }
-
-        console.log('sync selected value',this.oldValue, selectedValue);
-        this.selectedValue = selectedValue;
       }
+    },
+    syncSelectedValue() {
+      let selectedValue = this.value;
+      const ref = this.field.ref;
+      if (ref) {
+        const [rel, field] = ref.split(".");
+        const key = "_id";
+
+        if (_.isArray(this.value)) {
+          selectedValue = [];
+          if (this.field.ajaxOptions) {
+            _.filter(this.parent[rel], v => {
+              if (this.value.includes(v[key])) {
+                selectedValue.push({
+                  value: v[key],
+                  text: v[field]
+                });
+              }
+            });
+          } else {
+            // console.log(this.field.options);
+            _.filter(this.field.options, v => {
+              if (this.value.includes(v.value)) {
+                selectedValue.push(v);
+              }
+            });
+          }
+        } else {
+          selectedValue = {
+            value: this.value,
+            text: _.get(this.parent, ref)
+          };
+        }
+      } else {
+        const selected = _.find(this.options, {value: this.value})
+        selectedValue = selected;
+      }
+
+      this.selectedValue = selectedValue;
     },
     getAjaxOptions(q) {
       if (!this.field.ajaxOptions) {
@@ -314,22 +319,24 @@ export default {
       }
       const options = this.field.ajaxOptions;
       if (!options.where) {
-        options.where = {}
+        options.where = {};
       }
-      options.where[options.text] = q
+      options.where[options.text] = q;
       this.$http
         .get(options.resource + "/options", {
           params: options
         })
         .then(({ data }) => {
           this.options = data;
+
+          this.syncSelectedValue()
         });
     }
   },
   mounted() {
     this.syncValue();
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
-      // this.getAjaxOptions();
+      this.getAjaxOptions();
     }
   },
   created() {}

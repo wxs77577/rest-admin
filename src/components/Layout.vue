@@ -1,7 +1,7 @@
 <template>
   <div class="app">
-    <b-header/>
-    <div class="app-body">
+    <!-- <b-header/> -->
+    <div class="app-body1">
       <b-sidebar />
       <main class="main p-3">
         <ol class="breadcrumb" v-if="false">
@@ -22,31 +22,34 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import BHeader from './Header'
-import BSidebar from './Sidebar'
-import BFooter from './Footer'
+import Vue from "vue";
+import BHeader from "./Header";
+import BSidebar from "./Sidebar";
+import BFooter from "./Footer";
 
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   components: {
-    BHeader, BSidebar, BFooter
+    BHeader,
+    BSidebar,
+    BFooter
   },
-  computed: {
-    
-  },
+  computed: {},
   data() {
     return {
       path: []
-    }
+    };
   },
-  created(){
-    
-  }
-}
+  created() {}
+};
 </script>
 
 <style>
-
+.app-body {
+  margin-top: 0 !important;
+}
+.sidebar-fixed .sidebar {
+  height: 100%;
+}
 </style>

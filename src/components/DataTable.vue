@@ -17,7 +17,7 @@
       </div>
       <b-row>
         <b-col cols="8">
-          <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+          <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
         </b-col>
         <b-col cols="4" class="text-right">
           <p>共 <b>{{totalRows}}</b> 条数据</p>
@@ -39,7 +39,7 @@
 
       <b-row>
         <b-col cols="8">
-          <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="page" />
+          <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
         </b-col>
         <b-col cols="4" class="text-right">
           <p>共 <b>{{totalRows}}</b> 条数据</p>
@@ -83,7 +83,8 @@ export default {
       items: [],
       searchFields: {},
       searchModel: {},
-      where: {}
+      where: {},
+      limitPages: 10
     };
   },
   computed: {

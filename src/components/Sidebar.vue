@@ -1,8 +1,15 @@
 <template>
   <div class="sidebar">
-    <div class="text-center p-3" v-if="auth.user && false" >
-      <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" />
-      <div>{{auth.user.username}}</div>
+    <div class="text-center p-3" v-if="auth.user" >
+      <b-img :src="require('../assets/img/logo.jpg')" fluid style="border-radius: 5px;" />
+      
+      <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
+      <div class="mt-3">
+        <b-badge class="text-uppercase">{{auth.user.role}}</b-badge> 
+        <span>{{auth.user.username}}</span>
+
+        
+      </div>
     </div>
     <nav class="sidebar-nav">
       <div slot="header"></div>

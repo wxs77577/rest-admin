@@ -1,8 +1,4 @@
 // Here you can add other styles
-.header-fixed .app-header,
-.sidebar-fixed .sidebar{
-  z-index: 1000;
-}
 .main .container-fluid{
   padding: 0
 }
@@ -14,6 +10,9 @@
 }
 .form-control{
   -webkit-appearance: none;
+}
+.input-group .form-control{
+  // z-indenx
 }
 *:focus, *:active{
   outline: none;
@@ -42,6 +41,7 @@ input.input{
   border-radius: 0 !important;
 }
 .multiselect{
+  position: inherit;
   z-index: 9 !important;
 }
 .multiselect__content-wrapper{

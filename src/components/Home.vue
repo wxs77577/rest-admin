@@ -20,40 +20,18 @@
 export default {
   data(){
     return {
-      statics: [
-        {
-          bg: 'info',
-          icon: 'icon-speedometer',
-          value: 97200,
-          title: '访问量',
-          progress: 78
-        },
-        {
-          bg: 'success',
-          icon: 'icon-people',
-          value: 12532,
-          title: '用户数',
-          progress: 60
-        },
-        {
-          bg: 'warning',
-          icon: 'icon-basket-loaded',
-          value: 8780,
-          title: '销售额',
-          progress: 92
-        },
-        {
-          bg: 'primary',
-          icon: 'icon-speech',
-          value: 650,
-          title: '语音数量',
-          progress: 67
-        },
-      ]
+      statics: []
     }
   },
   methods: {
-    
+    fetch(){
+      this.$http.get('home').then(({data}) => {
+        this.statics = data.statics
+      })
+    }
   },
+  created() {
+    this.fetch()
+  }
 }
 </script>

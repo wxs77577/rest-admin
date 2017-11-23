@@ -1,6 +1,8 @@
 <template>
-   <!-- <b-form-select v-if="['select', 'select2'].includes(field.type)" :formatter="getFormatter(field, value)" :id="id" v-bind="field" :options="options" @input="model = arguments[0]" :title="value" />  -->
-  <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" @search-change="getAjaxOptions" :placeholder="field.placeholder || ''" selectLabel="" />
+   <b-form-select v-if="['select', 'select2'].includes(field.type)" 
+   :formatter="getFormatter(field, value)" :id="id" :options="options"
+   v-bind="field" :value="field.multiple && !value ? [] : value" @input="model = arguments[0]" /> 
+  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" @search-change="getAjaxOptions" :placeholder="field.placeholder || ''" selectLabel="" /> -->
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
 
@@ -171,16 +173,26 @@ export default {
         return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`;
       }
       return field.description;
+    },
+    filteredValue() {
+      let defaultValue = this.value;
+      if (!this.defaultValue) {
+        if (["object", "json"].includes(this.field.type)) {
+          defaultValue = {};
+        }
+        if (["array"].includes(this.field.type) || this.field.multiple) {
+          defaultValue = [];
+        }
+      }
+      // console.log(defaultValue);
+      return defaultValue
     }
   },
   data() {
-    let defaultValue = this.value;
-    if (["object", "json"].includes(this.field.type) && !this.value) {
-      // defaultValue = {}
-    }
     return {
       options: this.field.options || [],
-      model: defaultValue,
+      model: (!this.value && this.multiple) ? [] : this.value,
+      // model: this.value,
       oldValue: null,
       selectedValue: null
     };
@@ -265,12 +277,16 @@ export default {
       return URL.createObjectURL(file);
     },
     syncValue() {
-      this.model = this.value;
+      if (!this.value && this.field.multiple) {
+        this.model = []
+      } else {
+        this.model = this.value;
+      }
       if (!this.oldValue && this.value) {
         this.oldValue = this.value;
 
         if (this.isSelect) {
-          this.syncSelectedValue();
+          // this.syncSelectedValue();
         }
       }
     },
@@ -307,7 +323,7 @@ export default {
           };
         }
       } else {
-        const selected = _.find(this.options, {value: this.value})
+        const selected = _.find(this.options, { value: this.value });
         selectedValue = selected;
       }
 
@@ -329,12 +345,12 @@ export default {
         .then(({ data }) => {
           this.options = data;
 
-          this.syncSelectedValue()
+          // this.syncSelectedValue();
         });
     }
   },
   mounted() {
-    this.syncValue();
+    // this.syncValue();
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }

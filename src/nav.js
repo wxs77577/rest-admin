@@ -30,9 +30,9 @@ export default {
       name: '运营管理',
     },
     {
-      name: '兑换码',
-      url: '/rest/vouchers',
-      icon: 'icon-key',
+      name: '广告',
+      url: '/rest/ads',
+      icon: 'icon-camera',
     },
     {
       name: '订单',
@@ -43,6 +43,12 @@ export default {
       name: '已售',
       url: '/rest/order_items',
       icon: 'icon-basket',
+    },
+    
+    {
+      name: '兑换码',
+      url: '/rest/vouchers',
+      icon: 'icon-key',
     },
     {
       name: '评论',
@@ -60,17 +66,17 @@ export default {
       url: '/rest/oauths',
       icon: 'icon-people',
     },
-    {
-      name: '广告',
-      url: '/rest/ads',
-      icon: 'icon-camera',
-    },
+    
 
     {
       title: true,
       name: '系统设置',
     },
-    
+    {
+      name: '充值价格表',
+      url: '/rest/charges',
+      icon: 'icon-list',
+    },
     {
       name: '系统配置',
       url: '/rest/options',
@@ -117,6 +123,10 @@ export default {
       url: '/rest/pay_logs',
       icon: 'icon-list',
     },
-    
+    {
+      name: '钱包记录',
+      url: '/rest/wallet_logs',
+      icon: 'icon-list',
+    },
   ]
 }

@@ -46,9 +46,7 @@ export default {
 </script>
 
 <style>
-.app-body {
-  margin-top: 0 !important;
-}
+
 .sidebar-fixed .sidebar {
   height: 100%;
 }

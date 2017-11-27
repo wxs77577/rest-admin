@@ -1,20 +1,18 @@
 <template>
   <div class="sidebar">
     <div class="text-center p-3" v-if="auth.user" >
-      <b-img :src="require('../assets/img/logo.jpg')" fluid style="border-radius: 5px;" />
+      <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
       
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
       <div class="mt-3">
         <b-badge class="text-uppercase">{{auth.user.role}}</b-badge> 
         <span>{{auth.user.username}}</span>
-
-        
       </div>
     </div>
     <nav class="sidebar-nav">
       <div slot="header"></div>
       <ul class="nav">
-        <template v-for="(item, index) in nav.items">
+        <template v-for="(item, index) in site.menu">
           <li class="nav-title" v-if="item.title" :key="index">
             {{item.name}}
           </li>
@@ -60,7 +58,7 @@ export default {
   name: 'sidebar',
   
   computed: {
-    ...mapState(['auth', 'nav'])
+    ...mapState(['auth', 'site'])
   },
   components: {
 
@@ -75,5 +73,8 @@ export default {
 </script>
 
 <style lang="css">
-
+  .site-logo{
+    background:#fff;
+    /* padding:1em; */
+  }
 </style>

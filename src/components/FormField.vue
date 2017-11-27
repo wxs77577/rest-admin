@@ -37,7 +37,11 @@
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
 
   <div v-else-if="['json'].includes(field.type)">
-    <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
+    <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
+    
+     <!-- <v-jsoneditor v-if="model" :value="JSON.parse(model)" 
+     @input="model = JSON.stringify(arguments[0])"
+     :options="{}" /> -->
   </div>
 
   <div v-else-if="field.fields">
@@ -113,14 +117,19 @@ import bSelect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
+// import BJsonEditor  from "./JsonEditor";
+import BJsonEditor from "vue-jsoneditor";
 import Vue from "vue";
 import _ from "lodash";
 
+import 'jsoneditor/dist/jsoneditor.min.css'
+Vue.use(BJsonEditor)
 export default {
   components: {
     bUeditor,
     bDatePicker,
     bSelect,
+    // BJsonEditor,
     bDraggable
   },
   props: {
@@ -185,13 +194,22 @@ export default {
         }
       }
       // console.log(defaultValue);
-      return defaultValue
+      return defaultValue;
     }
   },
   data() {
+    let defaultValue = this.value;
+    if (!defaultValue) {
+      if (this.multiple) {
+        defaultValue = [];
+      } else if (this.field.type == "object") {
+        defaultValue = {};
+      }
+    }
     return {
       options: this.field.options || [],
-      model: (!this.value && this.multiple) ? [] : this.value,
+      model: !this.value && this.multiple ? [] : this.value,
+      model: defaultValue,
       // model: this.value,
       oldValue: null,
       selectedValue: null
@@ -278,7 +296,7 @@ export default {
     },
     syncValue() {
       if (!this.value && this.field.multiple) {
-        this.model = []
+        this.model = [];
       } else {
         this.model = this.value;
       }
@@ -328,6 +346,10 @@ export default {
       }
 
       this.selectedValue = selectedValue;
+    },
+    initAceEditor(editor) {
+      console.log(editor);
+      // require("vue-ace-editor/brace/mode/javascript");
     },
     getAjaxOptions(q) {
       if (!this.field.ajaxOptions) {

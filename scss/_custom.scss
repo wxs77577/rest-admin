@@ -47,3 +47,6 @@ input.input{
 .multiselect__content-wrapper{
   
 }
+.sidebar-fixed .sidebar{
+  z-index: 999 !important;
+}

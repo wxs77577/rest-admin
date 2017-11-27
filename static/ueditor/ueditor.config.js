@@ -424,7 +424,8 @@
 			tr:     ['rowspan', 'align', 'valign', 'class', 'style'],
 			tt:     [],
 			u:      [],
-			ul:     ['class', 'style'],
+            ul:     ['class', 'style'],
+            section:['class', 'style'],
 			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
 		}
     };

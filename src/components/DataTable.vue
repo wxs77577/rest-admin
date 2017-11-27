@@ -88,11 +88,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(['nav']),
-    ...mapGetters(['currentNav']),
+    ...mapState(['site']),
+    ...mapGetters(['currentMenu']),
     header() {
       return `
-        ${this.currentNav.name}
+        ${this.currentMenu.name}
         <small> ${this.resource.toUpperCase()} </small>
       `
     },

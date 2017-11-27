@@ -7,19 +7,28 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
+import { types } from "./store";
 
 export default {
-  name: 'app',
-  components: {
-    
-  },
+  name: "app",
+  components: {},
   data() {
     return {
       path: []
+    };
+  },
+  methods: {
+    fetch(){
+      this.$http.get('site').then(({data}) => {
+        this.$store.commit(types.SET_SITE, data)
+      })
     }
+  },
+  created() {
+    this.fetch()
   }
-}
+};
 </script>
 
 <style>

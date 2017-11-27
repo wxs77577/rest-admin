@@ -10,7 +10,7 @@
           <b-btn variant="primary" @click="$refs.form.handleSubmit()">保存</b-btn>
         </div>
       </div>
-      <b-form-builder :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
+      <b-form-builder v-if="loaded" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
     </div>
   </b-card>
 </template>
@@ -37,6 +37,7 @@ export default {
   },
   data() {
     return {
+      loaded: false,
       choices: {},
       fields: {},
       model: {},
@@ -64,16 +65,17 @@ export default {
     },
     header() {
       return `
-        ${this.currentNav.name}
+        ${this.currentMenu.name}
         <small> ${this.resource.toUpperCase()} </small>
       `;
     },
     ...mapState(["nav"]),
-    ...mapGetters(["currentNav"])
+    ...mapGetters(["currentMenu"])
   },
   methods: {
     fetch() {
       if (this.isNew) {
+        this.loaded = true
         return;
       }
       this.$http
@@ -85,6 +87,7 @@ export default {
           }
         })
         .then(({ data }) => {
+          this.loaded = true
           this.model = data;
         });
     },

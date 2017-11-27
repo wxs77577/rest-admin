@@ -5,7 +5,10 @@
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
-      <b-img-lazy :src="value" blank-color="#bbb" v-bind="field" />
+      <template v-if="field.multiple">
+        <b-img-lazy :key="v" v-for="v in value" :src="v" blank-color="#bbb" v-bind="field" />
+      </template>
+      <b-img-lazy v-else :src="value" blank-color="#bbb" v-bind="field" fluid />
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
@@ -65,7 +68,7 @@ export default {
   },
   computed: {
     value() {
-      let value = this.model[this.name];
+      let value = _.get(this.model,this.name);
       if (!value) {
         return value
       }

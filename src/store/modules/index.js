@@ -1,7 +1,7 @@
 import auth from './auth'
-import nav from './nav'
+import site from './site'
 
 export default {
   auth,
-  nav
+  site
 }

@@ -10,7 +10,7 @@ export {default as types} from './types'
 Vue.use(Vuex)
 
 const apiUri = process.env.API_URI || 'http://localhost:5555/admin/api'
-console.log(process.env.PORT);
+
 
 export default new Vuex.Store({
   modules: modules,

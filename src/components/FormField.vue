@@ -17,21 +17,8 @@
   <b-form-textarea v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
 
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
-  <div v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)">
-
-    <div class="">
-      <b-form-file ref="file" :id="id" v-model="model" v-bind="field" @input="upload" />
-
-    </div>
-    <div class="preview" v-show="value">
-      <component controls :is="field.type == 'image' ? 'img' : field.type" v-if="['audio', 'video', 'image'].includes(field.type)" :alt="value" :src="preview(value)" v-b-modal="'modal_input_' + name" class="my-2" center v-bind="field.preview" style="max-height: 300px;max-width: 100%;" />
-    </div>
-
-    <b-modal :title="field.label" :id="'modal_input_' + name">
-      <b-img :src="preview(value)" class="my-2" center fluid />
-    </b-modal>
-  </div>
-
+  <b-form-uploader v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
+  :field="field" v-model="model" :id="id" :name="name" />
   <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="id" v-model="model" />
 
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
@@ -117,6 +104,7 @@ import bSelect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
+import bFormUploder from "./FormUploder";
 // import BJsonEditor  from "./JsonEditor";
 import BJsonEditor from "vue-jsoneditor";
 import Vue from "vue";
@@ -129,6 +117,7 @@ export default {
     bUeditor,
     bDatePicker,
     bSelect,
+    'b-form-uploader': bFormUploder,
     // BJsonEditor,
     bDraggable
   },
@@ -248,52 +237,7 @@ export default {
       this.model = this.oldValue;
       return false;
     },
-    upload() {
-      if (!this.model) {
-        return;
-      }
-      const fd = new FormData();
-      fd.append("file", this.model);
-      fd.append("type", this.name);
-
-      const src = URL.createObjectURL(this.model);
-
-      const doUpload = () => {
-        this.$http.post("upload", fd).then(({ data }) => {
-          this.model = data.url;
-        });
-      };
-
-      const { width, height, size } = this.field.limit || {};
-
-      if (this.model.size > size) {
-        return this.reset(`请上传小于${parseInt(size / 1024)}KB的文件`);
-      }
-
-      if (this.model.type.match(/^image/)) {
-        let file = new Image();
-        file.src = src;
-        file.onload = () => {
-          if (this.field.limit) {
-            if (file.naturalHeight != height || file.naturalWidth != width) {
-              return this.reset(`请上传${width}x${height}像素的图片`);
-            }
-          }
-          doUpload();
-        };
-      } else {
-        doUpload();
-      }
-    },
-    preview(file) {
-      if (!file) {
-        return;
-      }
-      if (typeof file === "string") {
-        return file;
-      }
-      return URL.createObjectURL(file);
-    },
+    
     syncValue() {
       if (!this.value && this.field.multiple) {
         this.model = [];

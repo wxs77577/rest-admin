@@ -21,6 +21,7 @@ export default {
   methods: {
     fetch(){
       this.$http.get('site').then(({data}) => {
+        window.document.title = (data.name || 'REST ADMIN') + ' DASHBOARD'
         this.$store.commit(types.SET_SITE, data)
       })
     }

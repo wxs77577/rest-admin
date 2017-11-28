@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="break-all">
     <template v-if="['html'].includes(field.type)">
       <div v-html="value" class="p-2 data-value-html"></div>
     </template>

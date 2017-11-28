@@ -29,6 +29,7 @@
     "vue-router": "^3.0.1",
     "vue-select": "^2.3.0",
     "vue-snotify": "^2.0.3",
+    "vue-upload-component": "^2.7.1",
     "vue-upload-file": "^1.1.0",
     "vue2-datepicker": "^1.6.0",
     "vue2-dropzone": "^3.0.0",

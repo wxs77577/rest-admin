@@ -1,54 +1,60 @@
 <template>
   <div>
-    <div class="">
-      <b-form-file ref="file" :id="id" v-model="file" v-bind="field" @input="upload" />
-    </div>
-    <div class="preview" v-show="model" v-if="['audio', 'video', 'image'].includes(field.type)">
-      <template v-if="_.isArray(model)">
-        <b-draggable v-model="model">
-        <component controls @click="current = v" :class="{current: current == v}" v-for="v in value" :key="v" :is="tag" 
-         :alt="v" 
-        :src="preview(v)" center v-bind="field.preview"/>
-        </b-draggable>
-      </template>
-      <template v-else>
-        <component controls :is="tag" :alt="图片不存在" 
-        :src="preview(value)" center v-bind="field.preview" />
-      </template>
-    </div>
-
-    <b-modal :title="field.label" :id="'modal_input_' + name">
-      <!-- <b-img :src="preview(value)" class="my-2" center fluid /> -->
+    <b-card >
+       <component controls :is="tag" :alt="value" class="item"
+      :src="preview(file)" center v-bind="field.preview" @click.stop="showModal = !showModal" />
+      <div class="">
+      
+      </div>
+      <div slot="footer" class="text-center">
+        <b-form-file ref="file" :id="fileName" v-model="file" 
+        v-bind="field" @input="upload" class="d-none" :multiple="false" />
+        <label :for="`file_${id}`" class="btn btn-secondary m-0">
+          {{file ? '更换' : '选择'}}
+        </label>
+        <b-btn @click="$emit('remove')">删除</b-btn>
+        <b-btn @click="$emit('add')" v-if="allowAdd">添加</b-btn>
+      </div>
+    </b-card>
+    <b-modal :title="field.label">
+      <b-img :src="preview(value)" class="my-2" center fluid />
     </b-modal>
   </div>
 </template>
 <script>
-import bDraggable from "vuedraggable";
 export default {
-  name: "b-form-uploader",
-  components: {
-    bDraggable
-  },
+  name: "b-form-uploader-item",
   props: {
     value: {},
     field: {},
     id: {},
     parent: {},
-    name: {}
+    name: {},
+    allowAdd: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
       model: this.value,
-      file: null,
-      current: this.value
+      file: this.value,
+      current: this.value,
+      showModal: false
     };
   },
   watch: {
-    value(val){
-      this.model = val
+    value(val) {
+      this.file = val;
     }
   },
   computed: {
+    modalName(){
+      return `modal_${this.id}`
+    },
+    fileName(){
+      return `file_${this.id}`
+    },
     tag() {
       return this.field.type == "image" ? "img" : this.field.type;
     }
@@ -58,6 +64,7 @@ export default {
       if (!this.file) {
         return;
       }
+      console.log(this.file);
       const fd = new FormData();
       fd.append("file", this.file);
       fd.append("type", this.name);
@@ -67,6 +74,7 @@ export default {
       const doUpload = () => {
         this.$http.post("upload", fd).then(({ data }) => {
           this.file = data.url;
+          this.$emit("input", this.file);
         });
       };
 
@@ -104,9 +112,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .current {
   border: 1px solid #c30;
+}
+.item {
+  max-width: 100%;
+  max-height: 200px;
 }
 </style>
 

@@ -19,7 +19,7 @@
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
   <b-form-uploader v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
   :field="field" v-model="model" :id="id" :name="name" />
-  <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch'].includes(field.type)" :id="id" v-model="model" />
+  <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch', 'checkbox'].includes(field.type)" :id="id" v-model="model" />
 
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
 
@@ -104,7 +104,7 @@ import bSelect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
-import bFormUploder from "./FormUploder";
+import bFormUploader from "./FormUploader";
 // import BJsonEditor  from "./JsonEditor";
 import BJsonEditor from "vue-jsoneditor";
 import Vue from "vue";
@@ -117,7 +117,7 @@ export default {
     bUeditor,
     bDatePicker,
     bSelect,
-    'b-form-uploader': bFormUploder,
+    'b-form-uploader': bFormUploader,
     // BJsonEditor,
     bDraggable
   },

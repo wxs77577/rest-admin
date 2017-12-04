@@ -33,6 +33,7 @@
           <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.show !== false">查看</b-btn>
           <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.edit !== false">编辑</b-btn>
           <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields.actions.buttons || fields.actions.buttons.remove !== false">删除</b-btn>
+          <b-btn size="sm" v-for="(button, key) in fields.actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
         </template>
 
       </b-table>

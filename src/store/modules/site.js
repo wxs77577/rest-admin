@@ -7,6 +7,8 @@ export default {
     name: 'REST ADMIN',
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     menu: menu,
+    footer: ` <span><a href="https://worthdaily.com">一值</a> &copy; 2017 </span>
+    <span class="ml-auto">Powered by <a href="https://worthdaily.com">一值团队</a></span>`,
     logo: require('../../assets/img/logo.png'),
   },
   mutations: {

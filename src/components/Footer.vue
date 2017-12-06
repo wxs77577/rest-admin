@@ -1,11 +1,11 @@
 <template>
-  <footer class="app-footer">
-    <span><a href="https://worthdaily.com">一值</a> &copy; 2017 </span>
-    <span class="ml-auto">Powered by <a href="https://worthdaily.com">一值团队</a></span>
+  <footer class="app-footer" v-html="$store.state.site.footer">
+    
   </footer>
 </template>
 <script>
+
 export default {
-  name: 'footer'
-}
+  name: "footer",
+};
 </script>

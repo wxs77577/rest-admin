@@ -2,7 +2,7 @@
   <div>
     <b-card >
        <component controls :is="tag" :alt="value" class="item"
-      :src="preview(file)" center v-bind="field.preview" @click.stop="showModal = !showModal" />
+      :src="preview(file)" style="img-fluid" center v-bind="field.preview" @click.stop="showModal = !showModal" />
       <div class="">
       
       </div>

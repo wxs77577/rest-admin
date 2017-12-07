@@ -1,9 +1,9 @@
 {
   "name": "rest-admin",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
+  "version": "0.9.0",
+  "description": "An Admin Dashboard based on vue and boostrap 4",
   "author": "xuesong <wu-xuesong@qq.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",

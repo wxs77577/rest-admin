@@ -6,6 +6,7 @@ import ResourceIndex from '../components/ResourceIndex'
 import ResourceEdit from '../components/ResourceEdit'
 import ResourceShow from '../components/ResourceShow'
 import ResourceStat from '../components/ResourceStat'
+import CustomForm from '../components/CustomForm'
 import Login from '../components/Login'
 import Layout from '../components/Layout'
 import Home from '../components/Home'
@@ -56,6 +57,11 @@ const router = new Router({
           path: '/rest/:resource/:id',
           name: 'show',
           component: ResourceShow
+        },
+        {
+          path: '/form',
+          name: 'form',
+          component: CustomForm
         },
       ]
     },

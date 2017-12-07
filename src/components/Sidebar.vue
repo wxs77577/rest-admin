@@ -2,9 +2,11 @@
   <div class="sidebar">
     <div class="text-center p-3" v-if="auth.user" >
       <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
+      <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->
       
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
       <div class="mt-3">
+        <h5 style="letter-spacing:2px">{{site.name}}</h5>
         <b-badge class="text-uppercase">{{auth.user.role}}</b-badge> 
         <span>{{auth.user.username}}</span>
       </div>

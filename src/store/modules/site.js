@@ -5,9 +5,12 @@ import _ from 'lodash'
 export default {
   state: {
     name: 'REST ADMIN',
+    url: 'https://genyii.com',
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     menu: menu,
-    logo: require('../../assets/img/logo.png'),
+    poweredBy: 'Powered by <a href="https://genyii.com">上海庚易软件科技有限公司</a>',
+    footer: '',
+    logo: require('@/assets/img/gengyi-logo.svg'),
   },
   mutations: {
     [types.SET_SITE](state, data) {

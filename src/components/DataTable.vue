@@ -11,6 +11,11 @@
         <i class="icon-refresh"></i>
         刷新
         </b-btn>
+        <b-btn v-for="button in _.get(fields, 'actions.toolbar.extra', [])" 
+        :key="button.label"
+        v-bind="button">
+          {{button.label}}
+        </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />

@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <div class="preview py-2" v-show="model" v-if="['audio', 'video', 'image'].includes(field.type)">
+    <div class="preview py-2" v-if="['audio', 'video', 'image'].includes(field.type)">
       <div class="thumbnail" v-if="_.isArray(model)">
         <b-draggable v-model="model" @input="update" class="row">
           <b-form-uploader-item v-if="value" class="col-4" :name="name" :id="`${id}_${k}`" :key="k"

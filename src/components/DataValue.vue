@@ -6,9 +6,9 @@
 
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">
-        <b-img-lazy :key="v" v-for="v in value" :src="v" blank-color="#bbb" v-bind="field" />
+        <b-img :key="v" v-for="v in value" :src="v" v-bind="field" />
       </template>
-      <b-img-lazy v-else :src="value" blank-color="#bbb" v-bind="field" fluid />
+      <b-img v-else :src="value" v-bind="field" fluid />
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">

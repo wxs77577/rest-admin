@@ -10,12 +10,9 @@
           <small class="text-muted text-uppercase font-weight-bold">{{item.title}}</small>
           <b-progress class="progress-white progress-xs mt-3" :value="item.progress"/>
         </b-card>
-
-        
       </div><!--/.col-->
       
     </div><!--/.row-->
-    <b-btn to="/form?uri=vouchers/generate">生成兑换码</b-btn>
   </div>
 </template>
 

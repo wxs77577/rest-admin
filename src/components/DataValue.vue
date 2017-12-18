@@ -23,10 +23,10 @@
 
     <template v-else-if="field.ref">
       <template v-if="field.multiple">
-        {{_.map(_.get(model, field.ref.split('.')[0]), field.ref.split('.')[1]).join('，')}}
+        {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join('，')}}
       </template>
       <template v-else>
-        {{_.get(model, field.ref)}}
+        {{_.get(model || {}, field.ref)}}
       </template>
     </template>
 
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     value() {
-      let value = _.get(this.model,this.name);
+      let value = _.get(this.model || {},this.name);
       if (!value) {
         return value
       }

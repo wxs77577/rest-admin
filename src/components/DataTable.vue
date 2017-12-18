@@ -11,10 +11,15 @@
         <i class="icon-refresh"></i>
         刷新
         </b-btn>
-        <b-btn v-for="button in _.get(fields, 'actions.toolbar.extra', [])" 
+        <b-btn v-for="button in _.get(fields || {}, 'actions.toolbar.extra', [])" 
         :key="button.label"
         v-bind="button">
           {{button.label}}
+        </b-btn>
+
+        <b-btn @click="removeAll" class="pull-right" variant="second">
+        <i class="icon-trash"></i>
+        全部删除
         </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
@@ -58,7 +63,7 @@
 <script>
 import bFormBuilder from "./FormBuilder";
 import bDataValue from "./DataValue";
-import {mapState, mapGetters} from 'vuex'
+import { mapState, mapGetters } from "vuex";
 export default {
   components: {
     bFormBuilder,
@@ -80,7 +85,7 @@ export default {
       pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
       perPage: 6,
-      sortBy: '_id',
+      sortBy: "_id",
       sortDesc: true,
       fields: {},
       filter: {},
@@ -94,13 +99,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(['site']),
-    ...mapGetters(['currentMenu']),
+    ...mapState(["site"]),
+    ...mapGetters(["currentMenu"]),
     header() {
       return `
-        ${this.currentMenu.name}
+        ${this.currentMenu.name || ""}
         <small> ${this.resource.toUpperCase()} </small>
-      `
+      `;
     },
     with() {
       return _.filter(
@@ -151,18 +156,18 @@ export default {
     }
   },
   watch: {
-    "$route.params.resource"(){
-      this.pause = true
-      this.fetchGrid(true)
+    "$route.params.resource"() {
+      this.pause = true;
+      this.fetchGrid(true);
     },
     page: "fetch",
     sort: "fetch",
     where: "fetch",
-    "$route.query.query"(val){
+    "$route.query.query"(val) {
       console.log(val);
-      this.applyQuery()
-      this.fetch()
-    },
+      this.applyQuery();
+      this.fetch();
+    }
     // query(val) {
     //   this.$emit("change query", val);
     //   // this.$router.push({
@@ -175,7 +180,7 @@ export default {
   methods: {
     fetch() {
       if (this.pause) {
-        return
+        return;
       }
       this.$http
         .get(this.resourceUri, {
@@ -190,30 +195,30 @@ export default {
         });
     },
     fetchGrid(fetchData = false) {
-      this.query = {}
+      this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
         if (!this.fields.actions && this.fields.actions !== false) {
-          this.fields.actions = {}
+          this.fields.actions = {};
         }
         if (this.fields.actions) {
           if (!this.fields.actions.label) {
-            this.fields.actions.label = '操作'
+            this.fields.actions.label = "操作";
           }
         }
         this.searchFields = data.searchFields;
         this.searchModel = data.searchModel;
-        this.pause = false
+        this.pause = false;
         if (fetchData) {
           this.applyQuery();
-          this.fetch()
+          this.fetch();
         }
       });
     },
     applyQuery() {
       const query = this.$route.query.query;
       if (!query) {
-        this.query = {}
+        this.query = {};
         return;
       }
       this.query = _.isString(query) ? JSON.parse(query) : query;
@@ -230,31 +235,40 @@ export default {
     },
     edit(item) {
       this.$router.push({
-        path: this.resource + "/" + item._id + '/edit'
+        path: this.resource + "/" + item._id + "/edit"
       });
     },
     remove(item) {
-      if (window.confirm('确定要删除吗？')) {
-        this.$http.delete(this.resourceUri + '/' + item._id).then(({data}) => {
-          this.$snotify.success('删除成功');
-          this.fetch()
-        })
+      if (window.confirm("确定要删除吗？")) {
+        this.$http
+          .delete(this.resourceUri + "/" + item._id)
+          .then(({ data }) => {
+            this.$snotify.success("删除成功");
+            this.fetch();
+          });
       }
     },
+    removeAll(item) {
+      if (window.confirm("此次操作不可恢复，确定要全部删除吗？")) {
+        this.$http.delete(this.resourceUri).then(({ data }) => {
+          this.$snotify.success("全部删除成功");
+          this.fetch();
+        });
+      }
+    },
+
     onSearch() {
       this.where = this.searchModel;
       this.fetch();
     }
   },
-  mounted(){
+  mounted() {
     this.fetchGrid(true);
-    
+
     // console.log('mounted');
   },
   created() {
-    
     // this.applyQuery();
-
   }
 };
 </script>

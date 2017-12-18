@@ -47,8 +47,8 @@ export default {
         password: { placeholder: "密码", icon: "icon-lock", type: "password" }
       },
       model: {
-        username: "admin",
-        password: "123456"
+        username: "",
+        password: ""
       },
       errors: []
     };

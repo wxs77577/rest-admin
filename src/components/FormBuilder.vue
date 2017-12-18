@@ -1,5 +1,5 @@
 <template>
-  <b-form :inline="true" @submit.prevent="handleSubmit" v-if="inline">
+  <b-form ref="form" :inline="true" @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
     <template v-for="(field, name) in fields">
       <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
       <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="name" />
@@ -11,7 +11,7 @@
     </slot>
   </b-form>
 
-  <b-form :inline="false" @submit.prevent="handleSubmit" v-else>
+  <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
 
     <div class="row">
       <b-form-group :class="getClass(field)"  v-if="!field.showWhen || model[field.showWhen]" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
@@ -44,6 +44,10 @@ export default {
       default: 12
     },
     inline: {
+      type: Boolean,
+      default: false
+    },
+    useFormData: {
       type: Boolean,
       default: false
     },
@@ -106,8 +110,10 @@ export default {
         return this.onSubmit(this.model);
       }
       const methodName = String(this.method).toLowerCase();
+      console.log(this.$refs.form);
+      const formData = this.useFormData ? new FormData(this.$refs.form) : this.model
       this.$http
-      [methodName](this.action, this.model)
+      [methodName](this.action, formData)
         .then(({ data }) => {
           if (this.successMessage) {
             this.$snotify.success(this.successMessage);

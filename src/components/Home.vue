@@ -12,6 +12,7 @@
         </b-card>
       </div><!--/.col-->
       
+      
     </div><!--/.row-->
   </div>
 </template>

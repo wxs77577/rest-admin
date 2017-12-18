@@ -17,7 +17,7 @@
   <b-form-textarea v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
 
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
-  <b-form-uploader v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
+  <component :is="!field.autoUpload ? 'b-form-file' : 'b-form-uploader'" v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
   :field="field" v-model="model" :id="id" :name="name" />
   <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch', 'checkbox'].includes(field.type)" :id="id" v-model="model" />
 
@@ -32,8 +32,8 @@
   </div>
 
   <div v-else-if="field.fields">
-    <div v-if="['array'].includes(field.type) || parent.isArray">
-      <b-table hover bordered :items="model" :fields="myFields" v-if="parent.isTable">
+    <div v-if="['array'].includes(field.type) || parent.is_array">
+      <b-table hover bordered :items="model" :fields="myFields" v-if="parent.is_table">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
           <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
         </template>
@@ -43,6 +43,9 @@
           </b-btn>
         </template>
         <template slot="actions" slot-scope="row">
+          <b-btn size="sm" @click="model.splice(row.index + 1, 0, {});">
+            <i class="icon-plus"></i> 添加
+          </b-btn>
           <b-btn size="sm" @click="model.splice(row.index, 1);$snotify.success('删除成功')">
             <i class="icon-trash"></i> 删除
           </b-btn>
@@ -159,7 +162,7 @@ export default {
           fields = {};
         }
       }
-      if (this.parent.isTable) {
+      if (this.parent.is_table) {
         fields.actions = { label: "操作" };
       }
 
@@ -217,7 +220,7 @@ export default {
           v.label = v.replace();
         });
         this.model = _.map(val, "value");
-        console.log(val);
+        
 
         // this.selected =
       } else {
@@ -281,7 +284,7 @@ export default {
         } else {
           selectedValue = {
             value: this.value,
-            text: _.get(this.parent, ref)
+            text: _.get(this.parent || {}, ref)
           };
         }
       } else {

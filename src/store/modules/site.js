@@ -5,12 +5,14 @@ import _ from 'lodash'
 export default {
   state: {
     name: 'REST ADMIN',
-    url: 'https://genyii.com',
+    url: '',
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     menu: menu,
-    poweredBy: 'Powered by <a href="https://genyii.com">上海庚易软件科技有限公司</a>',
-    footer: '',
-    logo: require('@/assets/img/gengyi-logo.svg'),
+    footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; 2016-2018 </span>
+    <span class="ml-auto">
+      Powered by <a href="https://github.com/wxs77577/rest-admin>REST ADMIN</a>
+    </span>`,
+    logo: require('@/assets/img/logo.png'),
   },
   mutations: {
     [types.SET_SITE](state, data) {

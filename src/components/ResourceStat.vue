@@ -4,7 +4,7 @@
       <b-col cols="6" lg="8">
        
           <b-card :header="resource">
-            <b-data-chart :resource="resource" :id="id" group="os" />
+            <b-data-chart :resource="resource" :id="id" :group="group" />
           </b-card>
         
       </b-col>
@@ -32,6 +32,9 @@ export default {
     },
     resource() {
       return this.$route.params.resource
+    },
+    group() {
+      return this.$route.query.group || 'status'
     }
   },
   methods: {

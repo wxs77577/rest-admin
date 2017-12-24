@@ -14,7 +14,7 @@
   <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
 
     <div class="row">
-      <b-form-group :class="getClass(field)"  v-if="!field.showWhen || model[field.showWhen]" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
+      <b-form-group :class="getClass(field)"  v-if="isShowField(field)" :state="!hasError(name)" v-for="(field, name) in fields" :key="name" v-bind="field" :label-for="'input_' + name">
         <b-form-field :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
       </b-form-group>
     </div>
@@ -94,6 +94,10 @@ export default {
   },
   computed: {},
   methods: {
+    isShowField(field){
+      return !field.showWhen || this.model[field.showWhen] || eval(field.showWhen)
+      
+    },
     getClass(field) {
       const cols = field.cols ? field.cols : 12;
       return [

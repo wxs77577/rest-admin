@@ -1,20 +1,22 @@
 <template>
-   <b-form-select v-if="['select', 'select2'].includes(field.type)" 
+   <b-form-select v-if="['select'].includes(field.type)" 
    :formatter="getFormatter(field, value)" :id="id" :options="options"
-   v-bind="field" :value="field.multiple && !value ? [] : value" @input="model = arguments[0]" /> 
-  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" label="text" v-bind="field" :options="options" :value="selected" @input="selected = arguments[0]" @search-change="getAjaxOptions" :placeholder="field.placeholder || ''" selectLabel="" /> -->
+   v-bind="field" :value="field.multiple && !value ? [] : value" @input="model = arguments[0]" ></b-form-select> 
+   
+  <b-select v-else-if="['select2'].includes(field.type)" :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
+  :value="selected" @input="selected = arguments[0]" :placeholder="field.placeholder || ''" selectLabel="" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
-  <b-date-picker v-else-if="['date'].includes(field.type)" v-bind="field" v-model="model" />
+  <b-date-picker v-else-if="['date'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
-  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
+  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-model="model">
     <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
   </b-form-radio-group>
 
-  <b-form-checkbox-group v-else-if="['checkboxlist'].includes(field.type)" v-model="model">
+  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-model="model">
     <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox>
   </b-form-checkbox-group>
 
-  <b-form-textarea v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
+  <b-form-textarea :name="name" v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
 
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
   <component :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'" v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
@@ -32,8 +34,8 @@
   </div>
 
   <div v-else-if="field.fields">
-    <div v-if="['array'].includes(field.type) || parent.is_array">
-      <b-table hover bordered :items="model" :fields="myFields" v-if="parent.is_table">
+    <div v-if="['array'].includes(field.type) || field.is_array || parent.is_array">
+      <b-table hover bordered :items="model" :fields="myFields" v-if="field.is_table || parent.is_table">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
           <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
         </template>
@@ -92,10 +94,10 @@
   </div>
 
   <b-input-group v-else>
-    <b-input-group-addon v-if="field.icon || field.left">
+    <b-input-group-prepend is-text v-if="field.icon || field.left">
       <i :class="field.icon" v-if="field.icon"></i>
       <span v-else v-html="field.left"></span>
-    </b-input-group-addon>
+    </b-input-group-prepend>
     <b-form-input :state="state" :id="id" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
   </b-input-group>
 </template>
@@ -103,7 +105,8 @@
 <script>
 import bDraggable from "vuedraggable";
 
-import bSelect from "vue-multiselect";
+// import bSelect from "vue-multiselect";
+import bSelect from "vue-select";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
 import bUeditor from "./UEditor";
@@ -113,14 +116,14 @@ import BJsonEditor from "vue-jsoneditor";
 import Vue from "vue";
 import _ from "lodash";
 
-import 'jsoneditor/dist/jsoneditor.min.css'
-Vue.use(BJsonEditor)
+import "jsoneditor/dist/jsoneditor.min.css";
+Vue.use(BJsonEditor);
 export default {
   components: {
     bUeditor,
     bDatePicker,
     bSelect,
-    'b-form-uploader': bFormUploader,
+    "b-form-uploader": bFormUploader,
     // BJsonEditor,
     bDraggable
   },
@@ -171,7 +174,9 @@ export default {
     description() {
       if (this.field.limit) {
         const { width, height, size } = this.field.limit;
-        return `尺寸要求：${width}x${height}像素，小于${parseInt(size / 1024)}KB`;
+        return `尺寸要求：${width}x${height}像素，小于${parseInt(
+          size / 1024
+        )}KB`;
       }
       return field.description;
     },
@@ -187,24 +192,37 @@ export default {
       }
       // console.log(defaultValue);
       return defaultValue;
+    },
+    isArrayValue() {
+      return this.multiple || this.field.is_array || this.field.type == "array";
     }
   },
   data() {
     let defaultValue = this.value;
+    const isArrayValue =
+      this.multiple || this.field.is_array || this.field.type == "array";
     if (!defaultValue) {
-      if (this.multiple) {
+      if (isArrayValue) {
         defaultValue = [];
       } else if (this.field.type == "object") {
         defaultValue = {};
       }
     }
+    let options = this.field.options || [];
+    if (this.parent && this.field.ajaxOptions) {
+      const checked = this.parent[this.name + "_data"];
+      console.log(this.name + '_data', checked)
+      if (checked) {
+        options = checked;
+      }
+    }
     return {
-      options: this.field.options || [],
-      model: !this.value && this.multiple ? [] : this.value,
+      options: options,
+      // model: !this.value && (this.multiple || this.field.type == 'array') ? [] : this.value,
       model: defaultValue,
       // model: this.value,
       oldValue: null,
-      selectedValue: null
+      selectedValue: options.slice(1)
     };
   },
   watch: {
@@ -217,10 +235,10 @@ export default {
     handleSelect(val) {
       if (Array.isArray(val)) {
         _.mapValues(val, v => {
+          //function (v) {
           v.label = v.replace();
         });
         this.model = _.map(val, "value");
-        
 
         // this.selected =
       } else {
@@ -240,7 +258,7 @@ export default {
       this.model = this.oldValue;
       return false;
     },
-    
+
     syncValue() {
       if (!this.value && this.field.multiple) {
         this.model = [];
@@ -255,51 +273,25 @@ export default {
         }
       }
     },
-    syncSelectedValue() {
-      let selectedValue = this.value;
-      const ref = this.field.ref;
-      if (ref) {
-        const [rel, field] = ref.split(".");
-        const key = "_id";
-
-        if (_.isArray(this.value)) {
-          selectedValue = [];
-          if (this.field.ajaxOptions) {
-            _.filter(this.parent[rel], v => {
-              if (this.value.includes(v[key])) {
-                selectedValue.push({
-                  value: v[key],
-                  text: v[field]
-                });
-              }
-            });
-          } else {
-            // console.log(this.field.options);
-            _.filter(this.field.options, v => {
-              if (this.value.includes(v.value)) {
-                selectedValue.push(v);
-              }
-            });
-          }
-        } else {
-          selectedValue = {
-            value: this.value,
-            text: _.get(this.parent || {}, ref)
-          };
-        }
-      } else {
-        const selected = _.find(this.options, { value: this.value });
-        selectedValue = selected;
+    initSelectedValue() {
+      if (!this.field.ajaxOptions) {
+        return
       }
-
-      this.selectedValue = selectedValue;
+      this.model = _.clone(this.options)
+      return 
+      const options = this.options
+      this.value = this.value.map(v => {
+        _.pickBy()
+      })
+      console.log(ids, options)
     },
+    
     initAceEditor(editor) {
       console.log(editor);
       // require("vue-ace-editor/brace/mode/javascript");
     },
     getAjaxOptions(q) {
-      if (!this.field.ajaxOptions) {
+      if (!this.field.ajaxOptions || !q) {
         return;
       }
       const options = this.field.ajaxOptions;
@@ -319,7 +311,7 @@ export default {
     }
   },
   mounted() {
-    // this.syncValue();
+    this.initSelectedValue()
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }

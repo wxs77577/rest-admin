@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
-    "bootstrap": "^4.0.0-beta.2",
-    "bootstrap-vue": "^1.0.0",
+    "bootstrap": "*",
+    "bootstrap-vue": "*",
     "chart.js": "^2.7.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",

@@ -6,13 +6,18 @@
 
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">
-        <b-img :key="v" v-for="v in value" :src="v" v-bind="field" />
+        <b-img :key="v" v-for="v in value" :src="v" v-bind="field" @click.stop="previewInModal(v)"/>
       </template>
-      <b-img v-else :src="value" v-bind="field" fluid />
+      <b-img v-else :src="value" v-bind="field" fluid @click.stop="previewInModal(value)"/>
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
       <component :is="field.type" :src="value" controls />
+    </template>
+    <template v-else-if="['file'].includes(field.type)">
+      <a target="blank" :href="value">
+        <i class="fa fa-file"></i> {{String(value).split('/').pop()}}
+      </a>
     </template>
 
     <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
@@ -39,14 +44,25 @@
     <template v-else>
       {{value}}
     </template>
+
+    <b-modal :title="field.label" v-model="showModal">
+      <b-img :src="preview(previewValue)" class="my-2" center fluid />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
+import { install } from '_vuex@3.0.1@vuex';
 
 export default {
   name: "b-data-value",
+  data() {
+    return {
+      previewValue: null,
+      showModal: false,
+    }
+  },
   props: {
     field: {
       required: true,
@@ -81,11 +97,33 @@ export default {
       }
       return value;
     }
+  },
+  methods: {
+    previewInModal(value) {
+      this.showModal = true
+      this.previewValue = value
+    },
+    preview(file) {
+      if (!file) {
+        return;
+      }
+      if (typeof file === "string") {
+        return file;
+      }
+      if (file instanceof File) {
+        return URL.createObjectURL(file);
+      }
+      return ''
+    }
   }
 };
 </script>
 
 <style lang="scss">
+.data-table td .modal-body img{
+  max-height: inherit;
+  max-width: 100%;
+}
 .data-value-html {
   max-height: 500px;
   max-width: 420px;

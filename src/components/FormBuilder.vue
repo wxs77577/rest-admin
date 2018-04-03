@@ -104,7 +104,8 @@ export default {
     },
     getClass(field) {
       const cols = field.cols ? field.cols : 12;
-      return ["col-xl-" + cols, "col-lg-" + Math.min(12, cols * 2)];
+      const classNames = ["col-xl-" + cols, "col-lg-" + Math.min(12, cols * 2)];
+      return classNames
     },
     hasError(name) {
       return _.find(this.errors, v => v.field == name);

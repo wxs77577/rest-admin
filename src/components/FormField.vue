@@ -20,7 +20,7 @@
 
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
   <component :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'" v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
-  :field="field" v-model="model" :id="id" :name="name" />
+  :field="field" v-model="model" :id="id" :name="name" :parent="parent" />
   <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch', 'checkbox'].includes(field.type)" :id="id" v-model="model" />
 
   <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
@@ -208,10 +208,11 @@ export default {
         defaultValue = {};
       }
     }
+    console.log(this.value, defaultValue, isArrayValue)
     let options = this.field.options || [];
     if (this.parent && this.field.ajaxOptions) {
       const checked = this.parent[this.name + "_data"];
-      console.log(this.name + '_data', checked)
+      // console.log(this.name + '_data', checked)
       if (checked) {
         options = checked;
       }
@@ -283,15 +284,15 @@ export default {
       this.value = this.value.map(v => {
         _.pickBy()
       })
-      console.log(ids, options)
+      // console.log(ids, options)
     },
     
     initAceEditor(editor) {
-      console.log(editor);
+      // console.log(editor);
       // require("vue-ace-editor/brace/mode/javascript");
     },
     getAjaxOptions(q) {
-      if (!this.field.ajaxOptions || !q) {
+      if (!this.field.ajaxOptions) {
         return;
       }
       const options = this.field.ajaxOptions;
@@ -311,7 +312,7 @@ export default {
     }
   },
   mounted() {
-    this.initSelectedValue()
+    // this.initSelectedValue()
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }

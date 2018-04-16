@@ -18,16 +18,14 @@ export default {
       path: []
     };
   },
-  methods: {
-    fetch(){
-      this.$http.get('site').then(({data}) => {
-        window.document.title = (data.name || 'REST ADMIN') + ' DASHBOARD'
-        this.$store.commit(types.SET_SITE, data)
-      })
+  watch: {
+    "$store.state.site"(data) {
+      window.document.title = (data.name || "REST ADMIN") + " DASHBOARD";
     }
   },
+  methods: {},
   created() {
-    this.fetch()
+    this.$store.dispatch(types.FETCH_SITE)
   }
 };
 </script>

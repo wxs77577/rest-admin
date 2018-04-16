@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store, {types} from './store'
-
-axios.defaults.baseURL = store.state.config.apiUri
+const API_URI = process.env.apiUri || 'http://localhost:5555/admin/api/'
+global.API_URI = API_URI
+axios.defaults.baseURL = API_URI
 axios.interceptors.request.use(config => {
   config.headers.Authorization = 'Bearer ' + store.state.auth.token
   return config

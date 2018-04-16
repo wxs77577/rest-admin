@@ -164,7 +164,6 @@ export default {
     sort: "fetch",
     where: "fetch",
     "$route.query.query"(val) {
-      console.log(val);
       this.applyQuery();
       this.fetch();
     }

@@ -7,14 +7,14 @@
           <b-form-uploader-item class="col-4" :name="name" :id="`${id}_${k}`" :key="k"
           v-for="(v, k) in model" :field="field" :parent="parent" v-model="model[k]"
           @input="update"
-          @remove="model.splice(k, 1) && update" 
-          @add="model.splice(k + 1,0, null) && update" allow-add />
+          @remove="model.splice(k, 1) ; update()" 
+          @add="model.splice(k + 1,0, null) ; update()" allow-add />
         </b-draggable>
       </div>
       <div v-else>
         <div class="row">
           <b-form-uploader-item class="col-12" :id="id" v-model="model" 
-          @input="update" :name="name" :field="field" :parent="parent" @remove="value = null" />
+          @input="update" :name="name" :field="field" :parent="parent" @remove="model = null; update()" />
         </div>
       </div>
     </div>

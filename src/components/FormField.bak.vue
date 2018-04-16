@@ -1,10 +1,10 @@
 <template>
    <b-form-select v-if="['select'].includes(field.type)" 
    :formatter="getFormatter(field, value)" :id="id" :options="options"
-   v-bind="field" :value="selectedValue" @input="handleSelect" ></b-form-select> 
+   v-bind="field" :value="field.multiple && !value ? [] : value" @input="model = arguments[0]" ></b-form-select> 
    
   <b-select v-else-if="['select2'].includes(field.type)" :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
-   :value="selectedValue" @input="handleSelect" :placeholder="field.placeholder || ''" selectLabel="" />
+  :value="selected" @input="selected = arguments[0]" :placeholder="field.placeholder || ''" selectLabel="" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
@@ -66,7 +66,7 @@
               </b-row>
 
               <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
-                <b-form-field v-model="model[i][key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
+                <b-form-field v-model="model[i][key]" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
               </b-form-group>
             </b-card>
           </b-col>
@@ -82,13 +82,13 @@
     <div v-else-if="['object'].includes(field.type)">
       <b-card>
         <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
-          <b-form-field v-model="model[key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
+          <b-form-field v-model="model[key]" :name="key" :field="child" :id="`input_${name}_${key}`" />
         </b-form-group>
       </b-card>
     </div>
     <div v-else>
       <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
-        <b-form-field v-model="model[key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
+        <b-form-field v-model="model[key]" :name="key" :field="child" :id="`input_${name}_${key}`" />
       </b-form-group>
     </div>
   </div>
@@ -138,11 +138,20 @@ export default {
     name: {}
   },
   computed: {
+    selected: {
+      set(val) {
+        const sel = _.isArray(val) ? _.map(val, "value") : val.value;
+        // this.model = sel;
+        this.selectedValue = val;
+        this.$emit("input", sel);
+      },
+      get() {
+        console.log(this.selectedValue)
+        return this.selectedValue;
+      }
+    },
     isSelect() {
       return ["select", "select2"].includes(this.field.type);
-    },
-    isSelect2() {
-      return ["select2"].includes(this.field.type);
     },
     myFields() {
       let fields = this.field.fields;
@@ -170,7 +179,7 @@ export default {
           size / 1024
         )}KB`;
       }
-      return this.field.description;
+      return field.description;
     },
     filteredValue() {
       let defaultValue = this.value;
@@ -186,29 +195,59 @@ export default {
       return defaultValue;
     },
     isArrayValue() {
-      return this.field.multiple || this.field.is_array || this.field.type == "array"
+      return this.multiple || this.field.is_array || this.field.type == "array";
     }
   },
   data() {
-    const isArray = this.field.multiple || this.field.is_array || this.field.type == "array"
+    let defaultValue = this.value;
+    const isArrayValue =
+      this.multiple || this.field.is_array || this.field.type == "array";
+    if (!defaultValue) {
+      if (isArrayValue) {
+        defaultValue = [];
+      } else if (this.field.type == "object") {
+        defaultValue = {};
+      }
+    }
+    if (this.name == 'admin_user_ids') {
+      console.log(this.value, defaultValue, isArrayValue)
+    }
+    let options = this.field.options || [];
+    if (this.parent && this.field.ajaxOptions) {
+      const checked = this.parent[this.name + "_data"];
+      // console.log(this.name + '_data', checked)
+      if (checked) {
+        options = checked;
+      }
+    }
     return {
-      options: this.field.options || [],
-      model: this.value,
-      oldValue: _.clone(this.value),
-      selectedValue: isArray && !this.value ? [] : this.value
+      options: options,
+      // model: !this.value && (this.multiple || this.field.type == 'array') ? [] : this.value,
+      model: defaultValue,
+      // model: this.value,
+      oldValue: null,
+      selectedValue: options.slice(1)
     };
   },
   watch: {
+    value: "syncValue",
     model(val) {
       this.$emit("input", val);
     }
   },
   methods: {
     handleSelect(val) {
-      if (this.isSelect2) {
-        val = _.uniq(_.map(val, "value"));
+      if (Array.isArray(val)) {
+        _.mapValues(val, v => {
+          //function (v) {
+          v.label = v.replace();
+        });
+        this.model = _.map(val, "value");
+
+        // this.selected =
+      } else {
+        this.model = val ? val.value : null;
       }
-      this.$emit("input", val);
     },
     getFormatter(field, value) {
       if (field.format) {
@@ -216,7 +255,33 @@ export default {
       }
       return v => v;
     },
+    reset(error) {
+      if (error) {
+        this.$snotify.error(error);
+      }
+      this.model = this.oldValue;
+      return false;
+    },
 
+    syncValue() {
+      if (!this.value && this.field.multiple) {
+        this.model = [];
+      } else {
+        this.model = this.value;
+      }
+      if (!this.oldValue && this.value) {
+        this.oldValue = this.value;
+
+        if (this.isSelect) {
+          // this.syncSelectedValue();
+        }
+      }
+    },
+    
+    initAceEditor(editor) {
+      // console.log(editor);
+      // require("vue-ace-editor/brace/mode/javascript");
+    },
     getAjaxOptions(q) {
       if (!this.field.ajaxOptions) {
         return;
@@ -232,26 +297,17 @@ export default {
         })
         .then(({ data }) => {
           this.options = data;
+
+          // this.syncSelectedValue();
         });
-    },
-    initOptionsForSelect2() {
-      const parentOptions = this.parent[this.name + "_data"];
-      if (parentOptions) {
-        this.options = this.options.concat(parentOptions);
-      }
     }
   },
-  mounted() {},
-  created() {
+  mounted() {
+    // this.initSelectedValue()
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }
-    if (this.isSelect2) {
-      this.initOptionsForSelect2();
-      this.selectedValue = _.filter(this.options, v =>
-        this.value.includes(v.value)
-      );
-    }
-  }
+  },
+  created() {}
 };
 </script>

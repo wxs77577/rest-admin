@@ -1,6 +1,7 @@
 import types from '../types'
 import menu from '../../menu'
 import _ from 'lodash'
+import http from '../../http'
 
 export default {
   state: {
@@ -33,10 +34,10 @@ export default {
     }
   },
   actions: {
-    // [types.FETCH_SITE]({commit}){
-    //   http.get('site').then(({data}) => {
-    //     commit(types.SET_SITE, data)
-    //   })
-    // }
+    [types.FETCH_SITE]({commit}){
+      http.get('site').then(({data}) => {
+        commit(types.SET_SITE, data)
+      })
+    }
   }
 }

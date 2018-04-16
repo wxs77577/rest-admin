@@ -22,7 +22,7 @@ export default {
     },
     url: {
       default() {
-        return this.$config.apiUri + 'upload'
+        return global.API_URI + 'upload'
       }
     },
     multiple: {

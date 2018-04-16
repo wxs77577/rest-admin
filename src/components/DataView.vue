@@ -9,11 +9,9 @@
             <td>
               <div v-if="['array'].includes(field.type)">
                 <b-table :items="model[key]" :fields="field.fields">
-                  <div v-for="(child, k) in field.fields" :key="k" :slot="k" slot-scope="row">
-
-                    <b-data-value :field="child" :name="k" :model="row.item" />
-
-                  </div>
+                  <template v-for="(child, k) in field.fields" :slot="k" slot-scope="row">
+                    <b-data-value :field="child" :name="k" :key="k" :model="row.item" />
+                  </template>
                 </b-table>
               </div>
               <div v-else>

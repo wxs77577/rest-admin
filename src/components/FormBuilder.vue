@@ -1,30 +1,30 @@
 <template>
   <div v-if="model">
     <b-form ref="form" inline @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
-    <template v-for="(field, name) in fields">
-      <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
-      <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
-    </template>
+      <template v-for="(field, name) in fields">
+        <label :for="'input_' + name" class="m-1" :key="name">{{field.label || name}}</label>
+        <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
+      </template>
 
-    <slot name="actions">
-      <b-button type="submit" variant="primary">{{submitText}}</b-button>
-      <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
-    </slot>
-  </b-form>
+      <slot name="actions">
+        <b-button type="submit" variant="primary">{{submitText}}</b-button>
+        <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+      </slot>
+    </b-form>
 
-  <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
+    <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
 
-    <div class="row" v-if="model">
-      <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name">
-        <b-form-field :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
-      </b-form-group>
-    </div>
+      <div class="row">
+        <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name">
+          <b-form-field :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+        </b-form-group>
+      </div>
 
-    <slot name="actions">
-      <b-button type="submit" variant="primary">{{submitText}}</b-button>
-      <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
-    </slot>
-  </b-form>
+      <slot name="actions">
+        <b-button type="submit" variant="primary">{{submitText}}</b-button>
+        <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+      </slot>
+    </b-form>
   </div>
 </template>
 
@@ -96,7 +96,6 @@ export default {
   },
   computed: {},
   methods: {
-    
     isShowField(field) {
       return (
         !field.showWhen || this.model[field.showWhen] || eval(field.showWhen)
@@ -105,7 +104,7 @@ export default {
     getClass(field) {
       const cols = field.cols ? field.cols : 12;
       const classNames = ["col-xl-" + cols, "col-lg-" + Math.min(12, cols * 2)];
-      return classNames
+      return classNames;
     },
     hasError(name) {
       return _.find(this.errors, v => v.field == name);

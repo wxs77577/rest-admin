@@ -73,6 +73,13 @@ export default {
     }
   },
   methods: {
+    reset(error) {
+      if (error) {
+        this.$snotify.error(error);
+      }
+      this.model = this.oldValue;
+      return false;
+    },
     upload() {
       if (!this.file) {
         return;

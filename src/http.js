@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store, {types} from './store'
-const API_URI = process.env.apiUri || 'http://localhost:5555/admin/api/'
+const API_URI = process.env.API_URI || 'http://localhost:5555/admin/api/'
 global.API_URI = API_URI
 axios.defaults.baseURL = API_URI
 axios.interceptors.request.use(config => {

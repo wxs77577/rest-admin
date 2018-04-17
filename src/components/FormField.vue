@@ -27,7 +27,6 @@
 
   <div v-else-if="['json'].includes(field.type)">
     <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
-    
      <!-- <v-jsoneditor v-if="model" :value="JSON.parse(model)" 
      @input="model = JSON.stringify(arguments[0])"
      :options="{}" /> -->

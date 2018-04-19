@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store, {types} from './store'
-const API_URI = process.env.API_URI || 'http://localhost:5555/admin/api/'
+const API_URI = process.env.API_URI || '/admin/api/'
+console.log(`API_URI=${API_URI}`)
 global.API_URI = API_URI
 axios.defaults.baseURL = API_URI
 axios.interceptors.request.use(config => {
@@ -12,7 +13,7 @@ axios.interceptors.response.use(response => {
 
   return response;
 }, ({ response }) => {
-  const { data, status } = response
+  const { data, status, statusText } = response
   
   switch (status) {
     case 422:
@@ -21,14 +22,19 @@ axios.interceptors.response.use(response => {
     case 401:
       // vm.$snotify.error('请先登录')
       store.dispatch(types.GO_LOGIN)
-      
+    case 404:
+      Vue.prototype.$snotify.error(String(statusText))
       break;
   }
   let msg = data.message
   if (_.isArray(msg)) {
     msg = msg[0].message
   }
-  Vue.prototype.$snotify.error(msg)
+  if (msg) {
+    Vue.prototype.$snotify.error(String(msg))
+  } else {
+    console.error(data)
+  }
   return Promise.reject(response);
 });
 

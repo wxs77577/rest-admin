@@ -1,4 +1,6 @@
 // Here you can add other styles
+$border-radius: 0;
+
 body{
   letter-spacing: 0.05em;
 }
@@ -28,11 +30,11 @@ body{
   display: none;
 }
 .v-select .dropdown-toggle{
-  border-radius: 0 !important;
+  border-radius: $border-radius !important;
   
 }
 input.input{
-  border-radius: 0 !important;
+  border-radius: $border-radius !important;
 }
 
 .form-inline .multiselect{
@@ -41,7 +43,7 @@ input.input{
 }
 
 .multiselect__tags{
-  border-radius: 0 !important;
+  border-radius: 0$border-radius !important;
 }
 .multiselect{
   position: inherit;
@@ -55,4 +57,33 @@ input.input{
 }
 .break-all{
   word-break: break-all;
+}
+
+.vue-html5-editor{
+  border-radius: $border-radius !important;
+}
+.vue-html5-editor .dashboard-font {
+  line-height: 1.5em !important;
+}
+.vue-html5-editor>.toolbar>.dashboard button,
+.vue-html5-editor>.toolbar>.dashboard input {
+  line-height: 1em !important;
+  padding: 2px 4px !important;
+  border-radius: 2px !important;
+}
+.vue-html5-editor img {
+  max-width: 100%;
+}
+
+// fix vue-select 
+.v-select input[type=search], .v-select input[type=search]:focus {
+  width: inherit !important;
+}
+.v-select .selected-tag{
+  border-radius: $border-radius !important;
+}
+// fix date-picker
+.mx-input{
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }

@@ -73,14 +73,20 @@ export default {
       default: "post"
     },
     submitText: {
-      default: "保存"
+      default() {
+        return this.$t('actions.save')
+      }
     },
     backText: {
-      default: "返回"
+      default() {
+        return this.$t('actions.back')
+      }
     },
 
     successMessage: {
-      default: "操作成功"
+      default() {
+        return this.$t('messages.succeed')
+      }
     }
   },
   data() {

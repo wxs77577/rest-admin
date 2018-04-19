@@ -3,11 +3,11 @@
     <div class="data-form">
       <div class="row">
         <div class="col col-md-8">
-          <legend v-if="model._id">Edit: {{model._id}}</legend>
+          <legend v-if="model._id">{{$t('actions.edit')}}: {{model._id}}</legend>
         </div>
         <div class="col col-md-4 text-right hidden-sm-down">
-          <b-btn @click="$router.go(-1)">返回</b-btn>
-          <b-btn variant="primary" @click="$refs.form.handleSubmit()">保存</b-btn>
+          <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
+          <b-btn variant="primary" @click="$refs.form.handleSubmit()">{{$t('actions.save')}}</b-btn>
         </div>
       </div>
       <b-form-builder v-if="loaded" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>

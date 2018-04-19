@@ -4,5 +4,8 @@ export default {
   SET_SITE: 'SET_SITE',
   GO_LOGIN: 'GO_LOGIN',
 
+  SET_LOCALE: 'SET_LOCALE',
+  FETCH_LOCALE: 'FETCH_LOCALE',
+  
   FETCH_SITE: 'FETCH_SITE'
 }

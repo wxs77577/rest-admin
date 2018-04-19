@@ -23,7 +23,9 @@
   :field="field" v-model="model" :id="id" :name="name" :parent="parent" />
   <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch', 'checkbox'].includes(field.type)" :id="id" v-model="model" />
 
-  <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" />
+  <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
+  <b-html-editor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
+  :content="model" @change="model = arguments[0]" />
 
   <div v-else-if="['json'].includes(field.type)">
     <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
@@ -34,16 +36,17 @@
 
   <div v-else-if="field.fields">
     <div v-if="['array'].includes(field.type) || field.is_array || parent.is_array">
+
       <b-table hover bordered :items="model" :fields="myFields" v-if="field.is_table || parent.is_table">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
           <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
         </template>
-        <template slot="HEAD_actions" slot-scope="row">
+        <template slot="HEAD__actions" slot-scope="row">
           <b-btn size="sm" @click="model.push({});">
             <i class="icon-plus"></i> 添加
           </b-btn>
         </template>
-        <template slot="actions" slot-scope="row">
+        <template slot="_actions" slot-scope="row">
           <b-btn size="sm" @click="model.splice(row.index + 1, 0, {});">
             <i class="icon-plus"></i> 添加
           </b-btn>
@@ -52,9 +55,10 @@
           </b-btn>
         </template>
       </b-table>
+      
       <b-draggable v-model="model" v-else>
         <transition-group tag="div" class="row">
-          <b-col v-for="(item, i) in model" :key="i" cols :lg="6" :xl="4">
+          <b-col v-for="(item, i) in model" :key="i" cols :lg="field.itemCols || 6">
             <b-card>
               <b-row slot="header" class="justify-content-between">
                 <b-col>No. {{i + 1}}</b-col>
@@ -106,20 +110,21 @@ import bDraggable from "vuedraggable";
 
 // import bSelect from "vue-multiselect";
 import bSelect from "vue-select";
-import "vue-multiselect/dist/vue-multiselect.min.css";
+// import "vue-multiselect/dist/vue-multiselect.min.css";
 import bDatePicker from "vue2-datepicker";
-import bUeditor from "./UEditor";
+// import bUeditor from "./UEditor";
 import bFormUploader from "./FormUploader";
 // import BJsonEditor  from "./JsonEditor";
-import BJsonEditor from "vue-jsoneditor";
+// import BJsonEditor from "vue-jsoneditor";
 import Vue from "vue";
 import _ from "lodash";
 
-import "jsoneditor/dist/jsoneditor.min.css";
-Vue.use(BJsonEditor);
+// import "jsoneditor/dist/jsoneditor.min.css";
+
+// Vue.use(BJsonEditor);
 export default {
   components: {
-    bUeditor,
+    // bUeditor,
     bDatePicker,
     bSelect,
     "b-form-uploader": bFormUploader,
@@ -157,7 +162,7 @@ export default {
         }
       }
       if (this.parent.is_table) {
-        fields.actions = { label: "操作" };
+        fields._actions = { label: this.$t('actions.actions') };
       }
 
       return fields;
@@ -165,9 +170,7 @@ export default {
     description() {
       if (this.field.limit) {
         const { width, height, size } = this.field.limit;
-        return `尺寸要求：${width}x${height}像素，小于${parseInt(
-          size / 1024
-        )}KB`;
+        return `${width}x${height}`;
       }
       return this.field.description;
     },
@@ -185,14 +188,23 @@ export default {
       return defaultValue;
     },
     isArrayValue() {
-      return this.field.multiple || this.field.is_array || this.field.type == "array"
+      return (
+        this.field.multiple ||
+        this.field.is_array ||
+        this.field.type == "array" ||
+        this.field.is_table
+      );
     }
   },
   data() {
-    const isArray = this.field.multiple || this.field.is_array || this.field.type == "array"
+    const isArray =
+      this.field.multiple ||
+      this.field.is_array ||
+      this.field.type == "array" ||
+      this.field.is_table;
     return {
       options: this.field.options || [],
-      model: this.value,
+      model: isArray && !this.value ? [] : this.value,
       oldValue: _.clone(this.value),
       selectedValue: isArray && !this.value ? [] : this.value
     };
@@ -205,7 +217,11 @@ export default {
   methods: {
     handleSelect(val) {
       if (this.isSelect2) {
-        val = _.uniq(_.map(val, "value"));
+        if (this.isArrayValue) {
+          val = _.uniq(_.map(val, "value"));
+        } else {
+          val = val ? val.value : null
+        }
       }
       this.$emit("input", val);
     },
@@ -247,9 +263,13 @@ export default {
     }
     if (this.isSelect2) {
       this.initOptionsForSelect2();
-      this.selectedValue = _.filter(this.options, v =>
-        this.value.includes(v.value)
-      );
+      if (this.isArrayValue) {
+        this.selectedValue = _.filter(this.options, v =>
+          this.value && this.value.includes(v.value)
+        );
+      } else {
+        this.selectedValue = _.find(this.options, v => this.value == v.value);
+      }
     }
   }
 };

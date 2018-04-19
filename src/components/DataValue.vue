@@ -1,23 +1,26 @@
 <template>
-  <div class="break-all">
+  <div class="break-all data-value">
     <template v-if="['html'].includes(field.type)">
       <div v-html="value" class="p-2 data-value-html"></div>
     </template>
 
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">
-        <b-img :key="v" v-for="v in value" :src="v" v-bind="field" @click.stop="previewInModal(v)"/>
+        <b-img class="type-image" :key="v" v-for="v in value" :src="v" v-bind="field" @click.stop="previewInModal(v)"/>
       </template>
-      <b-img v-else :src="value" v-bind="field" fluid @click.stop="previewInModal(value)"/>
+      <b-img class="type-image" v-else :src="value" v-bind="field" fluid @click.stop="previewInModal(value)"/>
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
       <component :is="field.type" :src="value" controls />
     </template>
     <template v-else-if="['file'].includes(field.type)">
-      <a target="blank" :href="value">
+      <a target="blank" :href="value" v-if="value">
         <i class="fa fa-file"></i> {{String(value).split('/').pop()}}
       </a>
+      <div v-else class="text-muted">
+        
+      </div>
     </template>
 
     <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
@@ -40,6 +43,12 @@
         {{String(shortId ? value.substr(-4) : value).toUpperCase()}}
       </span>
     </template>
+    <template v-else-if="field.type == 'datetime'">
+      <span v-b-tooltip.hover.top.d100 :title="value">
+        {{value | datetime}}
+      </span>
+    </template>
+    
 
     <template v-else>
       {{value}}
@@ -53,10 +62,14 @@
 
 <script>
 import _ from "lodash";
-import { install } from '_vuex@3.0.1@vuex';
 
 export default {
   name: "b-data-value",
+  filters: {
+    datetime(val) {
+      return new Date(val).toLocaleDateString()
+    }
+  },
   data() {
     return {
       previewValue: null,
@@ -134,6 +147,13 @@ export default {
     img {
       max-width: 100%;
     }
+  }
+}
+.data-value {
+  .type-image {
+    max-width: 100%;
+    max-height: 200px;
+
   }
 }
 </style>

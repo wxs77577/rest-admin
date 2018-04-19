@@ -5,13 +5,13 @@
       <div class="py-1">
         <b-btn :to="resourceUri + '/create'" variant="secondary">
         <i class="icon-plus"></i>
-        新建
+        {{$t('actions.create')}}
         </b-btn>
         <b-btn @click="fetchGrid" variant="success">
         <i class="icon-refresh"></i>
-        刷新
+        {{$t('actions.reload')}}
         </b-btn>
-        <b-btn v-for="button in _.get(fields || {}, 'actions.toolbar.extra', [])" 
+        <b-btn v-for="button in _.get(fields || {}, '_actions.toolbar.extra', [])" 
         :key="button.label"
         v-bind="button">
           {{button.label}}
@@ -19,31 +19,32 @@
 
         <b-btn @click="removeAll" class="pull-right" variant="second">
         <i class="icon-trash"></i>
-        全部删除
+        {{$t('actions.delete_all')}}
         </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
-        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" submitText="搜索" backText="" method="get" :on-submit="onSearch" />
+        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch" />
       </div>
       <b-row>
         <b-col cols="8">
           <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
         </b-col>
         <b-col cols="4" class="text-right">
-          <p>共 <b>{{totalRows}}</b> 条数据</p>
+          <p>{{$t('messages.paginate', {total: totalRows})}}</p>
+          <!-- <p>共 <b>{{totalRows}}</b> 条数据</p> -->
         </b-col>
       </b-row>
-      <b-table :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
+      <b-table class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
         
         <template v-for="(field, key) in fields"  :slot="key" slot-scope="row">
           <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id />
         </template>
         
-        <template slot="actions" slot-scope="row" >
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields.$actions.buttons || fields.$actions.buttons.show !== false">查看</b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields.$actions.buttons || fields.$actions.buttons.edit !== false">编辑</b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields.$actions.buttons || fields.$actions.buttons.remove !== false">删除</b-btn>
-          <b-btn size="sm" v-for="(button, key) in fields.$actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
+        <template slot="_actions" slot-scope="row" >
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.show !== false">{{$t('actions.view')}}</b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.edit !== false">{{$t('actions.edit')}}</b-btn>
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.remove !== false">{{$t('actions.delete')}}</b-btn>
+          <b-btn size="sm" v-for="(button, key) in fields._actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
         </template>
 
       </b-table>
@@ -53,7 +54,7 @@
           <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
         </b-col>
         <b-col cols="4" class="text-right">
-          <p>共 <b>{{totalRows}}</b> 条数据</p>
+          <p>{{$t('messages.paginate', {total: totalRows})}}</p>
         </b-col>
       </b-row>
     </div>
@@ -197,12 +198,12 @@ export default {
       this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
-        if (!this.fields.$actions && this.fields.$actions !== false) {
-          this.fields.$actions = {};
+        if (!this.fields._actions && this.fields._actions !== false) {
+          this.fields._actions = {};
         }
-        if (this.fields.$actions) {
-          if (!this.fields.$actions.label) {
-            this.fields.$actions.label = "操作";
+        if (this.fields._actions) {
+          if (!this.fields._actions.label) {
+            this.fields._actions.label = this.$t('actions.actions');
           }
         }
         this.searchFields = data.searchFields;
@@ -238,19 +239,19 @@ export default {
       });
     },
     remove(item) {
-      if (window.confirm("确定要删除吗？")) {
+      if (window.confirm(this.$t('messages.confirm_delete'))) {
         this.$http
           .delete(this.resourceUri + "/" + item._id)
           .then(({ data }) => {
-            this.$snotify.success("删除成功");
+            this.$snotify.success(this.$t('messages.deleted'));
             this.fetch();
           });
       }
     },
     removeAll(item) {
-      if (window.confirm("此次操作不可恢复，确定要全部删除吗？")) {
+      if (window.confirm(this.$t('messages.confirm_delete_all'))) {
         this.$http.delete(this.resourceUri).then(({ data }) => {
-          this.$snotify.success("全部删除成功");
+          this.$snotify.success(this.$t('messages.deleted_all'));
           this.fetch();
         });
       }
@@ -274,8 +275,9 @@ export default {
 
 <style lang="scss">
 .data-table {
-  td img {
-    max-height: 3em;
+  .data-value > img {
+    max-width: inherit !important;
+    max-height: 60px !important;
   }
   .data-table-search {
   }

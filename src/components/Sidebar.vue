@@ -10,6 +10,7 @@
         <b-badge class="text-uppercase">{{auth.user.role}}</b-badge> 
         <span>{{auth.user.username}}</span>
       </div>
+      <languages />
     </div>
     <nav class="sidebar-nav">
       <div slot="header"></div>
@@ -55,28 +56,27 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
-export default {
-  name: 'sidebar',
-  
-  computed: {
-    ...mapState(['auth', 'site'])
-  },
-  components: {
+import Languages from './Languages'
 
+import { mapState } from "vuex";
+export default {
+  name: "sidebar",
+
+  computed: {
+    ...mapState(["auth", "site"])
   },
+  components: {Languages},
   methods: {
     toggle(item) {
-      this.$set(item, 'open', !item.open)
-
+      this.$set(item, "open", !item.open);
     }
   }
-}
+};
 </script>
 
 <style lang="css">
-  .site-logo{
-    background:#fff;
-    /* padding:1em; */
-  }
+.site-logo {
+  background: #fff;
+  /* padding:1em; */
+}
 </style>

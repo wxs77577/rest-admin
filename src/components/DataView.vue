@@ -1,7 +1,7 @@
 <template>
   <b-card :header="header">
     <div class="data-view">
-      <legend v-if="model._id">View: {{model._id}}</legend>
+      <legend v-if="model._id">{{$t('actions.view')}}: {{model._id}}</legend>
       <table class="table ">
         <tbody>
           <tr v-for="(field, key) in fields" :key="key">
@@ -23,7 +23,7 @@
       </table>
     </div>
     <div slot="footer">
-      <b-btn @click="$router.go(-1)">返回</b-btn>
+      <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
     </div>
   </b-card>
 </template>
@@ -97,6 +97,7 @@ export default {
     fetchView() {
       this.$http.get(this.viewUri).then(({ data }) => {
         this.fields = data.fields;
+        delete this.fields._actions
         this.fetch();
       });
     },

@@ -1,8 +1,7 @@
 <template>
   <div>
     <b-card>
-      <b-data-value :field="field" :name="name" :model="parent" 
-       />
+      <b-data-value class="text-center" :field="field" :name="name" :model="parent"/>
       <div class="">
       
       </div>
@@ -10,10 +9,10 @@
         <b-form-file ref="file" :id="fileName" v-model="file" 
         v-bind="field" @input="upload" class="d-none" :multiple="false" />
         <label :for="`file_${id}`" class="btn btn-secondary m-0">
-          {{file ? '更换' : '选择'}}
+          {{file ? $t('actions.change') : $t('actions.choose')}}
         </label>
-        <b-btn @click="$emit('remove')">删除</b-btn>
-        <b-btn @click="$emit('add')" v-if="allowAdd">添加</b-btn>
+        <b-btn @click="$emit('remove')">{{$t('actions.delete')}}</b-btn>
+        <b-btn @click="$emit('add')" v-if="allowAdd">{{$t('actions.add')}}</b-btn>
       </div>
     </b-card>
     
@@ -95,14 +94,14 @@ export default {
         this.$http.post("upload", fd).then(({ data }) => {
           this.file = data.url;
           this.$emit("input", this.file);
-          this.$snotify.success("上传成功");
+          this.$snotify.success(this.$t('messages.uploaded'));
         });
       };
 
       const { width, height, size } = this.field.limit || {};
 
       if (this.file.size > size) {
-        return this.reset(`请上传小于${parseInt(size / 1024)}KB的文件`);
+        return this.reset(this.$t("errors.too_large", { limit: parseInt(size / 1024) }));
       }
 
       if (this.file.type.match(/^image/)) {
@@ -111,7 +110,7 @@ export default {
         file.onload = () => {
           if (this.field.limit) {
             if (file.naturalHeight != height || file.naturalWidth != width) {
-              return this.reset(`请上传${width}x${height}像素的图片`);
+              return this.reset(this.$t("errors.wrong_size", {width, height}));
             }
           }
           doUpload();
@@ -119,8 +118,7 @@ export default {
       } else {
         doUpload();
       }
-    },
-    
+    }
   }
 };
 </script>

@@ -1,3 +1,4 @@
+// define default sidebar menu
 export default [
   {
     name: '首页',

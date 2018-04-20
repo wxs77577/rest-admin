@@ -21,7 +21,9 @@
   <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
   <component :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'" v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
   :field="field" v-model="model" :id="id" :name="name" :parent="parent" />
-  <b-switch variant="success" v-bind="field" pill type="3d" v-else-if="['switch', 'checkbox'].includes(field.type)" :id="id" v-model="model" />
+  <div v-else-if="['switch', 'checkbox'].includes(field.type)">
+    <b-switch variant="success" v-bind="field" pill type="3d" :id="id" v-model="model" />
+  </div>
 
   <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
   <b-html-editor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"

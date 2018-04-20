@@ -3,8 +3,16 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.get('/', (req, res) => {
+  res.send({
+    welcome: 'Test api for rest-admin is running.'
+  })
+})
+
 const router = express.Router()
+
 app.use((req, res, next) => {
+  // cors
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', '*')
   res.header('Access-Control-Allow-Methods', '*')
@@ -51,28 +59,32 @@ router.post('/login', (req, res) => {
 })
 
 /**
-* CRUD
+* CRUD for Resources
 */
 
-const users = []
+const resources = {
+  users: [],
+  posts: [],
+}
 for (let i = 1; i < 46; i++) {
-  users.push({_id: '2018AFEDBC0' + String(i), username: `user${i}`, created_at: new Date})
+  resources.users.push({_id: '2018AFEDBC0' + String(i), username: `user${i}`, created_at: new Date})
 }
 
 // user list data
-router.get('/users', (req, res) => {
+router.get('/:resource', (req, res) => {
+  const resource = resources[req.params.resource]
   const {page = 1, perPage = 10} = JSON.parse(req.query.query)
   res.send({
-    total: users.length,
+    total: resource.length,
     perPage,
     page,
-    data: users.slice((page - 1) * perPage, page * perPage)
+    data: resource.slice((page - 1) * perPage, page * perPage)
   })
 })
 
 
 // data table config for listing users
-router.get('/users/grid', (req, res) => {
+router.get('/:resource/grid', (req, res) => {
   res.send({
     searchFields: {
       _id: {label: 'ID'},
@@ -88,7 +100,7 @@ router.get('/users/grid', (req, res) => {
 })
 
 // data FORM config for editing an user
-router.get('/users/form', (req, res) => {
+router.get('/:resource/form', (req, res) => {
   res.send({
     model: {},
     fields: {
@@ -100,35 +112,42 @@ router.get('/users/form', (req, res) => {
 })
 
 // single user data
-router.get('/users/:id', (req, res) => {
-  const user = users.find(v => v._id == req.params.id)
-  res.send(user)
+router.get('/:resource/:id', (req, res) => {
+  const resource = resources[req.params.resource]
+  const model = resource.find(v => v[this.$config.primaryKey] == req.params.id)
+  res.send(model)
 })
 
 // update
-router.put('/users/:id', (req, res) => {
-  let i = users.findIndex(v => v._id == req.params.id)
-  users[i] = req.body
-  res.send(users[i])
+router.put('/:resource/:id', (req, res) => {
+  const resource = resources[req.params.resource]  
+  let i = resource.findIndex(v => v[this.$config.primaryKey] == req.params.id)
+  resource[i] = req.body
+  res.send(resource[i])
 })
 
 // create
-router.post('/users', (req, res) => {
-  users.push(req.body)
-  res.send(users[users.length - 1])
+router.post('/:resource', (req, res) => {
+  const resource = resources[req.params.resource]  
+  resource.push(req.body)
+  res.send(resource[resource.length - 1])
 })
 
 // delete
-router.delete('/users/:id', (req, res) => {
-  let i = users.findIndex(v => v._id == req.params.id)
-  users.splice(i, 1)
+router.delete('/:resource/:id', (req, res) => {
+  const resource = resources[req.params.resource]  
+  
+  let i = resource.findIndex(v => v[this.$config.primaryKey] == req.params.id)
+  resource.splice(i, 1)
   res.send({
     success: true
   })
 })
 // delete all
-router.delete('/users', (req, res) => {
-  users.splice(0)
+router.delete('/:resource', (req, res) => {
+  const resource = resources[req.params.resource]  
+  
+  resource.splice(0)
   res.send({
     success: true
   })

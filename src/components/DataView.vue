@@ -1,7 +1,7 @@
 <template>
   <b-card :header="header">
     <div class="data-view">
-      <legend v-if="model._id">{{$t('actions.view')}}: {{model._id}}</legend>
+      <legend v-if="model[$config.primaryKey]">{{$t('actions.view')}}: {{model[$config.primaryKey]}}</legend>
       <table class="table ">
         <tbody>
           <tr v-for="(field, key) in fields" :key="key">

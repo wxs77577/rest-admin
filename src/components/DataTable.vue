@@ -230,18 +230,18 @@ export default {
     },
     show(item) {
       this.$router.push({
-        path: this.resource + "/" + item._id
+        path: this.resource + "/" + item[this.$config.primaryKey]
       });
     },
     edit(item) {
       this.$router.push({
-        path: this.resource + "/" + item._id + "/edit"
+        path: this.resource + "/" + item[this.$config.primaryKey] + "/edit"
       });
     },
     remove(item) {
       if (window.confirm(this.$t('messages.confirm_delete'))) {
         this.$http
-          .delete(this.resourceUri + "/" + item._id)
+          .delete(this.resourceUri + "/" + item[this.$config.primaryKey])
           .then(({ data }) => {
             this.$snotify.success(this.$t('messages.deleted'));
             this.fetch();

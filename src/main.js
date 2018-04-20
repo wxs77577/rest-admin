@@ -8,6 +8,8 @@ import router from './router'
 import store, { types } from './store'
 import http from './http'
 import i18n from './i18n'
+import config from './config'
+Vue.prototype.$config = config
 
 import { sync } from 'vuex-router-sync'
 

@@ -4,6 +4,13 @@
 
 REST-ADMIN is trying to make it easier to built an admin dashboard for any backend services. All you need to do is just provide a RESTful api for it.
 
+## Screenshots
+| - | - |
+|--|--|
+|![](./screenshots/1.png) Login Page|![](./screenshots/2.png) Data Table for users|
+|![](./screenshots/3.png) Data Table for posts|![](./screenshots/4.png) Data Form for post|
+|![](./screenshots/5.png) Custom Form|![](./screenshots/6.png) Sample Fields of posts|
+
 ## Features
 - Based on the latest Bootstrap(v4) and Vue.js, it means you can easily change any skin based on bootstrap css framework.
 - Plain vue.js project, can be used for any backend restful api.
@@ -36,16 +43,8 @@ API_URI=http://localhost:5555/admin/api/ npm run build
 ```
 Then just copy `/dist/admin` folder to the anywhere.
 
-
-
 > There is a built-in restful api based on `express` for test.
 
-## Screenshots
-| - | - |
-|--|--|
-|![](./screenshots/1.png) Login Page|![](./screenshots/2.png) Data Table for users|
-|![](./screenshots/3.png) Data Table for posts|![](./screenshots/4.png) Data Form for post|
-|![](./screenshots/5.png) Custom Form|![](./screenshots/6.png) Sample Fields of posts|
 
 ## Fields Definition
 > Used in listing tables and editing forms

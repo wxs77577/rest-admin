@@ -49,13 +49,12 @@ const posts = {
   data: [],
   fields: {
     _id: {},
-    
+
     category_id: {
       cols: 3, label: 'Category',
       type: 'select', options: buildOptions(categories.data, '_id', 'title'), sortable: true
     },
     title: { cols: 9, searchable: true, description: 'Give me an awesome title.' },
-    
 
     views: { type: 'number', cols: 3, listable: false },
     sort: { type: 'number', cols: 3, sortable: true },
@@ -67,9 +66,9 @@ const posts = {
       ], searchable: true, description: 'Which type do you like?'
     },
 
-    image: { type: 'image', cols: 6, limit: {width: 320, height: 180, limit: 300 * 1000} },
+    image: { type: 'image', cols: 6, limit: { width: 320, height: 180, limit: 300 * 1000 } },
     body: { type: 'html', listable: false, cols: 6 },
-    
+
     created_at: { label: 'Created At', type: 'datetime' }
   }
 }

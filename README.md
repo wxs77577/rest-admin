@@ -1,7 +1,8 @@
 # REST-ADMIN
 
 > An Powerful Admin Dashboard based on Vue.js and Boostrap v4.
-> All you need to do is just give me a restful api endpoint :)
+
+REST-ADMIN is trying to make it easier to built an admin dashboard for any backend services. All you need to do is just provide a RESTful api for it.
 
 ## Features
 - Based on the latest Bootstrap(v4) and Vue.js, it means you can easily change any skin based on bootstrap css framework.
@@ -29,13 +30,24 @@ npm run local # start rest admin client
 ```bash
 API_URI=http://localhost:5555/admin/api/ npm run dev
 ```
+### Build
+```bash
+API_URI=http://localhost:5555/admin/api/ npm run build
+```
+Then just copy `/dist/admin` folder to the anywhere.
 
 
-REST-ADMIN is trying to make it easier to built an admin dashboard for any backend services. All you need to do is just provide a RESTful api for it.
 
 > There is a built-in restful api based on `express` for test.
 
-### Fields Definition
+## Screenshots
+| - | - |
+|--|--|
+|![](./screenshots/1.png) Login Page|![](./screenshots/2.png) Data Table for users|
+|![](./screenshots/3.png) Data Table for posts|![](./screenshots/4.png) Data Form for post|
+|![](./screenshots/5.png) Custom Form|![](./screenshots/6.png) Sample Fields of posts|
+
+## Fields Definition
 > Used in listing tables and editing forms
 
 Example:
@@ -67,7 +79,7 @@ Example:
   }
 }
 ```
-#### Field properties
+### Field properties
 - `label` Title for display
 - `cols` column width, total is 12.
 - `input_cols` column width of input control.
@@ -101,7 +113,7 @@ Example:
 - `required`
 - Any other properties accepted in https://bootstrap-vue.js.org/docs/components/form-input, please notice that every kind of field component has it's own properties.
 
-### APIs
+## APIs
 > Tips: check `/api/index.js` :p
 
 Example Base Api Url: http://localhost:8088/admin/api

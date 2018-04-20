@@ -21,6 +21,7 @@ axios.interceptors.response.use(response => {
       break;
     case 401:
       // vm.$snotify.error('请先登录')
+      console.log('go login')
       store.dispatch(types.GO_LOGIN)
     case 404:
       Vue.prototype.$snotify.error(String(statusText))

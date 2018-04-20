@@ -1,5 +1,5 @@
 <template>
-   <b-form-select v-if="['select'].includes(field.type)" 
+  <b-form-select v-if="['select'].includes(field.type)" 
    :formatter="getFormatter(field, value)" :id="id" :options="options"
    v-bind="field" :value="selectedValue" @input="handleSelect" ></b-form-select> 
    

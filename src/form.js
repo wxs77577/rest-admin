@@ -2,6 +2,7 @@ import Vue from 'vue'
 import store from './store'
 import VueHtml5Editor from 'vue-html5-editor'
 import Snotify from 'vue-snotify'
+import i18n from './i18n'
 
 import Switch from './components/Switch.vue'
 Vue.component('b-switch', Switch)
@@ -18,9 +19,10 @@ Vue.component('b-form-builder', FormBuilder)
 
 export default {
   init() {
+    const language = i18n.locale == 'zh-CN' ? 'zh-cn' : 'en-us'
     Vue.use(VueHtml5Editor, {
       name: 'b-html-editor',
-      language: 'zh-cn',
+      language,
       image: {
         upload: {
           url: global.API_URI + "upload",

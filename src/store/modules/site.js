@@ -9,9 +9,9 @@ export default {
     url: '',
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     menu: menu,
-    footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; 2016-2018 </span>
+    footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; ${new Date().getFullYear()} </span>
     <span class="ml-auto">
-      Powered by <a href="https://github.com/wxs77577/rest-admin>REST ADMIN</a>
+      Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
     </span>`,
     logo: require('@/assets/img/logo.png'),
   },
@@ -34,8 +34,8 @@ export default {
     }
   },
   actions: {
-    [types.FETCH_SITE]({commit}){
-      http.get('site').then(({data}) => {
+    [types.FETCH_SITE]({ commit }) {
+      http.get('site').then(({ data }) => {
         commit(types.SET_SITE, data)
       })
     }

@@ -2,7 +2,7 @@
   <b-card :header="form.header">
     <div class="custom-form">
       <div class="row">
-        <div class="col col-md-8" v-if="form.title">
+        <div class="col col-md-8">
           <legend>{{form.title}}</legend>
         </div>
         <div class="col col-md-4 text-right hidden-sm-down">
@@ -45,6 +45,9 @@ export default {
         this.form = data;
         if (!this.form.action) {
           this.form.action = this.uri
+        }
+        if (!this.form.title) {
+          this.form.title = this.$inflection.titleize(String(this.$route.query.uri).split('/').pop())
         }
         // this.fetch();
       });

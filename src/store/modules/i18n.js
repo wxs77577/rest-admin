@@ -18,6 +18,7 @@ export default {
     [types.FETCH_LOCALE]({commit}){
       const cachedLocale = localStorage.getItem('rest_admin_locale')
       if (cachedLocale) {
+        
         commit(types.SET_LOCALE, cachedLocale)
       }
     }

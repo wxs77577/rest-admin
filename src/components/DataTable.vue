@@ -22,7 +22,7 @@
         {{$t('actions.delete_all')}}
         </b-btn>
       </div>
-      <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchModel)">
+      <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch" />
       </div>
       <b-row>

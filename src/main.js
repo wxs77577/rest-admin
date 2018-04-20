@@ -9,7 +9,10 @@ import store, { types } from './store'
 import http from './http'
 import i18n from './i18n'
 import config from './config'
+import inflection from 'inflection'
+
 Vue.prototype.$config = config
+Vue.prototype.$inflection = inflection
 
 import { sync } from 'vuex-router-sync'
 
@@ -29,15 +32,11 @@ Vue.use(BootstrapVue)
 
 import form from './form'
 
-
 Vue.prototype._ = _
 sync(store, router)
 
 store.dispatch(types.GET_AUTH)
 store.dispatch(types.FETCH_LOCALE)
-
-i18n.locale = 'zh-CN'
-
 
 /* eslint-disable no-new */
 new Vue({

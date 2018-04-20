@@ -10,14 +10,14 @@ export default {
     [types.SET_AUTH](state, data) {
       state.user = data.user
       state.token = data.token
-      localStorage.setItem('auth', JSON.stringify(data))
+      localStorage.setItem('rest_admin_auth', JSON.stringify(data))
     },
   },
   actions: {
     [types.GET_AUTH]({ commit }) {
       let auth = {}
       try {
-        auth = JSON.parse(localStorage.getItem('auth')) || {}
+        auth = JSON.parse(localStorage.getItem('rest_admin_auth') || '{}')
       } catch (e) {
         auth = {
           token: null,
@@ -27,7 +27,6 @@ export default {
       commit(types.SET_AUTH, auth)
     },
     [types.GO_LOGIN](){
-      console.log('>>> 请先登录');
       return router.push({
         name: 'login'
       })

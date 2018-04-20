@@ -45,7 +45,7 @@
     </template>
     <template v-else-if="field.type == 'datetime'">
       <span v-b-tooltip.hover.top.d100 :title="value">
-        {{value | datetime}}
+        {{$d(new Date(value), 'long')}}
       </span>
     </template>
     

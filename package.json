@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "test-api": "nodemon ./src/test-api.js",
+    "test-api": "nodemon ./api",
     "local": "API_URI=http://localhost:8088/admin/api/ npm run dev",
     "server": "API_URI=http://localhost:5555/admin/api/ npm run dev",
     "start": "npm run dev",
@@ -60,6 +60,7 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^3.0.0",
+    "faker": "^4.1.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",

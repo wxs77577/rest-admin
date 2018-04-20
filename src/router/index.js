@@ -70,7 +70,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (!store.state.auth.token && !to.meta.isPublic) {
-    // console.log('no token');
+    console.log('no token', store.state.auth);
     return next({name: 'login'})
   }
   next()

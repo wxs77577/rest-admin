@@ -18,7 +18,7 @@
         <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
         v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
         :label="field.label || $inflection.titleize(name)">
-          <div class="row">
+          <div class="">
             <b-form-field :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
           </div>
         </b-form-group>
@@ -115,13 +115,14 @@ export default {
       );
     },
     getInputClass(field) {
+      return []
       const classNames = []
       classNames.push(`col-lg-${field.input_cols ? field.input_cols : '12'}`)
       return classNames
     },
     getClass(field) {
       const cols = field.cols ? field.cols : 12;
-      const classNames = ["col-xl-" + cols, "col-lg-" + Math.min(12, cols * 2)];
+      const classNames = ["col-lg-" + cols, "col-" + Math.min(12, cols * 2)];
       return classNames;
     },
     hasError(name) {

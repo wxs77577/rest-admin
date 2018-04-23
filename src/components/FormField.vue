@@ -3,8 +3,10 @@
    :formatter="getFormatter(field, value)" :id="id" :options="options"
    v-bind="field" :value="selectedValue" @input="handleSelect" ></b-form-select> 
    
-  <b-select v-else-if="['select2'].includes(field.type)" :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
+  <div v-else-if="['select2'].includes(field.type)">
+    <b-select :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
    :value="selectedValue" @input="handleSelect" :placeholder="field.placeholder || ''" selectLabel="" />
+  </div>
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 

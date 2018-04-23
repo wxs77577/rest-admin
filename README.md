@@ -166,6 +166,16 @@ For admin user login
     "token": "1o2u3h4oi2u3h4jkashdflsda"
   }
   ```
+  or with validation errors
+  > must response `422` http status.
+  ```json
+  {
+    "name":"HttpException",
+    "message":[
+      { "field":"password", "message":"Incorrect password." }
+    ]
+  }
+  ```
 
 #### GET `/:resource`
 Fetch all records of a resource.

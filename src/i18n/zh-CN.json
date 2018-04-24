@@ -48,6 +48,7 @@
     "deleted": "删除成功",
     "deleted_all": "全部删除成功",
     "confirm_delete": "确定要删除吗？",
+    "image_size": "尺寸要求：{width}x{height}",
     "confirm_delete_all": "此次操作不可恢复，确定要全部删除吗？"
   },
   "errors": {

@@ -8,6 +8,7 @@
     "login_footer": "REST ADMIN",
     "deleted_all": "All deleted",
     "confirm_delete": "Are you sure you want to delete?",
+    "image_size": "Size limit: {width}x{height}",
     "confirm_delete_all": "Are you sure you want to delete all data?"    
   },
   "errors": {

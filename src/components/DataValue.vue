@@ -6,9 +6,9 @@
 
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">
-        <b-img class="type-image" :key="v" v-for="v in value" :src="v" v-bind="field" @click.stop="previewInModal(v)"/>
+        <b-img class="type-image" :key="v" v-for="v in value" :src="preview(v)" v-bind="field" @click.stop="previewInModal(v)"/>
       </template>
-      <b-img class="type-image" v-else :src="value" v-bind="field" fluid @click.stop="previewInModal(value)"/>
+      <b-img class="type-image" v-else :src="preview(value)" v-bind="field" fluid @click.stop="previewInModal(value)"/>
     </template>
 
     <template v-else-if="['audio', 'video'].includes(field.type)">
@@ -43,12 +43,11 @@
         {{String(shortId ? value.substr(-4) : value).toUpperCase()}}
       </span>
     </template>
-    <template v-else-if="field.type == 'datetime'">
-      <span v-b-tooltip.hover.top.d100 :title="value">
-        {{$d(new Date(value), 'long')}}
+    <template v-else-if="['date', 'datetime'].includes(field.type)">
+      <span v-b-tooltip.hover.top.d100 :title="value" v-if="value">
+        {{$d(new Date(value), field.format || 'long')}}
       </span>
     </template>
-    
 
     <template v-else>
       {{value}}
@@ -65,11 +64,6 @@ import _ from "lodash";
 
 export default {
   name: "b-data-value",
-  filters: {
-    datetime(val) {
-      return new Date(val).toLocaleDateString()
-    }
-  },
   data() {
     return {
       previewValue: null,

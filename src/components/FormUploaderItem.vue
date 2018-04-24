@@ -2,8 +2,8 @@
   <div>
     <b-card>
       <b-data-value class="text-center" :field="field" :name="name" :model="parent"/>
-      <div class="">
-      
+      <div class="text-center text-muted mt-2" v-if="field.limit && field.limit.width">
+        {{$t('messages.image_size', field.limit)}}
       </div>
       <div slot="footer" class="text-center">
         <b-form-file ref="file" :id="fileName" v-model="file" 
@@ -94,14 +94,16 @@ export default {
         this.$http.post("upload", fd).then(({ data }) => {
           this.file = data.url;
           this.$emit("input", this.file);
-          this.$snotify.success(this.$t('messages.uploaded'));
+          this.$snotify.success(this.$t("messages.uploaded"));
         });
       };
 
       const { width, height, size } = this.field.limit || {};
 
       if (this.file.size > size) {
-        return this.reset(this.$t("errors.too_large", { limit: parseInt(size / 1024) }));
+        return this.reset(
+          this.$t("errors.too_large", { limit: parseInt(size / 1024) })
+        );
       }
 
       if (this.file.type.match(/^image/)) {
@@ -110,7 +112,9 @@ export default {
         file.onload = () => {
           if (this.field.limit) {
             if (file.naturalHeight != height || file.naturalWidth != width) {
-              return this.reset(this.$t("errors.wrong_size", {width, height}));
+              return this.reset(
+                this.$t("errors.wrong_size", { width, height })
+              );
             }
           }
           doUpload();

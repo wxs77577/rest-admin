@@ -62,7 +62,7 @@
       
       <b-draggable v-model="model" v-else>
         <transition-group tag="div" class="row">
-          <b-col v-for="(item, i) in model" :key="i" cols :lg="field.itemCols || 6">
+          <b-col v-for="(item, i) in model" :key="i" cols :lg="field.item_cols || 6">
             <b-card>
               <b-row slot="header" class="justify-content-between">
                 <b-col>No. {{i + 1}}</b-col>
@@ -73,11 +73,11 @@
               </b-row>
 
               <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
-                <b-form-field v-model="model[i][key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${i}_${key}`" />
+                <b-form-field v-model="model[i][key]" :parent="parent" :name="`${name}.${i}.${key}`" :field="child" :id="`input_${name}_${i}_${key}`" />
               </b-form-group>
             </b-card>
           </b-col>
-          <b-col cols lg="6" xl="4" :key="-1" class="d-flex align-items-center justify-content-center">
+          <b-col cols :lg="field.item_cols || 6" :key="-1" class="d-flex align-items-center justify-content-center">
             <b-btn size="lg" class="p-5" block @click="model = !model? [] : model; model.push({})">
               <i class="fa fa-plus"></i>
             </b-btn>
@@ -174,7 +174,10 @@ export default {
     description() {
       if (this.field.limit) {
         const { width, height, size } = this.field.limit;
-        return `${width}x${height}`;
+        if (width && height) {
+          return `尺寸：${width}x${height}`
+        }
+        return ;
       }
       return this.field.description;
     },

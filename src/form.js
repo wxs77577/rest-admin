@@ -20,6 +20,8 @@ Vue.component('b-form-builder', FormBuilder)
 export default {
   init() {
     const language = i18n.locale == 'zh-CN' ? 'zh-cn' : 'en-us'
+    window.document.execCommand("defaultParagraphSeparator", false, "p");
+
     Vue.use(VueHtml5Editor, {
       name: 'b-html-editor',
       language,

@@ -2,6 +2,7 @@ import types from '../types'
 import menu from '../../menu'
 import _ from 'lodash'
 import http from '../../http'
+import i18n from '../../i18n'
 
 export default {
   state: {
@@ -14,6 +15,7 @@ export default {
       Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
     </span>`,
     logo: require('@/assets/img/logo.png'),
+    locale: 'en-US'
   },
   mutations: {
     [types.SET_SITE](state, data) {
@@ -37,6 +39,9 @@ export default {
     [types.FETCH_SITE]({ commit }) {
       http.get('site').then(({ data }) => {
         commit(types.SET_SITE, data)
+        if (data.locale) {
+          commit(types.SET_LOCALE, data.locale)
+        }
       })
     }
   }

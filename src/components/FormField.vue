@@ -47,15 +47,15 @@
         </template>
         <template slot="HEAD__actions" slot-scope="row">
           <b-btn size="sm" @click="model.push({});">
-            <i class="icon-plus"></i> 添加
+            <i class="icon-plus"></i> {{$t('actions.add')}}
           </b-btn>
         </template>
         <template slot="_actions" slot-scope="row">
           <b-btn size="sm" @click="model.splice(row.index + 1, 0, {});">
-            <i class="icon-plus"></i> 添加
+            <i class="icon-plus"></i> {{$t('actions.add')}}
           </b-btn>
-          <b-btn size="sm" @click="model.splice(row.index, 1);$snotify.success('删除成功')">
-            <i class="icon-trash"></i> 删除
+          <b-btn size="sm" @click="model.splice(row.index, 1);">
+            <i class="icon-trash"></i> {{$t('actions.delete')}}
           </b-btn>
         </template>
       </b-table>
@@ -67,8 +67,8 @@
               <b-row slot="header" class="justify-content-between">
                 <b-col>No. {{i + 1}}</b-col>
                 <b-col right class="text-right">
-                  <b-btn size="sm" @click="model.splice(i, 1);$snotify.success('删除成功')">
-                    <i class="icon-trash"></i> 删除</b-btn>
+                  <b-btn size="sm" @click="model.splice(i, 1)">
+                    <i class="icon-trash"></i> {{$t('actions.delete')}}</b-btn>
                 </b-col>
               </b-row>
 

@@ -37,6 +37,9 @@ npm run local # start rest admin client
 ```bash
 API_URI=http://localhost:5555/admin/api/ npm run dev
 ```
+
+> The default username and password of test-api is `admin` and `admin`
+
 ### Build
 ```bash
 API_URI=http://localhost:5555/admin/api/ npm run build

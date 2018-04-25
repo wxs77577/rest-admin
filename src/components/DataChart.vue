@@ -1,8 +1,8 @@
 <script>
-import Chart from "vue-chartjs";
+// import Chart from "vue-chartjs";
 
 export default {
-  extends: Chart.Pie,
+  // extends: Chart.Pie,
   props: {
     resource: {
       type: String,

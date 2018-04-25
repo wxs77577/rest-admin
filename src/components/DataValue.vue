@@ -31,7 +31,7 @@
 
     <template v-else-if="field.ref">
       <template v-if="field.multiple">
-        {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join('，')}}
+        {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join(',')}}
       </template>
       <template v-else>
         {{_.get(model || {}, field.ref)}}
@@ -95,7 +95,7 @@ export default {
       if (!value) {
         return value
       }
-      if (this.field.options) {
+      if (['select', 'select2'].includes(this.field.type)) {
         const options = _.mapValues(
           _.keyBy(this.field.options, "value"),
           "text"

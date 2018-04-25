@@ -8,12 +8,12 @@
 
 <script>
 import Vue from "vue";
-import bDropzone from 'vue2-dropzone'
+import BDropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.css'
 
 export default {
   components: {
-    bDropzone
+    BDropzone
   },
   props: {
     id: {},

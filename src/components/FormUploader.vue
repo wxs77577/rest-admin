@@ -23,13 +23,12 @@
   </div>
 </template>
 <script>
-import bDraggable from "vuedraggable";
-import bFormUploaderItem from "./FormUploaderItem";
+import BDraggable from "vuedraggable";
+import BFormUploaderItem from "./FormUploaderItem";
 export default {
-  name: "b-form-uploader",
   components: {
-    bDraggable,
-    bFormUploaderItem
+    BDraggable,
+    BFormUploaderItem
   },
   props: {
     value: {},

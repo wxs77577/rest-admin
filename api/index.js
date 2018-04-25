@@ -39,19 +39,19 @@ router.get('/site', (req, res) => res.send({
       title: true,
     },
     {
-      name: 'Users',
-      url: '/rest/users',
-      icon: 'icon-user',
-    },
-    {
-      name: 'Posts',
-      url: '/rest/posts',
-      icon: 'icon-list',
-    },
-    {
       name: 'Categories',
       url: '/rest/categories',
       icon: 'icon-list',
+    },
+    {
+      name: 'Products',
+      url: '/rest/products',
+      icon: 'icon-list',
+    },
+    {
+      name: 'Users',
+      url: '/rest/users',
+      icon: 'icon-user',
     },
     {
       name: 'System',
@@ -187,13 +187,13 @@ resourceRouter.get('/:id', ({ resource, params }, res) => {
 // update
 resourceRouter.put('/:id', ({ resource, params, body }, res) => {
   let i = resource.data.findIndex(v => v[config.primaryKey] == params.id)
-  resource.data[i] = body
+  resource.data[i] = _.pick(body, Object.keys(resource.fields))
   res.send(resource.data[i])
 })
 
 // create
 resourceRouter.post('/', ({ resource, body }, res) => {
-  resource.data.push(body)
+  resource.data.push(_.pick(body, Object.keys(resource.fields)))
   res.send(resource.data[resource.data.length - 1])
 })
 

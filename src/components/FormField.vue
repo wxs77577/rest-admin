@@ -7,6 +7,7 @@
     <b-select :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
    :value="selectedValue" @input="handleSelect" :placeholder="field.placeholder || ''" selectLabel="" />
   </div>
+  <b-tree-select v-else-if="['tree', 'treeselect'].includes(field.type)" v-bind="field" v-model="model" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
@@ -110,30 +111,32 @@
 </template>
 
 <script>
-import bDraggable from "vuedraggable";
-
-// import bSelect from "vue-multiselect";
-import bSelect from "vue-select";
-// import "vue-multiselect/dist/vue-multiselect.min.css";
-import bDatePicker from "vue2-datepicker";
-// import bUeditor from "./UEditor";
-import bFormUploader from "./FormUploader";
-// import BJsonEditor  from "./JsonEditor";
-// import BJsonEditor from "vue-jsoneditor";
+import BDraggable from "vuedraggable";
+import BTreeSelect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.min.css"
+// import BSelect from "vue-multiselect"
+import BSelect from "vue-select";
+// import "vue-multiselect/dist/vue-multiselect.min.css"
+import BDatePicker from "vue2-datepicker";
+// import BUeditor from "./UEditor"
+import BFormUploader from "./FormUploader";
+// import BJsonEditor  from "./JsonEditor"
+// import BJsonEditor from "vue-jsoneditor"
 import Vue from "vue";
 import _ from "lodash";
 
-// import "jsoneditor/dist/jsoneditor.min.css";
+// import "jsoneditor/dist/jsoneditor.min.css"
 
 // Vue.use(BJsonEditor);
 export default {
   components: {
-    // bUeditor,
-    bDatePicker,
-    bSelect,
-    "b-form-uploader": bFormUploader,
+    // BUeditor,
+    BDatePicker,
+    BSelect,
+    BFormUploader,
     // BJsonEditor,
-    bDraggable
+    BDraggable,
+    BTreeSelect
   },
   props: {
     id: {
@@ -166,7 +169,7 @@ export default {
         }
       }
       if (this.parent.is_table) {
-        fields._actions = { label: this.$t('actions.actions') };
+        fields._actions = { label: this.$t("actions.actions") };
       }
 
       return fields;
@@ -175,9 +178,9 @@ export default {
       if (this.field.limit) {
         const { width, height, size } = this.field.limit;
         if (width && height) {
-          return `尺寸：${width}x${height}`
+          return `尺寸：${width}x${height}`;
         }
-        return ;
+        return;
       }
       return this.field.description;
     },
@@ -227,7 +230,7 @@ export default {
         if (this.isArrayValue) {
           val = _.uniq(_.map(val, "value"));
         } else {
-          val = val ? val.value : null
+          val = val ? val.value : null;
         }
       }
       this.$emit("input", val);
@@ -271,8 +274,9 @@ export default {
     if (this.isSelect2) {
       this.initOptionsForSelect2();
       if (this.isArrayValue) {
-        this.selectedValue = _.filter(this.options, v =>
-          this.value && this.value.includes(v.value)
+        this.selectedValue = _.filter(
+          this.options,
+          v => this.value && this.value.includes(v.value)
         );
       } else {
         this.selectedValue = _.find(this.options, v => this.value == v.value);

@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import bDataValue from "./DataValue";
+import BDataValue from "./DataValue";
 
 import { mapState, mapGetters } from 'vuex'
 export default {
   components: {
-    bDataValue
+    BDataValue
   },
   props: {
     resource: {

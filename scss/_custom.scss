@@ -87,3 +87,7 @@ input.input{
   border-radius: 0 !important;
   box-shadow: none !important;
 }
+// tree-select
+.vue-treeselect__control, .vue-treeselect__menu{
+  border-radius: $border-radius !important;
+}

@@ -19,12 +19,11 @@
   </div>
 </template>
 <script>
-import bDataValue from "./DataValue";
+import BDataValue from "./DataValue";
 
 export default {
-  name: "b-form-uploader-item",
   components: {
-    bDataValue
+    BDataValue
   },
   props: {
     value: {},

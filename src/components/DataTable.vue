@@ -62,13 +62,13 @@
 </template>
 
 <script>
-import bFormBuilder from "./FormBuilder";
-import bDataValue from "./DataValue";
+import BFormBuilder from "./FormBuilder";
+import BDataValue from "./DataValue";
 import { mapState, mapGetters } from "vuex";
 export default {
   components: {
-    bFormBuilder,
-    bDataValue
+    BFormBuilder,
+    BDataValue
   },
   props: {
     resource: {

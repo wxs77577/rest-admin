@@ -14,12 +14,12 @@
 
 <script>
 
-import bDataChart from './DataChart'
+import BDataChart from './DataChart'
 
 export default {
   name: "resource-stat",
   components: {
-    bDataChart
+    BDataChart
   },
   data() {
     return {

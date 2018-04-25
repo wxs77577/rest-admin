@@ -90,7 +90,9 @@ Example:
     - `options` e.g. `[{ "text": "Label", "value": "1" }]`
   - `select2` [vue-select](https://github.com/sagalbot/vue-select), like `select2` in jQuery
     - `options` e.g. `[{ "text": "Label", "value": "1" }]`
-  - `date` [vue2-datepicker](https://github.com/mengxiong10/vue2-datepicker) support **date range**
+  - `tree` [vue-treeselect](https://vue-treeselect.js.org/)
+    - `options` **use `text` and `value` instead `label` and `id`** e.g. `[{ "text": "Label", "value": "1", "children": [ { "text": "Item1", "value": "2" } ] }]`  
+  - `date` [vue2-datepicker](https://github.com/mengxiong10/vue2-datepicker) supports **date range**
   - `switch` A iOS-liked switch component 
   - `html` An WYSIWYG html editor from [vue-html5-editor](https://github.com/PeakTai/vue-html5-editor)
   - `array` Array values
@@ -127,6 +129,7 @@ Get config data of site
   {
     "name": "Site Name",
     "logo": "http://.../logo.png",
+    "locale": "en-US", //or zh-CN
     "menu" : [
       {
         "name": "Home",

@@ -7,7 +7,7 @@
     <b-select :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
    :value="selectedValue" @input="handleSelect" :placeholder="field.placeholder || ''" selectLabel="" />
   </div>
-  <b-tree-select v-else-if="['tree', 'treeselect'].includes(field.type)" v-bind="field" v-model="model" />
+  <b-tree-select :normalizer="treeSelectNormalizer" value-consists-of="LEAF_PRIORITY" v-else-if="['tree', 'treeselect'].includes(field.type)" v-bind="field" v-model="model" />
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
@@ -30,7 +30,7 @@
 
   <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
   <b-html-editor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
-  :content="model" @change="model = arguments[0]" />
+  :content="model" @change="htmlEditorInput" />
 
   <div v-else-if="['json'].includes(field.type)">
     <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
@@ -225,6 +225,15 @@ export default {
     }
   },
   methods: {
+    htmlEditorInput(value){
+      this.model = value
+    },
+    treeSelectNormalizer(row) {
+      return {
+        id: row.value,
+        label: row.text,
+      }
+    },
     handleSelect(val) {
       if (this.isSelect2) {
         if (this.isArrayValue) {

@@ -34,7 +34,7 @@ categories.data = categories.data.map((v, i) => {
   }
   const parent = _.sample(categories.data)
   if (!parent || parent._id == v._id) {
-    return v
+    // return v
   }
   v.parent_id = parent._id
   v.parent = _.clone(parent)
@@ -47,8 +47,8 @@ function findChildren(data = [], id = null, primaryKey = '_id', foreignKey = 'pa
     if (!_.isEmpty(children)) {
       v.children = _.clone(children)
     }
-    v.id = v[primaryKey]
-    v.label = v[labelKey]
+    v.value = v[primaryKey]
+    v.text = v[labelKey]
     return v
   })
   return ret
@@ -88,7 +88,7 @@ const products = {
 
     category_ids: {
       cols: 3, label: 'Categories', multiple: true, ref: 'categories.name',
-      type: 'tree', options: findChildren(categories.data), sortable: true
+      type: 'tree', options: findChildren(categories.data), sortable: true,
     },
     slug: { cols: 3, searchable: true },
     name: { cols: 6, searchable: true, description: 'Give me an awesome title.' },

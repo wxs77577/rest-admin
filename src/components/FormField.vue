@@ -30,7 +30,7 @@
 
   <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
   <b-html-editor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
-  :content="model" @change="htmlEditorInput" />
+  :content="model" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
 
   <div v-else-if="['json'].includes(field.type)">
     <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
@@ -220,13 +220,18 @@ export default {
     };
   },
   watch: {
-    model(val) {
-      this.$emit("input", val);
+    model(value) {
+      this.$emit("input", value);
     }
   },
   methods: {
     htmlEditorInput(value){
-      this.model = value
+      
+      this.$emit('input', value)
+    },
+    wrapFirstLine(el){
+      // const value = String(el.target.innerHTML).replace(/^\s*(.+?)(<?)/i, '<p> $1 </p>$2')
+      // this.$emit('input', value)
     },
     treeSelectNormalizer(row) {
       return {

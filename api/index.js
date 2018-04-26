@@ -178,6 +178,15 @@ resourceRouter.get('/form', ({ resource }, res) => {
   })
 })
 
+// data FORM config for editing an user
+resourceRouter.get('/view', ({ resource }, res) => {
+  res.send({
+    fields: _.pickBy(resource.fields, (v, k) => {
+      return v.viewable !== false && !['_id', 'created_at', 'updated_at'].includes(k)
+    })
+  })
+})
+
 // single user data
 resourceRouter.get('/:id', ({ resource, params }, res) => {
   const model = resource.data.find(v => v[config.primaryKey] == params.id)
@@ -193,7 +202,9 @@ resourceRouter.put('/:id', ({ resource, params, body }, res) => {
 
 // create
 resourceRouter.post('/', ({ resource, body }, res) => {
-  resource.data.push(_.pick(body, Object.keys(resource.fields)))
+  const data = _.pick(body, Object.keys(resource.fields))
+  data._id = resources.genId('')
+  resource.data.push(data)
   res.send(resource.data[resource.data.length - 1])
 })
 

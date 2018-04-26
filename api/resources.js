@@ -142,4 +142,4 @@ function buildOptions(data = [], valueField = '_id', titleField = 'title') {
 }
 
 
-module.exports = { users, products, categories }
+module.exports = { users, products, categories, genId }

@@ -39,8 +39,8 @@
     </template>
 
     <template v-else-if="name === '_id'">
-      <span v-b-tooltip.hover.top.d100 :title="value">
-        {{String(shortId ? value.substr(-4) : value).toUpperCase()}}
+      <span v-b-tooltip.hover.top.d100 :title="value" v-if="value">
+        {{String(shortId ? String(value).substr(-4) : value).toUpperCase()}}
       </span>
     </template>
     <template v-else-if="['date', 'datetime'].includes(field.type)">

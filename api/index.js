@@ -27,7 +27,25 @@ app.use((req, res, next) => {
 
 // for basic site config
 router.get('/site', (req, res) => res.send({
-  name: 'Awesome', //site name
+  name: 'REST-ADMIN', //site name
+  locale: 'en-US',
+  url: 'https://github.com/wxs77577/rest-admin',
+  footer: `
+  <span><a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a> &copy; 2018</span>
+  <span class="ml-auto">
+    GitHub <a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a>
+  </span>
+  <script>
+  //Baidu Statistic
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8ec67f6e612d57c8a9f2e21a32ddf4ff";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+  `,
   menu: [ //site menu
     {
       name: 'Home',
@@ -72,7 +90,46 @@ router.get('/site', (req, res) => res.send({
 }))
 
 // for home page
-router.get('/home', (req, res) => res.send({ name: 'Awesome' }))
+router.get('/home', (req, res) => res.send({
+  title: 'Welcome to REST ADMIN', 
+  description: 'Admin dashboard based on vue 2 and bootstrap 4',
+  button: {
+    icon: 'icon-people',
+    variant: 'primary',
+    text: 'Users',
+    to: '/rest/users'
+  },
+  statics: [
+    {
+      bg: 'info',
+      icon: 'icon-speedometer',
+      value: 5000 + parseInt(Math.random() * 5000),
+      title: 'Comments',
+      progress: 78
+    },
+    {
+      bg: 'success',
+      icon: 'icon-people',
+      value: 10000 + parseInt(Math.random() * 10000),
+      title: 'Users',
+      progress: 60
+    },
+    {
+      bg: 'warning',
+      icon: 'icon-basket-loaded',
+      value: 100000 + parseInt(Math.random() * 30000),
+      title: 'Sales',
+      progress: 92
+    },
+    {
+      bg: 'primary',
+      icon: 'icon-camrecorder',
+      value: 300 + parseInt(Math.random() * 300),
+      title: 'Videos',
+      progress: 67
+    },
+  ]
+}))
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body

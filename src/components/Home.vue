@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="row">
-      <div class="col-sm-6  col-md-3 " v-for="(item, index) in statics" :key="index">
+      <div class="col-sm-6  col-md-3 " v-for="(item, index) in data.statics" :key="index">
         <b-card class="text-white" :class="[`bg-${item.bg}`]">
           <div class="h1 text-muted text-right mb-4">
             <i :class="[item.icon]"></i>
@@ -14,25 +14,38 @@
       
       
     </div><!--/.row-->
+
+    <div v-if="data.html" v-html="html"></div>
+    <div v-else class="jumbotron">
+      <h1 class="display-4">{{data.title}}</h1>
+      <p class="lead">{{data.description}}</p>
+      <b-button v-bind="data.button" v-if="data.button">
+        <i :class="[data.button.icon]" v-if="data.button.icon"></i>
+        {{data.button.text}}
+      </b-button>
+    </div>
+    
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
-  data(){
+  data() {
     return {
-      statics: []
-    }
+      data: {}
+    };
   },
   methods: {
-    fetch(){
-      this.$http.get('home').then(({data}) => {
-        this.statics = data.statics
-      })
+    fetch() {
+      this.$http.get("home").then(({ data }) => {
+        this.data = data
+      });
     }
   },
   created() {
-    this.fetch()
+    this.fetch();
   }
-}
+};
 </script>

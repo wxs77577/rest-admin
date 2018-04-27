@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 router.get('/site', (req, res) => res.send({
   name: 'REST-ADMIN', //site name
   locale: 'en-US',
+  locale_switcher: true,
   url: 'https://github.com/wxs77577/rest-admin',
   footer: `
   <span><a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a> &copy; 2018</span>

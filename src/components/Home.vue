@@ -15,8 +15,7 @@
       
     </div><!--/.row-->
 
-    <div v-if="data.html" v-html="html"></div>
-    <div v-else class="jumbotron">
+    <div class="jumbotron">
       <h1 class="display-4">{{data.title}}</h1>
       <p class="lead">{{data.description}}</p>
       <b-button v-bind="data.button" v-if="data.button">
@@ -24,6 +23,8 @@
         {{data.button.text}}
       </b-button>
     </div>
+
+    <div v-if="data.html" v-html="data.html"></div>
     
   </div>
 </template>

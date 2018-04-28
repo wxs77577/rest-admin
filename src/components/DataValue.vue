@@ -95,7 +95,7 @@ export default {
       if (!value) {
         return value
       }
-      if (['select', 'select2'].includes(this.field.type)) {
+      if (['select', 'select2', 'radiolist', 'checkboxlist'].includes(this.field.type)) {
         const options = _.mapValues(
           _.keyBy(this.field.options, "value"),
           "text"

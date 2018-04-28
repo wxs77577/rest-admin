@@ -91,7 +91,7 @@ router.get('/site', (req, res) => res.send({
 
 // for home page
 router.get('/home', (req, res) => res.send({
-  title: 'Welcome to REST ADMIN', 
+  title: 'Welcome to REST ADMIN',
   description: 'Admin dashboard based on vue 2 and bootstrap 4',
   button: {
     icon: 'icon-people',
@@ -157,15 +157,26 @@ router.post('/upload', (req, res) => {
   })
 })
 
+const settingForm = {
+  title: "App Settings",
+  fields: {
+    name: { label: "Site Name", input_cols: 4 },
+    logo: { label: "Site Logo", type: "image", input_cols: 4 },
+  },
+  model: {
+    name: 'REST ADMIN',
+  }
+}
+
 router.get('/site/settings', (req, res) => {
-  res.send({
-    title: "App Settings",
-    fields: {
-      name: { label: "Site Name", input_cols: 4},
-      logo: { label: "Site Logo", type: "image", input_cols: 4 },
-    }
-  })
+  res.send(settingForm)
 })
+
+router.post('/site/settings', ({ body }, res) => {
+  settingForm.model = body
+  res.send(settingForm)
+})
+
 
 /**
 * CRUD for Resources

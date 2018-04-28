@@ -42,12 +42,15 @@
         
         <template slot="_actions" slot-scope="row" >
           <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.show !== false">
+            <i class="icon-eye"></i>
             {{$t('actions.view')}}
           </b-btn>
           <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.edit !== false">
+            <i class="icon-pencil"></i>
             {{$t('actions.edit')}}
           </b-btn>
           <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.remove !== false">
+            <i class="icon-trash"></i>
             {{$t('actions.delete')}}
           </b-btn>
           <b-btn size="sm" v-for="(button, key) in fields._actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
@@ -209,7 +212,7 @@ export default {
         }
         if (this.fields._actions) {
           if (!this.fields._actions.label) {
-            this.fields._actions.label = this.$t('actions.actions');
+            this.fields._actions.label = '';
           }
         }
         this.searchFields = data.searchFields;

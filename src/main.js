@@ -8,7 +8,7 @@ import router from './router'
 import store, { types } from './store'
 import http from './http'
 import i18n from './i18n'
-import config from './config'
+import config from './config.json'
 import inflection from 'inflection'
 
 Vue.prototype.$config = config

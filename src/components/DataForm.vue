@@ -3,7 +3,7 @@
     <div class="data-form">
       <div class="row">
         <div class="col col-md-8">
-          <legend v-if="model._id">{{$t('actions.edit')}}: {{model._id}}</legend>
+          <legend v-if="model[$config.primaryKey]">{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
         </div>
         <div class="col col-md-4 text-right hidden-sm-down">
           <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>

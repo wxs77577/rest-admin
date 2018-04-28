@@ -92,7 +92,7 @@ export default {
       pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
       perPage: 6,
-      sortBy: $config.primaryKey,
+      sortBy: this.$config.primaryKey,
       sortDesc: true,
       fields: {},
       filter: {},

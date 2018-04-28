@@ -19,8 +19,8 @@ export default {
     };
   },
   watch: {
-    "$store.state.site"(data) {
-      window.document.title = (data.name || "REST ADMIN") + " DASHBOARD";
+    "$store.state.site.name"(name) { 
+      window.document.title = name || "REST ADMIN DASHBOARD"
     }
   },
   methods: {},

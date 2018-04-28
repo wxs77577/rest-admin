@@ -15,14 +15,15 @@ export default {
       Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
     </span>`,
     logo: require('@/assets/img/logo.png'),
-    locale: 'en-US'
+    locale: 'en-US',
+    locale_switcher: true,
   },
   mutations: {
     [types.SET_SITE](state, data) {
       const { name, description, menu } = data
       for (let k in data) {
         const value = data[k]
-        if (!value) {
+        if (typeof value === 'undefined') {
           continue
         }
         state[k] = value

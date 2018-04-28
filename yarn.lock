@@ -941,9 +941,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap-vue@^2:
-  version "2.0.0-rc.8"
-  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.0.0-rc.8.tgz#f0c515fb812b38612ee1f35f4bb2d6a1b6a5fe3e"
+bootstrap-vue@^2.0.0-rc.9:
+  version "2.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.0.0-rc.9.tgz#763a96a2707fdd9731d137572d03151db124573d"
   dependencies:
     bootstrap "^4.0.0"
     lodash.get "^4.4.2"
@@ -952,7 +952,7 @@ bootstrap-vue@^2:
     popper.js "^1.12.9"
     vue-functional-data-merge "^2.0.5"
 
-bootstrap@^4, bootstrap@^4.0.0:
+bootstrap@^4.0.0, bootstrap@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.0.tgz#110b05c31a236d56dbc9adcda6dd16f53738a28a"
 

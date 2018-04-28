@@ -4,9 +4,8 @@ const app = express()
 const _ = require('lodash')
 const faker = require('faker')
 
-const config = {
-  primaryKey: '_id'
-}
+const config = require('../src/config.json')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', (req, res) => {
@@ -231,7 +230,7 @@ resourceRouter.get('/grid', ({ resource }, res) => {
 resourceRouter.get('/form', ({ resource }, res) => {
   res.send({
     fields: _.pickBy(resource.fields, (v, k) => {
-      return v.editable !== false && !['_id', 'created_at', 'updated_at'].includes(k)
+      return v.editable !== false && ![config.primaryKey, 'created_at', 'updated_at'].includes(k)
     })
   })
 })
@@ -240,7 +239,7 @@ resourceRouter.get('/form', ({ resource }, res) => {
 resourceRouter.get('/view', ({ resource }, res) => {
   res.send({
     fields: _.pickBy(resource.fields, (v, k) => {
-      return v.viewable !== false && !['_id', 'created_at', 'updated_at'].includes(k)
+      return v.viewable !== false && ![config.primaryKey, 'created_at', 'updated_at'].includes(k)
     })
   })
 })
@@ -261,7 +260,7 @@ resourceRouter.put('/:id', ({ resource, params, body }, res) => {
 // create
 resourceRouter.post('/', ({ resource, body }, res) => {
   const data = _.pick(body, Object.keys(resource.fields))
-  data._id = resources.genId('')
+  data[config.primaryKey] = resources.genId('')
   resource.data.push(data)
   res.send(resource.data[resource.data.length - 1])
 })

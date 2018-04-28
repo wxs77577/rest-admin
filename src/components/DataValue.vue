@@ -38,7 +38,7 @@
       </template>
     </template>
 
-    <template v-else-if="name === '_id'">
+    <template v-else-if="name === $config.primaryKey">
       <span v-b-tooltip.hover.top.d100 :title="value" v-if="value">
         {{String(shortId ? String(value).substr(-4) : value).toUpperCase()}}
       </span>

@@ -55,6 +55,7 @@ Then just copy `/dist/admin` folder to the anywhere.
 
 ## Fields Definition
 > Used in listing tables and editing forms
+> Default PRIMARY_KEY field is `_id`, feel free to change it in `/src/config.json`
 
 Example:
 ```json

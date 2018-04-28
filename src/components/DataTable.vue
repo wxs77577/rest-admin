@@ -41,9 +41,15 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.show !== false">{{$t('actions.view')}}</b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.edit !== false">{{$t('actions.edit')}}</b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.remove !== false">{{$t('actions.delete')}}</b-btn>
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.show !== false">
+            {{$t('actions.view')}}
+          </b-btn>
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.edit !== false">
+            {{$t('actions.edit')}}
+          </b-btn>
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.remove !== false">
+            {{$t('actions.delete')}}
+          </b-btn>
           <b-btn size="sm" v-for="(button, key) in fields._actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
         </template>
 
@@ -86,7 +92,7 @@ export default {
       pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
       perPage: 6,
-      sortBy: "_id",
+      sortBy: $config.primaryKey,
       sortDesc: true,
       fields: {},
       filter: {},

@@ -70,7 +70,7 @@ Example:
   "body": { "type": "html" },
   "steps": { "type": "array", "fields": {
     "name": { "label": "Name" },
-    "date": { "label": "date" }
+    "date": { "label": "date" } 
   }},
   
   "_actions": { // define table view, it's optional.

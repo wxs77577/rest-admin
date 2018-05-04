@@ -12,9 +12,24 @@
       </slot>
     </b-form>
 
+    
+
     <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
 
-      <div class="row">
+      <b-tabs class="my-3" v-if="groupBy">
+        <b-tab v-for="(fields, tabName) in groupedFields" :title="tabName || $t('messages.default')" :key="tabName">
+          <div class="row">
+            <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
+            v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
+            :label="field.label || $inflection.titleize(name)">
+              <div class="">
+                <b-form-field :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+              </div>
+            </b-form-group>
+          </div>
+        </b-tab>
+      </b-tabs>
+      <div class="row" v-else>
         <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
         v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
         :label="field.label || $inflection.titleize(name)">
@@ -23,6 +38,7 @@
           </div>
         </b-form-group>
       </div>
+      
 
       <slot name="actions">
         <b-button type="submit" variant="primary">{{submitText}}</b-button>
@@ -57,6 +73,10 @@ export default {
       type: Boolean,
       default: false
     },
+    groupBy: {
+      type: String,
+      default: null
+    },
     value: {
       default() {
         return {};
@@ -78,18 +98,18 @@ export default {
     },
     submitText: {
       default() {
-        return this.$t('actions.save')
+        return this.$t("actions.save");
       }
     },
     backText: {
       default() {
-        return this.$t('actions.back')
+        return this.$t("actions.back");
       }
     },
 
     successMessage: {
       default() {
-        return this.$t('messages.succeed')
+        return this.$t("messages.succeed");
       }
     }
   },
@@ -104,21 +124,33 @@ export default {
       this.model = val;
     }
   },
-  computed: {},
+  computed: {
+    groupedFields() {
+      const ret = {};
+      _.keys(_.groupBy(this.fields, this.groupBy)).map(v => {
+        // console.log(v, v == 'undefined')
+        let tabName = v;
+        if (v == "undefined") {
+          v = null;
+          tabName = this.$t("messages.default");
+        }
+        ret[tabName] = _.pickBy(this.fields, field => field.group == v);
+      });
+      return ret;
+    }
+  },
   methods: {
-    titlize(val){
-
-    },
+    titlize(val) {},
     isShowField(field) {
       return (
         !field.showWhen || this.model[field.showWhen] || eval(field.showWhen)
       );
     },
     getInputClass(field) {
-      return []
-      const classNames = []
-      classNames.push(`col-lg-${field.input_cols ? field.input_cols : '12'}`)
-      return classNames
+      return [];
+      const classNames = [];
+      classNames.push(`col-lg-${field.input_cols ? field.input_cols : "12"}`);
+      return classNames;
     },
     getClass(field) {
       const cols = field.cols ? field.cols : 12;

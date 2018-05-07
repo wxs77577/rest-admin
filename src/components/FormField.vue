@@ -12,12 +12,18 @@
   <b-date-picker v-else-if="['date', 'datetime'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
   <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-model="model">
-    <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
+    <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
   </b-form-radio-group>
 
   <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-model="model">
-    <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox>
+    <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
   </b-form-checkbox-group>
+
+  <div v-else-if="['checkboxtable'].includes(field.type)" class="checkboxtable">
+    <div v-for="(options, group) in groupedOptions" :key="group" class="mt-1">
+      <b-form-checkbox-group :name="name" :options="options" v-bind="field" v-model="model"></b-form-checkbox-group>
+    </div>
+  </div>
 
   <b-form-textarea :name="name" v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
 
@@ -109,6 +115,13 @@
     <b-form-input :state="state" :id="id" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
   </b-input-group>
 </template>
+<style>
+.checkboxtable .btn-group > .btn:first-child{
+  text-align: center;
+  width:10em;
+  margin-right:2px;
+}
+</style>
 
 <script>
 import BDraggable from "vuedraggable";
@@ -122,8 +135,8 @@ import BDatePicker from "vue2-datepicker";
 import BFormUploader from "./FormUploader";
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
-import Vue from "vue";
-import _ from "lodash";
+import Vue from "vue"
+import _ from "lodash"
 
 // import "jsoneditor/dist/jsoneditor.min.css"
 
@@ -154,6 +167,9 @@ export default {
     },
     isSelect2() {
       return ["select2"].includes(this.field.type);
+    },
+    groupedOptions() {
+      return _.groupBy(this.options, 'group')
     },
     myFields() {
       let fields = this.field.fields;

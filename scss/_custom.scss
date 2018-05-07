@@ -62,6 +62,9 @@ input.input{
 .vue-html5-editor{
   border-radius: $border-radius !important;
 }
+.vue-html5-editor .toolbar {
+  z-index: inherit !important;
+}
 .vue-html5-editor .dashboard-font {
   line-height: 1.5em !important;
 }
@@ -86,6 +89,10 @@ input.input{
 .mx-input{
   border-radius: 0 !important;
   box-shadow: none !important;
+}
+.mx-datepicker{
+  min-width: inherit !important;
+  width: 100% !important;
 }
 // tree-select
 .vue-treeselect__control, .vue-treeselect__menu{

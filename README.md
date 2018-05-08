@@ -67,8 +67,8 @@ Example:
     { "text": "React", "value": "react" },
     { "text": "Angular", "value": "angular" },
   ]},
-  "body": { "type": "html" },
-  "steps": { "type": "array", "fields": {
+  "body": { "type": "html", "group": "Detail" },
+  "steps": { "type": "array", "group": "Steps", "fields": {
     "name": { "label": "Name" },
     "date": { "label": "date" } 
   }},
@@ -90,6 +90,7 @@ Example:
 - `label` Title for display
 - `cols` column width, total is 12.
 - `input_cols` column width of input control.
+- `group` title for tabs in create/edit forms
 - `type` Field type, accepted values and additional properties for some fields.
   - `select` raw html `<select>` tag from [b-select](https://bootstrap-vue.js.org/docs/components/form-select) of `bootstrap-vue`
     - `options` e.g. `[{ "text": "Label", "value": "1" }]`
@@ -135,6 +136,7 @@ Get config data of site
     "name": "Site Name",
     "logo": "http://.../logo.png",
     "locale": "en-US", //or zh-CN
+    "locale_switcher": false, //hide locale switcher
     "menu" : [
       {
         "name": "Home",

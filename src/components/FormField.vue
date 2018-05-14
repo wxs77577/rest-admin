@@ -11,11 +11,11 @@
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date', 'datetime'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
-  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-model="model">
+  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-bind="field" v-model="model">
     <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
   </b-form-radio-group>
 
-  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-model="model">
+  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-bind="field" v-model="model">
     <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
   </b-form-checkbox-group>
 

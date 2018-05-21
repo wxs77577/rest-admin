@@ -50,7 +50,8 @@
 
       <b-table hover bordered :items="model" :fields="myFields" v-if="field.is_table || parent.is_table">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
-          <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
+          <b-form-field :parent="parent" v-model="model[row.index][k]" :field="child"
+          :name="`input_${row.index}_${k}`" :key="`input_${row.index}_${k}`" :id="`input_${row.index}_${k}`" />
         </template>
         <template slot="HEAD__actions" slot-scope="row">
           <b-btn size="sm" @click="model.push({});">
@@ -116,17 +117,17 @@
   </b-input-group>
 </template>
 <style>
-.checkboxtable .btn-group > .btn:first-child{
+.checkboxtable .btn-group > .btn:first-child {
   text-align: center;
-  width:10em;
-  margin-right:2px;
+  width: 10em;
+  margin-right: 2px;
 }
 </style>
 
 <script>
 import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.min.css"
+import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
 // import BSelect from "vue-multiselect"
 import BSelect from "vue-select";
 // import "vue-multiselect/dist/vue-multiselect.min.css"
@@ -135,8 +136,8 @@ import BDatePicker from "vue2-datepicker";
 import BFormUploader from "./FormUploader";
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
-import Vue from "vue"
-import _ from "lodash"
+import Vue from "vue";
+import _ from "lodash";
 
 // import "jsoneditor/dist/jsoneditor.min.css"
 
@@ -169,7 +170,7 @@ export default {
       return ["select2"].includes(this.field.type);
     },
     groupedOptions() {
-      return _.groupBy(this.options, 'group')
+      return _.groupBy(this.options, "group");
     },
     myFields() {
       let fields = this.field.fields;
@@ -220,40 +221,46 @@ export default {
         this.field.type == "array" ||
         this.field.is_table
       );
+    },
+    model: {
+      get() {
+        const isArray =
+          this.field.multiple ||
+          this.field.is_array ||
+          this.field.type == "array" ||
+          this.field.is_table;
+        return isArray && !this.value ? [] : this.value;
+      },
+      set(value) {
+        this.$emit("input", value);
+      }
     }
   },
   data() {
     const isArray =
-      this.field.multiple ||
-      this.field.is_array ||
-      this.field.type == "array" ||
-      this.field.is_table;
+          this.field.multiple ||
+          this.field.is_array ||
+          this.field.type == "array" ||
+          this.field.is_table;
     return {
+      
       options: this.field.options || [],
-      model: isArray && !this.value ? [] : this.value,
-      oldValue: _.clone(this.value),
       selectedValue: isArray && !this.value ? [] : this.value
     };
   },
-  watch: {
-    model(value) {
-      this.$emit("input", value);
-    }
-  },
   methods: {
-    htmlEditorInput(value){
-      
-      this.$emit('input', value)
+    htmlEditorInput(value) {
+      this.$emit("input", value);
     },
-    wrapFirstLine(el){
+    wrapFirstLine(el) {
       // const value = String(el.target.innerHTML).replace(/^\s*(.+?)(<?)/i, '<p> $1 </p>$2')
       // this.$emit('input', value)
     },
     treeSelectNormalizer(row) {
       return {
         id: row.value,
-        label: row.text,
-      }
+        label: row.text
+      };
     },
     handleSelect(val) {
       if (this.isSelect2) {

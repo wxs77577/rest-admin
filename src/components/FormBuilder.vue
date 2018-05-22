@@ -9,6 +9,7 @@
       <slot name="actions">
         <b-button type="submit" variant="primary">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        <slot name="extra-buttons"></slot>
       </slot>
     </b-form>
 

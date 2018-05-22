@@ -23,7 +23,12 @@
         </b-btn>
       </div>
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
-        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch" />
+        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
+          <div slot="extra-buttons" class="ml-2">
+            <b-button type="button" @click="searchAndExport" variant="success" v-if="fields._actions.export">{{$t('actions.search_and_export')}}</b-button>
+            <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+          </div>
+        </b-form-builder>
       </div>
       <b-row>
         <b-col cols="8">
@@ -92,6 +97,7 @@ export default {
   },
   data() {
     return {
+      iframeSrc: null,
       pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
       perPage: 6,
@@ -203,6 +209,16 @@ export default {
           this.perPage = data.perPage;
         });
     },
+    searchAndExport() {
+      const query = JSON.stringify({
+        where: _.clone(this.searchModel)
+      })
+      this.iframeSrc = ''
+      setTimeout(() => {
+        this.iframeSrc = `${API_URI}${this.resourceUri}/export?query=${query}&token=${this.$store.state.auth.token}`
+      }, 50)
+      
+    },
     fetchGrid(fetchData = false) {
       this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
@@ -212,7 +228,7 @@ export default {
         }
         if (this.fields._actions) {
           if (!this.fields._actions.label) {
-            this.fields._actions.label = '';
+            this.fields._actions.label = "";
           }
         }
         this.searchFields = data.searchFields;
@@ -248,19 +264,19 @@ export default {
       });
     },
     remove(item) {
-      if (window.confirm(this.$t('messages.confirm_delete'))) {
+      if (window.confirm(this.$t("messages.confirm_delete"))) {
         this.$http
           .delete(this.resourceUri + "/" + item[this.$config.primaryKey])
           .then(({ data }) => {
-            this.$snotify.success(this.$t('messages.deleted'));
+            this.$snotify.success(this.$t("messages.deleted"));
             this.fetch();
           });
       }
     },
     removeAll(item) {
-      if (window.confirm(this.$t('messages.confirm_delete_all'))) {
+      if (window.confirm(this.$t("messages.confirm_delete_all"))) {
         this.$http.delete(this.resourceUri).then(({ data }) => {
-          this.$snotify.success(this.$t('messages.deleted_all'));
+          this.$snotify.success(this.$t("messages.deleted_all"));
           this.fetch();
         });
       }

@@ -11,13 +11,19 @@
   <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
   <b-date-picker v-else-if="['date', 'datetime'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
 
-  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-model="model">
-    <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio>
+  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-bind="field" v-model="model">
+    <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
   </b-form-radio-group>
 
-  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-model="model">
-    <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox>
+  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-bind="field" v-model="model">
+    <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
   </b-form-checkbox-group>
+
+  <div v-else-if="['checkboxtable'].includes(field.type)" class="checkboxtable">
+    <div v-for="(options, group) in groupedOptions" :key="group" class="mt-1">
+      <b-form-checkbox-group :name="name" :options="options" v-bind="field" v-model="model"></b-form-checkbox-group>
+    </div>
+  </div>
 
   <b-form-textarea :name="name" v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
 
@@ -44,7 +50,8 @@
 
       <b-table hover bordered :items="model" :fields="myFields" v-if="field.is_table || parent.is_table">
         <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
-          <b-form-field v-model="model[row.index][k]" :name="k" :key="k" :field="child" :id="`input_${row.index}_${k}`" />
+          <b-form-field :parent="parent" v-model="model[row.index][k]" :field="child"
+          :name="`input_${row.index}_${k}`" :key="`input_${row.index}_${k}`" :id="`input_${row.index}_${k}`" />
         </template>
         <template slot="HEAD__actions" slot-scope="row">
           <b-btn size="sm" @click="model.push({});">
@@ -109,11 +116,18 @@
     <b-form-input :state="state" :id="id" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
   </b-input-group>
 </template>
+<style>
+.checkboxtable .btn-group > .btn:first-child {
+  text-align: center;
+  width: 10em;
+  margin-right: 2px;
+}
+</style>
 
 <script>
 import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.min.css"
+import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
 // import BSelect from "vue-multiselect"
 import BSelect from "vue-select";
 // import "vue-multiselect/dist/vue-multiselect.min.css"
@@ -154,6 +168,9 @@ export default {
     },
     isSelect2() {
       return ["select2"].includes(this.field.type);
+    },
+    groupedOptions() {
+      return _.groupBy(this.options, "group");
     },
     myFields() {
       let fields = this.field.fields;
@@ -204,40 +221,46 @@ export default {
         this.field.type == "array" ||
         this.field.is_table
       );
+    },
+    model: {
+      get() {
+        const isArray =
+          this.field.multiple ||
+          this.field.is_array ||
+          this.field.type == "array" ||
+          this.field.is_table;
+        return isArray && !this.value ? [] : this.value;
+      },
+      set(value) {
+        this.$emit("input", value);
+      }
     }
   },
   data() {
     const isArray =
-      this.field.multiple ||
-      this.field.is_array ||
-      this.field.type == "array" ||
-      this.field.is_table;
+          this.field.multiple ||
+          this.field.is_array ||
+          this.field.type == "array" ||
+          this.field.is_table;
     return {
+      
       options: this.field.options || [],
-      model: isArray && !this.value ? [] : this.value,
-      oldValue: _.clone(this.value),
       selectedValue: isArray && !this.value ? [] : this.value
     };
   },
-  watch: {
-    model(value) {
-      this.$emit("input", value);
-    }
-  },
   methods: {
-    htmlEditorInput(value){
-      
-      this.$emit('input', value)
+    htmlEditorInput(value) {
+      this.$emit("input", value);
     },
-    wrapFirstLine(el){
+    wrapFirstLine(el) {
       // const value = String(el.target.innerHTML).replace(/^\s*(.+?)(<?)/i, '<p> $1 </p>$2')
       // this.$emit('input', value)
     },
     treeSelectNormalizer(row) {
       return {
         id: row.value,
-        label: row.text,
-      }
+        label: row.text
+      };
     },
     handleSelect(val) {
       if (this.isSelect2) {

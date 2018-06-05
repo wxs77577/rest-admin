@@ -24,6 +24,15 @@ import 'simple-line-icons/css/simple-line-icons.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '../scss/style.scss'
 
+/**
+ * Change `lumen` to any other words blow:
+ * 
+ * cerulean  darkly    litera    materia   sandstone slate     superhero
+ * cosmo     flatly    lumen     minty     simplex   solar     united
+ * cyborg    journal   lux       pulse     sketchy   spacelab  yeti
+ */
+// import "bootswatch/dist/lumen/bootstrap.min.css"
+
 import "vue-snotify/styles/material.css"
 Vue.use(Snotify)
 

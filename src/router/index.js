@@ -7,6 +7,7 @@ import ResourceEdit from '../components/ResourceEdit'
 import ResourceShow from '../components/ResourceShow'
 import ResourceStat from '../components/ResourceStat'
 import CustomForm from '../components/CustomForm'
+import CustomPage from '../components/CustomPage'
 import Login from '../components/Login'
 import Layout from '../components/Layout'
 import Home from '../components/Home'
@@ -62,6 +63,11 @@ const router = new Router({
           path: '/form',
           name: 'form',
           component: CustomForm
+        },
+        {
+          path: '/page',
+          name: 'page',
+          component: CustomPage
         },
       ]
     },

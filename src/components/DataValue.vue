@@ -45,7 +45,15 @@
     </template>
     <template v-else-if="['date', 'datetime'].includes(field.type)">
       <span v-b-tooltip.hover.top.d100 :title="value" v-if="value">
-        {{$d(new Date(value), field.format || 'long')}}
+        
+        <template v-if="_.isString(value)">
+          {{$d(new Date(value), timeFormat)}}
+        </template>
+        <template v-else-if="_.isArray(value)">
+          {{$d(new Date(value[0]), timeFormat)}} -
+          {{$d(new Date(value[1]), timeFormat)}}
+        </template>
+        
       </span>
     </template>
 
@@ -90,6 +98,9 @@ export default {
     }
   },
   computed: {
+    timeFormat() {
+      return 'long'
+    },
     value() {
       let value = _.get(this.model || {},this.name);
       if (!value) {

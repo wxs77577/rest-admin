@@ -36,7 +36,6 @@
         </b-col>
         <b-col cols="4" class="text-right">
           <p>{{$t('messages.paginate', {total: totalRows})}}</p>
-          <!-- <p>共 <b>{{totalRows}}</b> 条数据</p> -->
         </b-col>
       </b-row>
       <b-table class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">

@@ -10,7 +10,7 @@
           <b-btn variant="primary" @click="$refs.form.handleSubmit()">{{form.submitText || $t('actions.save')}}</b-btn>
         </div>
       </div>
-      <b-form-builder v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" v-model="form.model" />
+      <b-form-builder v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" />
     </div>
   </b-card>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <b-form-select v-if="['select'].includes(field.type)" 
    :formatter="getFormatter(field, value)" :id="id" :options="options"
-   v-bind="field" :value="selectedValue" @input="handleSelect" ></b-form-select> 
+   v-bind="field" :value="selectedValue" @input="handleSelect" :name="name" ></b-form-select> 
    
   <div v-else-if="['select2'].includes(field.type)">
     <b-select :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"

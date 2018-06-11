@@ -30,7 +30,11 @@ export default {
       form: {}
     };
   },
-
+  watch: {
+    '$route'(){
+      this.fetchForm()
+    }
+  },
   computed: {
     uri(){
       return this.$route.query.uri

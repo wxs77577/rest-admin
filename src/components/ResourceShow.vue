@@ -11,11 +11,10 @@
 </template>
 
 <script>
-import DataView from './DataView'
+import BDataView from './DataView'
 export default {
-  name: "resource-show",
   components: {
-    'b-data-view': DataView
+    BDataView
   },
   data() {
     return {

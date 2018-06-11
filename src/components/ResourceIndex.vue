@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import DataTable from './DataTable'
+import BDataTable from './DataTable'
 
 export default {
   name: "resource-index",
   components: {
-    'b-data-table': DataTable
+    BDataTable
   },
   data() {
     return {

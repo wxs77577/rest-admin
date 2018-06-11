@@ -1683,7 +1683,7 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-dayjs@^1.5.22:
+dayjs@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.6.6.tgz#2bb0d2e14f56301d364339140afcac6fb7e6e0e2"
 
@@ -3714,7 +3714,7 @@ node-pre-gyp@^0.10.0:
     semver "^5.3.0"
     tar "^4"
 
-node-sass@^4.7.2:
+node-sass@^4.9.0:
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.9.0.tgz#d1b8aa855d98ed684d6848db929a20771cc2ae52"
   dependencies:

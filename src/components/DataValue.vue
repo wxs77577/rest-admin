@@ -71,7 +71,6 @@
 import _ from "lodash";
 
 export default {
-  name: "b-data-value",
   data() {
     return {
       previewValue: null,

@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import DataForm from './DataForm'
+import BDataForm from './DataForm'
 export default {
   name: "resource-edit",
   components: {
-    'b-data-form': DataForm
+    BDataForm
   },
   data() {
     return {

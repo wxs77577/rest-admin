@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store, {types} from '../store'
+import store from '../store'
 
-import ResourceIndex from '../components/ResourceIndex'
-import ResourceEdit from '../components/ResourceEdit'
-import ResourceShow from '../components/ResourceShow'
-import ResourceStat from '../components/ResourceStat'
-import CustomForm from '../components/CustomForm'
-import CustomPage from '../components/CustomPage'
-import Login from '../components/Login'
-import Layout from '../components/Layout'
-import Home from '../components/Home'
+import ResourceIndex from '../views/ResourceIndex'
+import ResourceEdit from '../views/ResourceEdit'
+import ResourceShow from '../views/ResourceShow'
+import ResourceStat from '../views/ResourceStat'
+import CustomForm from '../views/CustomForm'
+import CustomPage from '../views/CustomPage'
+import Login from '../views/Login'
+import Layout from '../views/Layout'
+import Home from '../views/Home'
 
 Vue.use(Router)
 
@@ -76,7 +76,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (!store.state.auth.token && !to.meta.isPublic) {
-    console.log('no token', store.state.auth);
     return next({name: 'login'})
   }
   next()

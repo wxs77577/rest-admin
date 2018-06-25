@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BDataTable from './DataTable'
+import BDataTable from '../components/DataTable'
 
 export default {
   name: "resource-index",

@@ -14,7 +14,7 @@
 
 <script>
 
-import BDataChart from './DataChart'
+import BDataChart from '../components/DataChart'
 
 export default {
   name: "resource-stat",

@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="12" xl="12">
        
-          <b-data-view :resource="resource" :id="id"></b-data-view>
+          <b-data-form :resource="resource" :id="id"></b-data-form>
         
       </b-col>
     </b-row>
@@ -11,10 +11,11 @@
 </template>
 
 <script>
-import BDataView from './DataView'
+import BDataForm from '../components/DataForm'
 export default {
+  name: "resource-edit",
   components: {
-    BDataView
+    BDataForm
   },
   data() {
     return {

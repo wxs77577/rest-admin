@@ -36,7 +36,7 @@
 <script>
 import { types } from "../store";
 import { mapState } from "vuex";
-import Languages from "./Languages";
+import Languages from "../components/Languages";
 
 export default {
   name: "Login",

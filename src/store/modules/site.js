@@ -2,7 +2,6 @@ import types from '../types'
 import menu from '../../menu'
 import _ from 'lodash'
 import http from '../../http'
-import i18n from '../../i18n'
 
 export default {
   state: {
@@ -20,7 +19,6 @@ export default {
   },
   mutations: {
     [types.SET_SITE](state, data) {
-      const { name, description, menu } = data
       for (let k in data) {
         const value = data[k]
         if (typeof value === 'undefined') {

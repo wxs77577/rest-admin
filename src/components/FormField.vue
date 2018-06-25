@@ -136,7 +136,6 @@ import BDatePicker from "vue2-datepicker";
 import BFormUploader from "./FormUploader";
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
-import Vue from "vue";
 import _ from "lodash";
 
 // import "jsoneditor/dist/jsoneditor.min.css"
@@ -193,7 +192,7 @@ export default {
     },
     description() {
       if (this.field.limit) {
-        const { width, height, size } = this.field.limit;
+        const { width, height } = this.field.limit;
         if (width && height) {
           return `尺寸：${width}x${height}`;
         }
@@ -252,7 +251,7 @@ export default {
     htmlEditorInput(value) {
       this.$emit("input", value);
     },
-    wrapFirstLine(el) {
+    wrapFirstLine() {
       // const value = String(el.target.innerHTML).replace(/^\s*(.+?)(<?)/i, '<p> $1 </p>$2')
       // this.$emit('input', value)
     },
@@ -272,7 +271,7 @@ export default {
       }
       this.$emit("input", val);
     },
-    getFormatter(field, value) {
+    getFormatter(field) {
       if (field.format) {
         return eval(field.format);
       }

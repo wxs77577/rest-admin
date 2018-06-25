@@ -140,7 +140,7 @@ router.post('/login', (req, res) => {
     })
   } else {
     res.status(422).send({
-      msg: 'Username or password is incorrect.'
+      message: 'Username or password is incorrect.'
     })
   }
 })
@@ -300,7 +300,7 @@ router.use('/:resource', (req, res, next) => {
 
 
 app.use('/admin/api', router)
-
-app.listen(8088, () => {
-  console.log('Test API is listening at http://localhost:8088')
+const PORT = process.env.PORT || 8088
+app.listen(PORT, () => {
+  console.log(`Test API is listening at http://localhost:${PORT}`)
 })

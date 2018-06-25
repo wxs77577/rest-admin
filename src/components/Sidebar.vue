@@ -11,6 +11,8 @@
         <span>{{auth.user.username}}</span>
       </div>
       <languages />
+      <!-- <theme-switcher /> -->
+
     </div>
     <nav class="sidebar-nav">
       <div slot="header"></div>
@@ -56,7 +58,8 @@
   </div>
 </template>
 <script>
-import Languages from './Languages'
+import ThemeSwitcher from "./ThemeSwitcher";
+import Languages from "./Languages";
 
 import { mapState } from "vuex";
 export default {
@@ -65,7 +68,7 @@ export default {
   computed: {
     ...mapState(["auth", "site"])
   },
-  components: {Languages},
+  components: { Languages, ThemeSwitcher },
   methods: {
     toggle(item) {
       this.$set(item, "open", !item.open);

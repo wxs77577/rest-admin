@@ -1,5 +1,7 @@
 # REST-ADMIN
 
+## Use the latest `@vue/cli`
+
 ### [README - 简体中文](./README-zh.md)
 
 > An Powerful Admin Dashboard based on Vue.js and Boostrap v4.

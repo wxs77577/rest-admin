@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store, {types} from '../store'
+import store from '../store'
 
 import ResourceIndex from '../components/ResourceIndex'
 import ResourceEdit from '../components/ResourceEdit'
@@ -76,7 +76,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (!store.state.auth.token && !to.meta.isPublic) {
-    console.log('no token', store.state.auth);
     return next({name: 'login'})
   }
   next()

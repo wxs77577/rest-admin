@@ -1,5 +1,4 @@
 <template>
-  
   <div id="app">
     <router-view></router-view>
     <vue-snotify />
@@ -8,7 +7,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import { types } from "./store";
 
 export default {

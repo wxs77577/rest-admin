@@ -6,7 +6,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store, { types } from './store'
-import http from './http'
+import './http'
 import i18n from './i18n'
 import config from './config.json'
 import inflection from 'inflection'
@@ -22,7 +22,7 @@ import Snotify from 'vue-snotify'
 import 'font-awesome/css/font-awesome.min.css'
 import 'simple-line-icons/css/simple-line-icons.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '../scss/style.scss'
+import './scss/style.scss'
 
 /**
  * Change `lumen` to any other words blow:

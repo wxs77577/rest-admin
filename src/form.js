@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import store from './store'
 import VueHtml5Editor from 'vue-html5-editor'
-import Snotify from 'vue-snotify'
 import i18n from './i18n'
 
 import Switch from './components/Switch.vue'

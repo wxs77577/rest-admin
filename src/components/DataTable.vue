@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import BFormBuilder from "./FormBuilder";
 import BDataValue from "./DataValue";
 import { mapState, mapGetters } from "vuex";
@@ -124,7 +125,7 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, (v, k) => v.ref && v.ref.split(".").shift())
+        _.map(this.fields, (v) => v.ref && v.ref.split(".").shift())
       );
     },
     searchUri() {
@@ -178,7 +179,7 @@ export default {
     page: "fetch",
     sort: "fetch",
     where: "fetch",
-    "$route.query.query"(val) {
+    "$route.query.query"() {
       this.applyQuery();
       this.fetch();
     }
@@ -214,7 +215,7 @@ export default {
       })
       this.iframeSrc = ''
       setTimeout(() => {
-        this.iframeSrc = `${API_URI}${this.resourceUri}/export?query=${query}&token=${this.$store.state.auth.token}`
+        this.iframeSrc = `${global.API_URI}${this.resourceUri}/export?query=${query}&token=${this.$store.state.auth.token}`
       }, 50)
       
     },
@@ -266,15 +267,15 @@ export default {
       if (window.confirm(this.$t("messages.confirm_delete"))) {
         this.$http
           .delete(this.resourceUri + "/" + item[this.$config.primaryKey])
-          .then(({ data }) => {
+          .then(() => {
             this.$snotify.success(this.$t("messages.deleted"));
             this.fetch();
           });
       }
     },
-    removeAll(item) {
+    removeAll() {
       if (window.confirm(this.$t("messages.confirm_delete_all"))) {
-        this.$http.delete(this.resourceUri).then(({ data }) => {
+        this.$http.delete(this.resourceUri).then(() => {
           this.$snotify.success(this.$t("messages.deleted_all"));
           this.fetch();
         });

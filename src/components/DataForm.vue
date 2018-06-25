@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex"
+import _ from 'lodash'
 
 export default {
   components: {},
@@ -60,7 +61,7 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, (v, k) => v.ref && v.ref.split(".").shift())
+        _.map(this.fields, (v) => v.ref && v.ref.split(".").shift())
       );
     },
     header() {

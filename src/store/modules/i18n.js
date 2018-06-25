@@ -1,5 +1,4 @@
 import types from '../types'
-import _ from 'lodash'
 
 import i18n from '../../i18n'
 

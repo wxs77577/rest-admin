@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import Vue from "vue";
+import _ from 'lodash'
 
 export default {
   name: "b-form-builder",
@@ -141,17 +141,17 @@ export default {
     }
   },
   methods: {
-    titlize(val) {},
+    titlize() {},
     isShowField(field) {
       return (
         !field.showWhen || this.model[field.showWhen] || eval(field.showWhen)
       );
-    },
-    getInputClass(field) {
+  },
+    getInputClass() {
       return [];
-      const classNames = [];
-      classNames.push(`col-lg-${field.input_cols ? field.input_cols : "12"}`);
-      return classNames;
+      // const classNames = [];
+      // classNames.push(`col-lg-${field.input_cols ? field.input_cols : "12"}`);
+      // return classNames;
     },
     getClass(field) {
       const cols = field.cols ? field.cols : 12;

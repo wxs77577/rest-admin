@@ -22,12 +22,9 @@
 </template>
 
 <script>
-import Vue from "vue";
 import BHeader from "./Header";
 import BSidebar from "./Sidebar";
 import BFooter from "./Footer";
-
-import { mapState } from "vuex";
 
 export default {
   components: {

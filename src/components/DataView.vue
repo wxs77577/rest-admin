@@ -30,6 +30,7 @@
 
 <script>
 import BDataValue from "./DataValue";
+import _ from 'lodash'
 
 import { mapState, mapGetters } from 'vuex'
 export default {
@@ -71,7 +72,7 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, (v, k) => v.ref && v.ref.replace(/\.\w+$/, ''))
+        _.map(this.fields, (v) => v.ref && v.ref.replace(/\.\w+$/, ''))
       );
     },
 

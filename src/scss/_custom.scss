@@ -1,5 +1,5 @@
 // Here you can add other styles
-$border-radius: 0;
+$border-radius: 4px;
 
 body{
   letter-spacing: 0.05em;
@@ -87,8 +87,11 @@ input.input{
 }
 // fix date-picker
 .mx-input{
-  border-radius: 0 !important;
+  border-radius: $border-radius !important;
   box-shadow: none !important;
+}
+[class*="btn"], .page-link{
+  // border-radius: $border-radius !important;
 }
 .mx-datepicker{
   min-width: inherit !important;
@@ -99,6 +102,16 @@ input.input{
   border-radius: $border-radius !important;
 }
 
-.data-table td .btn{
-  margin-top:4px;
+.card-body .btn{
+  margin:2px;
+}
+.nav-tabs .nav-item{
+  margin-bottom: 0 !important;
+}
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
+  border-color: $border-color !important;
+  border-bottom-color: #fff !important;
+}
+.form-control{
+  border-radius: $border-radius !important;
 }

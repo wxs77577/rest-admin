@@ -31,7 +31,7 @@ import './scss/style.scss'
  * cosmo     flatly    lumen     minty     simplex   solar     united
  * cyborg    journal   lux       pulse     sketchy   spacelab  yeti
  */
-
+import "bootswatch/dist/lumen/bootstrap.min.css"
 
 import "vue-snotify/styles/material.css"
 Vue.use(Snotify)

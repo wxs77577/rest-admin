@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import ThemeSwitcher from "./ThemeSwitcher";
+// import ThemeSwitcher from "./ThemeSwitcher";
 import Languages from "./Languages";
 
 import { mapState } from "vuex";
@@ -68,7 +68,7 @@ export default {
   computed: {
     ...mapState(["auth", "site"])
   },
-  components: { Languages, ThemeSwitcher },
+  components: { Languages },
   methods: {
     toggle(item) {
       this.$set(item, "open", !item.open);

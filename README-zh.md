@@ -5,7 +5,7 @@
 REST-ADMIN试图让你在构建后台管理界面的时候更轻松点，所有你需要做的仅仅是提供一个后台服务的RESTFul API而已。
 
 ## 在线DEMO
-#### http://rest-admin.genyii.com/admin/ 
+#### http://rest-admin.genyii.com/ 
 > 用户名:密码 `admin:admin`
 
 ## 截图

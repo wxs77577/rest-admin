@@ -9,7 +9,7 @@
 REST-ADMIN is trying to make it easier to built an admin dashboard for any backend services. All you need to do is just provide a RESTful api for it.
 
 ## Online Demo
-#### http://rest-admin.genyii.com/admin/ 
+#### http://rest-admin.genyii.com/ 
 > username:password `admin:admin`
 
 ## Screenshots

@@ -69,7 +69,7 @@ export default {
       this.$store.commit(types.SET_AUTH, data);
       this.$store.dispatch(types.FETCH_SITE);
       this.$router.push({
-        path: "/"
+        path: data.redirect || '/'
       });
     }
   },

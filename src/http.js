@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store, { types } from './store'
+import _ from 'lodash'
+
 const API_URI = process.env.VUE_APP_API_URL || '/admin/api/'
 global.API_URI = API_URI
 axios.defaults.baseURL = API_URI
@@ -26,7 +28,7 @@ axios.interceptors.response.use(response => {
       Vue.prototype.$snotify.error(String(statusText))
       break;
   }
-  let msg = data.message
+  let msg = _.get(data, 'message', _.get(data, 'error.message', _.get(data, '0.message')))
   if (Array.isArray(msg)) {
     msg = msg[0].message
   }

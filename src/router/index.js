@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '../store'
+// import store from '../store'
 
 import ResourceIndex from '../views/ResourceIndex'
 import ResourceEdit from '../views/ResourceEdit'
@@ -9,6 +9,7 @@ import ResourceStat from '../views/ResourceStat'
 import CustomForm from '../views/CustomForm'
 import CustomPage from '../views/CustomPage'
 import Login from '../views/Login'
+import Logout from '../views/Logout'
 import Layout from '../views/Layout'
 import Home from '../views/Home'
 
@@ -20,6 +21,14 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login,
+      meta: {
+        isPublic: true
+      }
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
       meta: {
         isPublic: true
       }
@@ -74,11 +83,12 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (!store.state.auth.token && !to.meta.isPublic) {
-    return next({name: 'login'})
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   // if (!store.state.auth.token && !to.meta.isPublic) {
+//   if (!to.meta.isPublic) {
+//     return next({name: 'login'})
+//   }
+//   next()
+// })
 
 export default router

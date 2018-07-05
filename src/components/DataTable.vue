@@ -3,11 +3,11 @@
     
     <div class="data-table">
       <div class="py-1">
-        <b-btn :to="resourceUri + '/create'" variant="secondary">
+        <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(fields,'_actions.toolbar.create') !== false">
         <i class="icon-plus"></i>
         {{$t('actions.create')}}
         </b-btn>
-        <b-btn @click="fetchGrid" variant="success">
+        <b-btn @click="fetchGrid" variant="success" v-if="_.get(fields, '_actions.toolbar.reload') !== false">
         <i class="icon-refresh"></i>
         {{$t('actions.reload')}}
         </b-btn>
@@ -17,7 +17,7 @@
           {{button.label}}
         </b-btn>
 
-        <b-btn @click="removeAll" class="pull-right" variant="second">
+        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(fields, '_actions.toolbar.delete_all') !== false">
         <i class="icon-trash"></i>
         {{$t('actions.delete_all')}}
         </b-btn>
@@ -45,15 +45,15 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.show !== false">
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(fields, '_actions.buttons.show') !== false">
             <i class="icon-eye"></i>
             {{$t('actions.view')}}
           </b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.edit !== false">
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="_.get(fields, '_actions.buttons.edit') !== false">
             <i class="icon-pencil"></i>
             {{$t('actions.edit')}}
           </b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="!fields._actions.buttons || fields._actions.buttons.remove !== false">
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="_.get(fields, '_actions.buttons.delete') !== false">
             <i class="icon-trash"></i>
             {{$t('actions.delete')}}
           </b-btn>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _ from "lodash";
 import BFormBuilder from "./FormBuilder";
 import BDataValue from "./DataValue";
 import { mapState, mapGetters } from "vuex";
@@ -125,7 +125,7 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, (v) => v.ref && v.ref.split(".").shift())
+        _.map(this.fields, v => v.ref && v.ref.split(".").shift())
       );
     },
     searchUri() {
@@ -212,12 +212,13 @@ export default {
     searchAndExport() {
       const query = JSON.stringify({
         where: _.clone(this.searchModel)
-      })
-      this.iframeSrc = ''
+      });
+      this.iframeSrc = "";
       setTimeout(() => {
-        this.iframeSrc = `${global.API_URI}${this.resourceUri}/export?query=${query}&token=${this.$store.state.auth.token}`
-      }, 50)
-      
+        this.iframeSrc = `${global.API_URI}${
+          this.resourceUri
+        }/export?query=${query}&token=${this.$store.state.auth.token}`;
+      }, 50);
     },
     fetchGrid(fetchData = false) {
       this.query = {};

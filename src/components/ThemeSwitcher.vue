@@ -8,7 +8,7 @@
 export default {
   data(){
     return {
-      theme: null,
+      theme: 'null',
       themeOptions: `
       cerulean  darkly    litera    materia   sandstone slate     superhero
       cosmo     flatly    lumen     minty     simplex   solar     united

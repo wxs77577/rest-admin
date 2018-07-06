@@ -6,17 +6,18 @@
           <div class="card-group">
             <div class="card p-4">
               <div class="card-body">
-                <h1>{{this.$t('actions.login')}}</h1>
-                <p class="text-muted">{{$t('message.login_please')}}</p>
+                <!-- <h1>{{this.$t('actions.login')}}</h1> -->
+                <img :src="site.login_logo" style="margin-bottom:20px">
+                <!-- <p class="text-muted">{{$t('message.login_please')}}</p> -->
                 <b-form-builder action="login" :fields="fields" v-model="model" 
                 @success="onSuccess" :submitText="$t('actions.login')" backText="" />
       
               </div>
             </div>
-            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+            <div class="card text-white  py-5 d-md-down-none" :style="site.desbg_style">
               <div class="card-body text-center align-items-center d-flex">
                 <div>
-                  <h2>{{site.name || 'REST ADMIN'}} - {{$t('messages.dashboard')}}</h2>
+                  <!-- <h2>{{site.name || 'REST ADMIN'}} - {{$t('messages.dashboard')}}</h2> -->
                   <p>{{site.description}}</p>
                   <!-- <button type="button" class="btn btn-primary active mt-3">{{$t('messages.go_home')}}</button> -->
                 </div>

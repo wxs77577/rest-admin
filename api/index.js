@@ -4,7 +4,7 @@ const app = express()
 const _ = require('lodash')
 const faker = require('faker')
 
-const config = require('../src/config.json')
+const config = require('../src/config.js')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))

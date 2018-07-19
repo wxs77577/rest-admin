@@ -1,7 +1,14 @@
 module.exports = {
   runtimeCompiler: true,
   productionSourceMap: false,
-  baseUrl: process.env.NODE_ENV === 'production'
-    ? process.env.PRODUCTION_BASE_URL
-    : '/'
+  baseUrl: process.env.PRODUCTION_BASE_URL,
+  configureWebpack: {
+    // No need for splitting
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
+    }
+  },
+  
 }

@@ -68,6 +68,7 @@ const router = new Router({
           name: 'show',
           component: ResourceShow
         },
+        
         {
           path: '/form',
           name: 'form',

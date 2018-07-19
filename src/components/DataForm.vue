@@ -10,7 +10,7 @@
           <b-btn variant="primary" @click="$refs.form.handleSubmit()">{{$t('actions.save')}}</b-btn>
         </div>
       </div>
-      <b-form-builder group-by="group" v-if="loaded" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
+      <b-form-builder group-by="group" v-if="loaded" :layout="layout" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
     </div>
   </b-card>
 </template>
@@ -95,6 +95,7 @@ export default {
     fetchForm() {
       this.$http.get(this.formUri).then(({ data }) => {
         this.fields = data.fields;
+        this.layout = data.layout;
 
         this.fetch();
       });

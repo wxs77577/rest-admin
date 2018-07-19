@@ -7,7 +7,7 @@ export default {
   state: {
     name: 'REST ADMIN',
     url: '',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: '',
     menu: menu,
     footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; ${new Date().getFullYear()} </span>
     <span class="ml-auto">

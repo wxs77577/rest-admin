@@ -10,7 +10,6 @@ import './http'
 import i18n from './i18n'
 import config from './config'
 import inflection from 'inflection'
-
 Vue.prototype.$config = config
 Vue.prototype.$inflection = inflection
 

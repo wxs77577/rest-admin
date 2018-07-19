@@ -97,7 +97,10 @@
     <div v-else-if="['object'].includes(field.type)">
       <b-card>
         <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
-          <b-form-field v-model="model[key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
+          
+          <b-form-field :value="_.get(model, `${key}`)"
+          @input="model[key] = arguments[0]"
+          :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
         </b-form-group>
       </b-card>
     </div>
@@ -228,7 +231,16 @@ export default {
           this.field.is_array ||
           this.field.type == "array" ||
           this.field.is_table;
-        return isArray && !this.value ? [] : this.value;
+        const isObject = this.field.type == 'object'
+        let ret = this.value
+        if (!this.value) {
+          if (isArray) {
+            ret = []
+          } else if (isObject) {
+            ret = {}
+          }
+        }
+        return ret
       },
       set(value) {
         this.$emit("input", value);
@@ -237,12 +249,11 @@ export default {
   },
   data() {
     const isArray =
-          this.field.multiple ||
-          this.field.is_array ||
-          this.field.type == "array" ||
-          this.field.is_table;
+      this.field.multiple ||
+      this.field.is_array ||
+      this.field.type == "array" ||
+      this.field.is_table;
     return {
-      
       options: this.field.options || [],
       selectedValue: isArray && !this.value ? [] : this.value
     };

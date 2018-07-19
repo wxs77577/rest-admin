@@ -6,19 +6,19 @@
           <div class="card-group">
             <div class="card p-4">
               <div class="card-body">
-                <!-- <h1>{{this.$t('actions.login')}}</h1> -->
+                <h1>{{$t('actions.login')}}</h1>
                 <img :src="site.login_logo" style="margin-bottom:20px">
-                <!-- <p class="text-muted">{{$t('message.login_please')}}</p> -->
+                <p class="text-muted">{{$t('messages.login_please')}}</p>
                 <b-form-builder action="login" :fields="fields" v-model="model" 
                 @success="onSuccess" :submitText="$t('actions.login')" backText="" />
       
               </div>
             </div>
-            <div class="card text-white  py-5 d-md-down-none" :style="site.desbg_style">
+            <div class="card text-white login-desc py-5 d-md-down-none" :style="site.desbg_style">
               <div class="card-body text-center align-items-center d-flex">
-                <div>
-                  <!-- <h2>{{site.name || 'REST ADMIN'}} - {{$t('messages.dashboard')}}</h2> -->
-                  <p>{{site.description}}</p>
+                <div class="" style="width: 100%">
+                  <h2>{{site.name || 'REST ADMIN'}} - {{$t('messages.dashboard')}}</h2>
+                  <p>{{site.description || $t('messages.login_description')}}</p>
                   <!-- <button type="button" class="btn btn-primary active mt-3">{{$t('messages.go_home')}}</button> -->
                 </div>
               </div>
@@ -43,11 +43,9 @@ export default {
   name: "Login",
   components: { Languages },
   computed: {
-    ...mapState(["auth", "site"])
-  },
-  data() {
-    return {
-      fields: {
+    ...mapState(["auth", "site"]),
+    fields(){
+      return {
         username: {
           label: this.$t("fields.username"),
           placeholder: this.$t("fields.username"),
@@ -59,7 +57,11 @@ export default {
           icon: "icon-lock",
           type: "password"
         }
-      },
+      }
+    }
+  },
+  data() {
+    return {
       model: {
         username: "",
         password: ""
@@ -82,8 +84,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import '../scss/bootstrap-variables';
 .login-container{
   height: 100%;
+  background: map-get($theme-colors, light );
+}
+.login-bg{
+
+}
+.card.login-desc{
+  background: map-get($theme-colors, primary );
 }
 </style>

@@ -78,8 +78,12 @@ export default {
 </script>
 
 <style lang="css">
+.sidebar {
+  box-shadow: 0 0 20px #000;
+}
 .site-logo {
   background: #fff;
   /* padding:1em; */
 }
+
 </style>

@@ -1,7 +1,13 @@
 <template>
   <div>
-    
-      <b-data-table :resource="resource"></b-data-table>
+    <b-row>
+      <b-col cols="12">
+       
+          <b-data-table :resource="resource"></b-data-table>
+        
+      </b-col>
+    </b-row>
+      
     
   </div>
 </template>

@@ -5,7 +5,7 @@ const inflection = require('inflection')
 String.prototype.slugify = function () {
   return inflection.dasherize(this.toLowerCase())
 }
-const config = require('../src/config.js')
+const config = require('./config')
 
 // Categories
 const categories = {

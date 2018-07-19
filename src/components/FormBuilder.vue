@@ -1,6 +1,8 @@
 <template>
   <div v-if="model">
-    <b-form ref="form" inline @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
+    <form ref="form" :action="actionUrl" :method="method" class="form form-inline" @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
+      <input type="hidden" name="token" :value="auth.token">
+
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name">{{field.label || $inflection.titleize(name)}}</label>
         <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
@@ -11,22 +13,29 @@
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
         <slot name="extra-buttons"></slot>
       </slot>
-    </b-form>
+    </form>
 
     
 
-    <b-form ref="form" :inline="false" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
-
+    <form ref="form" :action="actionUrl" :method="method"  class="form" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
+      <input type="hidden" name="token" :value="auth.token">
       <b-tabs class="my-3" v-if="groupBy">
-        <b-tab v-for="(fields, tabName) in groupedFields" :title="tabName || $t('messages.default')" :key="tabName">
+        <b-tab v-for="(subFields, tabName) in groupedFields" :title="tabName || $t('messages.default')" :key="tabName">
           <div class="row">
-            <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
-            v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
+            <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">
+              <b-row>
+                <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
+            v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
             :label="field.label || $inflection.titleize(name)">
               <div class="">
                 <b-form-field :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
               </div>
             </b-form-group>
+              </b-row>
+            </b-col>
+            <b-col :md="12 - _.get(layout, `tabs.${tabName}.cols`, 0)">
+              <div v-html="_.get(layout, `tabs.${tabName}.right`)"></div>
+            </b-col>
           </div>
         </b-tab>
       </b-tabs>
@@ -45,12 +54,13 @@
         <b-button type="submit" variant="primary">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
-    </b-form>
+    </form>
   </div>
 </template>
 
 <script>
-import _ from 'lodash'
+import _ from "lodash";
+import { mapState } from "vuex";
 
 export default {
   name: "b-form-builder",
@@ -74,6 +84,10 @@ export default {
       type: Boolean,
       default: false
     },
+    submitRawForm: {
+      type: Boolean,
+      default: false
+    },
     groupBy: {
       type: String,
       default: null
@@ -85,6 +99,12 @@ export default {
     },
     fields: {
       required: true,
+      default() {
+        return {};
+      }
+    },
+    layout: {
+      required: false,
       default() {
         return {};
       }
@@ -126,6 +146,10 @@ export default {
     }
   },
   computed: {
+    ...mapState(["auth"]),
+    actionUrl() {
+      return global.API_URI + this.action;
+    },
     groupedFields() {
       const ret = {};
       _.keys(_.groupBy(this.fields, this.groupBy)).map(v => {
@@ -146,7 +170,7 @@ export default {
       return (
         !field.showWhen || this.model[field.showWhen] || eval(field.showWhen)
       );
-  },
+    },
     getInputClass() {
       return [];
       // const classNames = [];
@@ -163,6 +187,10 @@ export default {
     },
 
     handleSubmit() {
+      if (this.submitRawForm) {
+        this.$refs.form.submit();
+        return true;
+      }
       if (this.onSubmit) {
         return this.onSubmit(this.model);
       }
@@ -190,6 +218,12 @@ export default {
   },
   mounted() {
     this.model = this.value;
+    for (let [k, v] of Object.entries(this.fields)) {
+      if (v.type === "object" && !this.model[k]) {
+        this.$set(this.model, k, {});
+      }
+    }
+    // global.console.log(this.fields, this.model)
   },
   created() {}
 };

@@ -33,5 +33,14 @@ export default {
 </script>
 
 <style>
+body{
+  /* background: darkgrey !important; */
+}
+#app{
+  /* background:#fff; */
+  /* width:1200px; */
+  /* margin:0 auto; */
+  /* box-shadow:0 0 30px #333; */
+}
 
 </style>

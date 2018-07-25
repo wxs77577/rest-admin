@@ -25,11 +25,12 @@
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
           <div slot="extra-buttons" class="ml-2">
-            <b-button type="button" @click="searchAndExport" variant="success" v-if="fields._actions.export">{{$t('actions.search_and_export')}}</b-button>
+            <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(fields, '_actions.export')">{{$t('actions.search_and_export')}}</b-button>
             <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
           </div>
         </b-form-builder>
       </div>
+      <div class="" v-if="description" v-html="description"></div>
       <b-row>
         <b-col cols="8">
           <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
@@ -39,7 +40,11 @@
         </b-col>
       </b-row>
       <b-table class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
-        
+        <template v-for="(field, key) in _.omit(fields, '_actions')"  :slot="`HEAD_${key}`" slot-scope="row">
+          <div :key="key" :class="{'text-right': ['number'].includes(field.type)}">
+            {{field.label || key}}
+          </div>
+        </template>
         <template v-for="(field, key) in fields"  :slot="key" slot-scope="row">
           <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id />
         </template>
@@ -103,6 +108,7 @@ export default {
       perPage: 6,
       sortBy: this.$config.primaryKey,
       sortDesc: true,
+      description: '',
       fields: {},
       filter: {},
       choices: {},
@@ -204,9 +210,21 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.items = data.data;
-          this.totalRows = data.total;
-          this.perPage = data.perPage;
+          const {
+            data: items,
+            total,
+            perPage,
+            fields,
+            searchFields,
+            searchModel
+          } = data;
+          fields && (this.fields = fields);
+          searchFields && (this.searchFields = searchFields);
+          searchModel && (this.searchModel = searchModel);
+          this.items = items;
+          this.description = data.description;
+          this.totalRows = total;
+          this.perPage = perPage;
         });
     },
     searchAndExport() {

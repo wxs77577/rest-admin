@@ -34,7 +34,8 @@
 export default {
   data() {
     return {
-      data: {}
+      data: {},
+      html: '',
     };
   },
   methods: {

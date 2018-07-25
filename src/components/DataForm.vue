@@ -45,13 +45,18 @@ export default {
       errors: []
     };
   },
-
+  watch: {
+    '$route'(){
+      this.fetchForm()
+    }
+  },
   computed: {
     resourceUri() {
       return this.resource + "/" + this.id;
     },
     formUri() {
-      return this.resource + "/" + this.formPath;
+      let url = this.resource + "/" + this.formPath;
+      return url
     },
     isNew() {
       return !this.id;
@@ -93,7 +98,10 @@ export default {
         });
     },
     fetchForm() {
-      this.$http.get(this.formUri).then(({ data }) => {
+      
+      this.$http.get(this.formUri, {
+        params: this.$route.query
+      }).then(({ data }) => {
         this.fields = data.fields;
         this.layout = data.layout;
 

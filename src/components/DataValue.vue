@@ -1,9 +1,12 @@
 <template>
   <div class="break-all data-value">
+    
     <template v-if="['html'].includes(field.type)">
       <div v-html="value" class="p-2 data-value-html"></div>
     </template>
-
+    <template v-else-if="['number'].includes(field.type)">
+      <div class="p-2 text-right">{{value}}</div>
+    </template>
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">
         <b-img class="type-image" :key="v" v-for="v in value" :src="preview(v)" v-bind="field" @click.stop="previewInModal(v)"/>

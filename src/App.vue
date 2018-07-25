@@ -3,6 +3,7 @@
     <router-view></router-view>
     <vue-snotify />
     <iframe :src="$store.state.downloadUrl" style="width:0;height:0;border:none;"></iframe>
+    <div v-html="$store.state.site.html"></div>
   </div>
 </template>
 

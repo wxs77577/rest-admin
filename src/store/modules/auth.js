@@ -1,5 +1,6 @@
 import types from '../types'
 import router from '../../router'
+import site from './site'
 
 export default {
   state: {
@@ -27,9 +28,12 @@ export default {
       commit(types.SET_AUTH, auth)
     },
     [types.GO_LOGIN](){
-      return router.push({
-        name: 'login'
-      })
+      global.console.log(site.state)
+      if (!site.state.login_url) {
+        return router.push({name: 'login'})
+      } else {
+        return location.href = site.state.login_url
+      }
     }
   }
 }

@@ -16,6 +16,8 @@ export default {
     logo: require('@/assets/img/logo.png'),
     locale: 'en-US',
     locale_switcher: true,
+    login_url: null,
+    html: '',
   },
   mutations: {
     [types.SET_SITE](state, data) {

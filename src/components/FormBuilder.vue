@@ -9,7 +9,7 @@
       </template>
 
       <slot name="actions">
-        <b-button type="submit" variant="primary">{{submitText}}</b-button>
+        <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
         <slot name="extra-buttons"></slot>
       </slot>
@@ -51,7 +51,7 @@
       
 
       <slot name="actions">
-        <b-button type="submit" variant="primary">{{submitText}}</b-button>
+        <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
     </form>
@@ -185,7 +185,9 @@ export default {
     hasError(name) {
       return _.find(this.errors, v => v.field == name);
     },
-
+    submitForm(){
+      this.$refs.submitButton.click()
+    },
     handleSubmit() {
       if (this.submitRawForm) {
         this.$refs.form.submit();

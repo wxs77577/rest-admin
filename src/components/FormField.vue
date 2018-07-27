@@ -35,7 +35,7 @@
   </div>
 
   <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
-  <b-html-editor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
+  <b-html-editor ref="editor" :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
   :content="model" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
 
   <div v-else-if="['json'].includes(field.type)">
@@ -124,6 +124,9 @@
   text-align: center;
   width: 10em;
   margin-right: 2px;
+}
+.vue-html5-editor .content {
+  max-height: 500px;
 }
 </style>
 
@@ -313,7 +316,20 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    if (this.field.type == 'html') {
+      
+      // window.onscroll =  () => {
+      //   const editor = this.$refs.editor.$el
+      //   const offsetTop = editor.getClientRects()[0].top
+      //   // const scrollTop = document.documentElement.scrollTop
+      //   if (offsetTop <= 0) {
+      //     editor.classList.toggle()
+      //   }
+      //   // global.console.log(scrollTop, offsetTop)
+      // }
+    }
+  },
   created() {
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();

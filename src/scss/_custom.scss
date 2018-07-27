@@ -116,3 +116,7 @@ input.input{
 .form-control{
   border-radius: $border-radius !important;
 }
+.sticky{
+  position: sticky;
+  top: 0;
+}

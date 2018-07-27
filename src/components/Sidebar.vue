@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <div class="text-center p-3" v-if="auth.user" >
+    <div class="text-center p-3 top" v-if="auth.user" >
       <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
       <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->
       
@@ -77,13 +77,18 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="scss">
 .sidebar {
   box-shadow: 0 0 20px #000;
+  .top {
+    // position: sticky;
+  }
+  .site-logo {
+    background: #fff;
+    /* padding:1em; */
+  }
 }
-.site-logo {
-  background: #fff;
-  /* padding:1em; */
-}
+
+
 
 </style>

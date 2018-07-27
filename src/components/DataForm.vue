@@ -7,7 +7,7 @@
         </div>
         <div class="col col-md-4 text-right hidden-sm-down">
           <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
-          <b-btn variant="primary" @click="$refs.form.handleSubmit()">{{$t('actions.save')}}</b-btn>
+          <b-btn variant="primary" @click="$refs.form.submitForm()">{{$t('actions.save')}}</b-btn>
         </div>
       </div>
       <b-form-builder group-by="group" v-if="loaded" :layout="layout" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>

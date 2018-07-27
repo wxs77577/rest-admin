@@ -1,6 +1,6 @@
 <template>
   <b-card :header="header">
-    
+    <h1>{{title}}</h1>
     <div class="data-table">
       <div class="py-1">
         <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(fields,'_actions.toolbar.create') !== false">
@@ -117,6 +117,7 @@ export default {
       searchFields: {},
       searchModel: {},
       where: {},
+      title: '',
       limitPages: 10
     };
   },
@@ -322,6 +323,12 @@ export default {
   .data-value > img {
     max-width: inherit !important;
     max-height: 60px !important;
+  }
+  thead th, thead td {
+    position: sticky !important;
+    top: 0;
+    background: #fff;
+    
   }
   .data-table-search {
   }

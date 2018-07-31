@@ -9,6 +9,9 @@ export default {
   },
   mutations: {
     [types.SET_AUTH](state, data) {
+      if (!data) {
+        data = {}
+      }
       state.user = data.user
       state.token = data.token
       localStorage.setItem('rest_admin_auth', JSON.stringify(data))

@@ -1,14 +1,13 @@
 <template>
-  <b-card :header="page.header">
-    <div class="custom-page">
-      <h1>{{page.title}}</h1>
-      <div ref="out">out</div>
-    </div>
-  </b-card>
+  <div class="card">
+    <div class="card-header">{{data.header || data.title}}</div>
+    <div class="card-body custom-page"  ref="out"></div>
+  </div>
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
+import _ from 'lodash'
 
 export default {
   components: {},
@@ -16,24 +15,35 @@ export default {
   data() {
     return {
       loaded: false,
-      page: {}
+      page: {
+        data: {}
+      }
     };
   },
 
   computed: {
+    data() {
+      return this.page.data;
+    },
     uri() {
       return this.$route.query.uri;
     }
   },
+  watch: {
+    $route: "fetch"
+  },
   methods: {
-    fetch() {},
-    render() {
-      
+    fetch() {
+      this.fetchPage();
     },
+    render() {},
     fetchPage() {
       this.$http.get(this.uri).then(({ data }) => {
+        data.methods = _.mapValues(data.methods, (v) => new Function(...v))
+        data.computed = _.mapValues(data.computed, (v) => new Function(...v))
         this.page = data;
-        new Vue(this.page).$mount(this.$refs.out)
+        this.$refs.out.innerHTML = "";
+        new Vue(this.page).$mount(this.$refs.out, true);
       });
     },
 

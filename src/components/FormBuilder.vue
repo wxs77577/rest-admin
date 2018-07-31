@@ -60,7 +60,6 @@
 
 <script>
 import _ from "lodash";
-import { mapState } from "vuex";
 
 export default {
   name: "b-form-builder",
@@ -70,6 +69,12 @@ export default {
       type: String,
       default() {
         return "form_" + parseInt(Math.random() * 9999);
+      }
+    },
+    auth: {
+      type: Object,
+      default() {
+        return {}
       }
     },
     col: {
@@ -119,18 +124,18 @@ export default {
     },
     submitText: {
       default() {
-        return this.$t("actions.save");
+        return this.$t ? this.$t("actions.save") : 'Submit';
       }
     },
     backText: {
       default() {
-        return this.$t("actions.back");
+        return this.$t ? this.$t("actions.back") : 'Back';
       }
     },
 
     successMessage: {
       default() {
-        return this.$t("messages.succeed");
+        return this.$t ? this.$t("messages.succeed") : 'Succeed';
       }
     }
   },
@@ -146,7 +151,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["auth"]),
+    
     actionUrl() {
       return global.API_URI + this.action;
     },

@@ -10,12 +10,13 @@
           <b-btn variant="primary" @click="$refs.form.handleSubmit()">{{form.submitText || $t('actions.save')}}</b-btn>
         </div>
       </div>
-      <b-form-builder v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" />
+      <b-form-builder v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" :auth="auth" />
     </div>
   </b-card>
 </template>
 
 <script>
+import { mapState } from "vuex";
 
 export default {
   components: {},
@@ -35,6 +36,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(["auth"]),
     uri(){
       return this.$route.query.uri
     }

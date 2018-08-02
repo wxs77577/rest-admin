@@ -7,7 +7,7 @@
 
 <script>
 import Vue from "vue";
-import _ from 'lodash'
+import _ from "lodash";
 
 export default {
   components: {},
@@ -26,7 +26,7 @@ export default {
       return this.page.data;
     },
     uri() {
-      return this.$route.query.uri;
+      return this.$route.params.uri.replace(/\./g, "/");
     }
   },
   watch: {
@@ -39,8 +39,8 @@ export default {
     render() {},
     fetchPage() {
       this.$http.get(this.uri).then(({ data }) => {
-        data.methods = _.mapValues(data.methods, (v) => new Function(...v))
-        data.computed = _.mapValues(data.computed, (v) => new Function(...v))
+        data.methods = _.mapValues(data.methods, v => new Function(...v));
+        data.computed = _.mapValues(data.computed, v => new Function(...v));
         this.page = data;
         this.$refs.out.innerHTML = "";
         new Vue(this.page).$mount(this.$refs.out, true);

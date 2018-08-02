@@ -40,10 +40,15 @@ const router = new Router({
         {
           path: '/',
           name: 'home',
+          redirect: '/home',
+        },
+        {
+          path: '/home',
+          name: 'home',
           component: Home,
         },
         {
-          path: '/rest/:resource/stat',
+          path: '/rest/:resource/stat/:type?',
           name: 'stat',
           component: ResourceStat
         },
@@ -53,29 +58,29 @@ const router = new Router({
           component: ResourceIndex
         },
         {
-          path: '/rest/:resource/create',
+          path: '/rest/:resource/create/:group?',
           name: 'create',
           component: ResourceEdit
         },
         {
-          path: '/rest/:resource/:id/edit',
+          path: '/rest/:resource/:id/edit/:group?',
           name: 'edit',
           component: ResourceEdit
         },
         
         {
-          path: '/rest/:resource/:id',
+          path: '/rest/:resource/:id/:group?',
           name: 'show',
           component: ResourceShow
         },
         
         {
-          path: '/form',
+          path: '/form/:uri?',
           name: 'form',
           component: CustomForm
         },
         {
-          path: '/page',
+          path: '/page/:uri?',
           name: 'page',
           component: CustomPage
         },

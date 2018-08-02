@@ -13,7 +13,7 @@
       </div>
       <div v-else>
         <div class="row">
-          <b-form-uploader-item class="col-12" :id="id" v-model="model" 
+          <b-form-uploader-item class="col-12" :id="id" v-model="model" @open-file-browser="openFileBrowser(name)"
           @input="update" :name="name" :field="field" :parent="parent" @remove="model = null; update()" />
         </div>
       </div>
@@ -25,6 +25,7 @@
 <script>
 import BDraggable from "vuedraggable";
 import BFormUploaderItem from "./FormUploaderItem";
+import types from "../store/types";
 export default {
   components: {
     BDraggable,
@@ -45,8 +46,8 @@ export default {
     };
   },
   watch: {
-    value(val){
-      this.model = val
+    value(val) {
+      this.model = val;
     }
   },
   computed: {
@@ -55,8 +56,11 @@ export default {
     }
   },
   methods: {
-    update(){
-      this.$emit('input', this.model)
+    openFileBrowser(name) {
+      this.$store.commit(types.SHOW_FILE_BROWSER, { name });
+    },
+    update() {
+      this.$emit("input", this.model);
     }
   }
 };

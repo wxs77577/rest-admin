@@ -38,7 +38,7 @@ export default {
   computed: {
     ...mapState(["auth"]),
     uri(){
-      return this.$route.query.uri
+      return this.$route.params.uri.replace(/\./g, '/')
     }
   },
   methods: {

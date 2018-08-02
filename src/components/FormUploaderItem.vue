@@ -8,18 +8,25 @@
       <div slot="footer" class="text-center">
         <b-form-file ref="file" :id="fileName" v-model="file" 
         v-bind="field" @input="upload" class="d-none" :multiple="false" />
+        <b-btn v-if="field.showBrowse" @click="$emit('open-file-browser')">
+          {{$t('actions.file_browser')}}
+        </b-btn>
         <label :for="`file_${id}`" class="btn btn-secondary m-0">
           {{file ? $t('actions.change') : $t('actions.choose')}}
         </label>
         <b-btn @click="$emit('remove')">{{$t('actions.delete')}}</b-btn>
         <b-btn @click="$emit('add')" v-if="allowAdd">{{$t('actions.add')}}</b-btn>
+        <b-btn v-if="field.showCopy" ref="copy_btn" :data-clipboard-text="value">{{$t('actions.copy')}}</b-btn>
+
       </div>
     </b-card>
     
   </div>
 </template>
 <script>
-import BDataValue from "./DataValue";
+// import ClipboardJS from 'clipboard'
+import BDataValue from "./DataValue"
+import Vue from 'vue'
 
 export default {
   components: {
@@ -69,6 +76,11 @@ export default {
       };
       return tags[this.field.type] ? tags[this.field.type] : "div";
     }
+  },
+  mounted(){
+    Vue.nextTick(() => {
+      // new ClipboardJS(this.$refs.copy_btn)
+    })
   },
   methods: {
     reset(error) {

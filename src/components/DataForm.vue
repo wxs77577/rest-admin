@@ -3,7 +3,7 @@
     <div class="data-form">
       <div class="row">
         <div class="col col-md-8">
-          <legend v-if="model[$config.primaryKey]">{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
+          <legend v-if="model[$config.primaryKey] && false">{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
         </div>
         <div class="col col-md-4 text-right hidden-sm-down">
           <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
@@ -55,7 +55,7 @@ export default {
       return this.resource + "/" + this.id;
     },
     formUri() {
-      let url = this.resource + "/" + this.formPath;
+      let url = this.resource + "/" + this.formPath + '/' +(this.id || '');
       return url
     },
     isNew() {
@@ -71,7 +71,7 @@ export default {
     },
     header() {
       return `
-        ${this.currentMenu.name}
+        ${this.currentMenu.name || ''}
         <small> ${this.resource.toUpperCase()} </small>
       `;
     },
@@ -100,7 +100,7 @@ export default {
     fetchForm() {
       
       this.$http.get(this.formUri, {
-        params: this.$route.query
+        params: this.$route.params
       }).then(({ data }) => {
         this.fields = data.fields;
         this.layout = data.layout;

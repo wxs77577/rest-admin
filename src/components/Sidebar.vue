@@ -84,7 +84,7 @@ export default {
     // position: sticky;
   }
   .site-logo {
-    background: #fff;
+    // background: #fff;
     /* padding:1em; */
   }
 }

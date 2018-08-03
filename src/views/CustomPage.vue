@@ -1,10 +1,14 @@
 <template>
   <div class="card">
-    <div class="card-header">{{data.header || data.title}}</div>
-    <div class="card-body custom-page"  ref="out"></div>
+    <div class="card-header" v-if="data.header">{{data.header || data.title}}</div>
+    <div class="card-body custom-page" :class="{nopadding: data.nopadding}"  ref="out"></div>
   </div>
 </template>
-
+<style>
+.nopadding{
+  padding:0 !important;
+}
+</style>
 <script>
 import Vue from "vue";
 import _ from "lodash";

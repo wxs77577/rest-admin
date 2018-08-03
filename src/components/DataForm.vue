@@ -1,7 +1,7 @@
 <template>
   <b-card :header="header">
     <div class="data-form">
-      <div class="row">
+      <div class="row d-none">
         <div class="col col-md-8">
           <legend v-if="model[$config.primaryKey] && false">{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
         </div>

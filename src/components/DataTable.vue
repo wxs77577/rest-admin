@@ -50,6 +50,10 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
+          <b-btn size="sm" v-if="_.get(fields, '_actions.buttons.preview') === true" :href="`http://${_.get(row, 'item.createdBy.domain', '')}/posts/${row.item._id}`" target="_blank">
+          <i class="icon-eye"></i>
+          预览
+          </b-btn>
           <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(fields, '_actions.buttons.show') !== false">
             <i class="icon-eye"></i>
             {{$t('actions.view')}}

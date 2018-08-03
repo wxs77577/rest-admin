@@ -5,15 +5,12 @@ import http from '../../http'
 
 export default {
   state: {
-    name: 'REST ADMIN',
+    name: '',
     url: '',
     description: '',
     menu: menu,
     languages: false,
-    footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; ${new Date().getFullYear()} </span>
-    <span class="ml-auto">
-      Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
-    </span>`,
+    footer: ``,
     logo: '',
     locale: 'en-US',
     locale_switcher: true,

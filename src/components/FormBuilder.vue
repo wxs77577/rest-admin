@@ -174,13 +174,14 @@ export default {
   methods: {
     setValue(name, value, lang) {
       if (!this.fields[name].multilingual) {
-        return _.set(this.model, name, value);
+        return this.$set(this.model, name, value)
+        // return _.set(this.model, name, value);
       }
-      const key = lang ? [name, lang].join(".") : name;
       if (!this.model[name] && lang) {
         this.$set(this.model, name, {});
       }
-      _.set(this.model, key, value);
+      this.$set(this.model[name], lang, value)
+      // _.set(this.model, key, value);
       // console.log(key, value)
     },
     titlize() {},

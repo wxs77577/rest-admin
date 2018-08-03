@@ -5,7 +5,7 @@
 
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
+        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
 
       <slot name="actions">
@@ -28,7 +28,9 @@
             v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
             :label="field.label || $inflection.titleize(name)">
               <div class="">
-                <b-form-field :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+                <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
+                @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
+                :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
               </div>
             </b-form-group>
               </b-row>
@@ -44,7 +46,7 @@
         v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
         :label="field.label || $inflection.titleize(name)">
           <div class="">
-            <b-form-field :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
           </div>
         </b-form-group>
       </div>
@@ -74,13 +76,14 @@ export default {
     auth: {
       type: Object,
       default() {
-        return {}
+        return {};
       }
     },
     col: {
       type: Number,
       default: 12
     },
+    languages: {},
     inline: {
       type: Boolean,
       default: false
@@ -124,18 +127,18 @@ export default {
     },
     submitText: {
       default() {
-        return this.$t ? this.$t("actions.save") : 'Submit';
+        return this.$t ? this.$t("actions.save") : "Submit";
       }
     },
     backText: {
       default() {
-        return this.$t ? this.$t("actions.back") : 'Back';
+        return this.$t ? this.$t("actions.back") : "Back";
       }
     },
 
     successMessage: {
       default() {
-        return this.$t ? this.$t("messages.succeed") : 'Succeed';
+        return this.$t ? this.$t("messages.succeed") : "Succeed";
       }
     }
   },
@@ -151,7 +154,6 @@ export default {
     }
   },
   computed: {
-    
     actionUrl() {
       return global.API_URI + this.action;
     },
@@ -170,6 +172,17 @@ export default {
     }
   },
   methods: {
+    setValue(name, value, lang) {
+      if (!this.fields[name].multilingual) {
+        return _.set(this.model, name, value);
+      }
+      const key = lang ? [name, lang].join(".") : name;
+      if (!this.model[name] && lang) {
+        this.$set(this.model, name, {});
+      }
+      _.set(this.model, key, value);
+      // console.log(key, value)
+    },
     titlize() {},
     isShowField(field) {
       return (
@@ -190,8 +203,8 @@ export default {
     hasError(name) {
       return _.find(this.errors, v => v.field == name);
     },
-    submitForm(){
-      this.$refs.submitButton.click()
+    submitForm() {
+      this.$refs.submitButton.click();
     },
     handleSubmit() {
       if (this.submitRawForm) {

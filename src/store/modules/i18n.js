@@ -13,6 +13,11 @@ export default {
       i18n.locale = locale
     },
   },
+  getters: {
+    currentLanguage(state){
+      return String(state.locale).replace(/-\w+/, '')
+    }
+  },
   actions: {
     [types.FETCH_LOCALE]({commit}){
       const cachedLocale = localStorage.getItem('rest_admin_locale')

@@ -46,7 +46,7 @@
           </div>
         </template>
         <template v-for="(field, key) in fields"  :slot="key" slot-scope="row">
-          <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id />
+          <b-data-value :field="field" :key="key" :lang="currentLanguage" :name="key" :model="row.item" short-id />
         </template>
         
         <template slot="_actions" slot-scope="row" >
@@ -122,8 +122,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["site"]),
-    ...mapGetters(["currentMenu"]),
+    ...mapState(["site", 'i18n']),
+    ...mapGetters(["currentMenu", 'currentLanguage']),
     header() {
       return `
         ${this.currentMenu.name || ""}

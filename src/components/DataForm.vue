@@ -10,7 +10,7 @@
           <b-btn variant="primary" @click="$refs.form.submitForm()">{{$t('actions.save')}}</b-btn>
         </div>
       </div>
-      <b-form-builder group-by="group" v-if="loaded" :auth="auth" :layout="layout" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
+      <b-form-builder :languages="$store.state.site.languages" group-by="group" v-if="loaded" :auth="auth" :layout="layout" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
     </div>
   </b-card>
 </template>

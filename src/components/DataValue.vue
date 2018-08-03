@@ -81,6 +81,7 @@ export default {
     }
   },
   props: {
+    
     field: {
       required: true,
       type: Object
@@ -92,6 +93,9 @@ export default {
     model: {
       required: true,
       type: Object
+    },
+    lang: {
+      
     },
     shortId: {
       required: false,
@@ -114,6 +118,9 @@ export default {
           "text"
         );
         return options[value];
+      }
+      if (this.lang && this.field.multilingual) {
+        return _.get(value, this.lang, null)
       }
       return value;
     }

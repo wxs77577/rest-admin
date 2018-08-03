@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="12">
        
-          <b-data-form :resource="resource" :id="id"></b-data-form>
+          <b-data-form :resource="resource" :id="id" :languages="$store.state.site.languages"></b-data-form>
         
       </b-col>
     </b-row>

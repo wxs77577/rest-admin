@@ -1,5 +1,13 @@
 <template>
-  <b-form-select v-if="['select'].includes(field.type)" 
+  <div>
+    <div class="languages mb-1" v-if="field.multilingual">
+      <span 
+      class="badge mr-1 mb-0 pointer" :class="`badge-${currentLanguage === key ? 'primary' : 'secondary'}`"
+      v-for="(lang, key) in languages" 
+      :key="key" 
+      @click="changeLanguage(key, name)">{{lang}}</span>
+    </div>
+    <b-form-select v-if="['select'].includes(field.type)" 
    :formatter="getFormatter(field, value)" :id="id" :options="options"
    v-bind="field" :value="selectedValue" @input="handleSelect" :name="name" ></b-form-select> 
    
@@ -118,6 +126,7 @@
     </b-input-group-prepend>
     <b-form-input :state="state" :id="id" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
   </b-input-group>
+  </div>
 </template>
 <style>
 .checkboxtable .btn-group > .btn:first-child {
@@ -158,6 +167,7 @@ export default {
     BTreeSelect
   },
   props: {
+    languages: {},
     id: {
       required: true
     },
@@ -234,19 +244,23 @@ export default {
           this.field.is_array ||
           this.field.type == "array" ||
           this.field.is_table;
-        const isObject = this.field.type == 'object'
-        let ret = this.value
+        const isObject = this.field.type == "object";
+        let ret = this.value;
         if (!this.value) {
           if (isArray) {
-            ret = []
+            ret = [];
           } else if (isObject) {
-            ret = {}
+            ret = {};
           }
         }
-        return ret
+        if (this.field.multilingual) {
+          console.log(ret, this.currentLanguage)
+          return _.get(ret, this.currentLanguage, '')
+        }
+        return ret;
       },
       set(value) {
-        this.$emit("input", value);
+        this.$emit("input", value, this.currentLanguage);
       }
     }
   },
@@ -257,13 +271,19 @@ export default {
       this.field.type == "array" ||
       this.field.is_table;
     return {
+      currentLanguage: 'en',
       options: this.field.options || [],
       selectedValue: isArray && !this.value ? [] : this.value
     };
   },
   methods: {
+    changeLanguage(lang, name) {
+      this.currentLanguage = lang
+      // this.$emit('change-language', lang, name)
+      // global.console.log(lang, name)
+    },
     htmlEditorInput(value) {
-      this.$emit("input", value);
+      this.$emit("input", value, this.currentLanguage);
     },
     wrapFirstLine() {
       // const value = String(el.target.innerHTML).replace(/^\s*(.+?)(<?)/i, '<p> $1 </p>$2')
@@ -283,7 +303,7 @@ export default {
           val = val ? val.value : null;
         }
       }
-      this.$emit("input", val);
+      this.$emit("input", val, this.currentLanguage);
     },
     getFormatter(field) {
       if (field.format) {
@@ -317,8 +337,7 @@ export default {
     }
   },
   mounted() {
-    if (this.field.type == 'html') {
-      
+    if (this.field.type == "html") {
       // window.onscroll =  () => {
       //   const editor = this.$refs.editor.$el
       //   const offsetTop = editor.getClientRects()[0].top

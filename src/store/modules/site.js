@@ -9,6 +9,7 @@ export default {
     url: '',
     description: '',
     menu: menu,
+    languages: false,
     footer: `<span><a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a> &copy; ${new Date().getFullYear()} </span>
     <span class="ml-auto">
       Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
@@ -34,7 +35,8 @@ export default {
     currentMenu(state, getters, rootState) {
       const item = _.find(state.menu, { url: '/rest/' + rootState.route.params.resource }) || {}
       return item
-    }
+    },
+    
   },
   actions: {
     [types.FETCH_SITE]({ commit }) {

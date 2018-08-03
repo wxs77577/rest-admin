@@ -14,7 +14,7 @@ export default {
     <span class="ml-auto">
       Powered by <a href="https://github.com/wxs77577/rest-admin">REST ADMIN</a>
     </span>`,
-    logo: require('@/assets/img/logo.png'),
+    logo: '',
     locale: 'en-US',
     locale_switcher: true,
     login_url: null,

@@ -3,21 +3,21 @@
     <h1>{{title}}</h1>
     <div class="data-table">
       <div class="py-1">
-        <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(fields,'_actions.toolbar.create') !== false">
+        <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
         <i class="icon-plus"></i>
         {{$t('actions.create')}}
         </b-btn>
-        <b-btn @click="fetchGrid" variant="success" v-if="_.get(fields, '_actions.toolbar.reload') !== false">
+        <b-btn @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
         <i class="icon-refresh"></i>
         {{$t('actions.reload')}}
         </b-btn>
-        <b-btn v-for="button in _.get(fields || {}, '_actions.toolbar.extra', [])" 
+        <b-btn v-for="button in _.get(actions, 'toolbar.extra', [])" 
         :key="button.label"
         v-bind="button">
           {{button.label}}
         </b-btn>
 
-        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(fields, '_actions.toolbar.delete_all') !== false">
+        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(actions, 'toolbar.delete_all') !== false">
         <i class="icon-trash"></i>
         {{$t('actions.delete_all')}}
         </b-btn>
@@ -25,7 +25,7 @@
       <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
         <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
           <div slot="extra-buttons" class="ml-2">
-            <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(fields, '_actions.export')">{{$t('actions.search_and_export')}}</b-button>
+            <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(actions, 'export')">{{$t('actions.search_and_export')}}</b-button>
             <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
           </div>
         </b-form-builder>
@@ -50,23 +50,19 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
-          <b-btn size="sm" v-if="_.get(fields, '_actions.buttons.preview') === true" :href="`http://${_.get(row, 'item.createdBy.domain', '')}/posts/${row.item._id}`" target="_blank">
-          <i class="icon-eye"></i>
-          预览
-          </b-btn>
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(fields, '_actions.buttons.show') !== false">
+          <b-btn size="sm" v-for="(button, key) in _.get(actions, 'addon')" :key="key" v-bind="button">{{button.label}}</b-btn>
+          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(actions, 'buttons.show') !== false">
             <i class="icon-eye"></i>
             {{$t('actions.view')}}
           </b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="_.get(fields, '_actions.buttons.edit') !== false">
+          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="_.get(actions, 'buttons.edit') !== false">
             <i class="icon-pencil"></i>
             {{$t('actions.edit')}}
           </b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="_.get(fields, '_actions.buttons.delete') !== false">
+          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="_.get(actions, 'buttons.delete') !== false">
             <i class="icon-trash"></i>
             {{$t('actions.delete')}}
           </b-btn>
-          <b-btn size="sm" v-for="(button, key) in fields._actions.addon" :key="key" v-bind="button">{{button.label}}</b-btn>
         </template>
 
       </b-table>
@@ -128,6 +124,9 @@ export default {
   computed: {
     ...mapState(["site", 'i18n']),
     ...mapGetters(["currentMenu", 'currentLanguage']),
+    actions(){
+      return _.get(this.fields, '_actions')
+    },
     header() {
       return `
         ${this.currentMenu.name || ""}

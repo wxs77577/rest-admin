@@ -25,6 +25,12 @@
         
       </div>
     </template>
+    <template v-else-if="['link'].includes(field.type)">
+      <a :class="field.classes" :href="value" :target="field.target">
+        <i :class="field.icon" v-if="field.icon"></i>
+        {{field.text || field.label}}
+      </a>
+    </template>
 
     <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
       <b-badge :variant="value ? 'success' : 'danger'">

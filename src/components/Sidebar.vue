@@ -1,7 +1,9 @@
 <template>
   <div class="sidebar">
     <div class="text-center p-3 top" v-if="auth.user" >
-      <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
+      <a href="https://www.bearspawcloud.com/" target="_blank">
+        <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
+      </a>
       <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->
       
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->

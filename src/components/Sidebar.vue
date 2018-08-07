@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <div class="text-center p-3 top" v-if="auth.user" >
-      <a href="https://www.bearspawcloud.com/" target="_blank">
+      <a :href="site.url" target="_blank">
         <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
       </a>
       <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->

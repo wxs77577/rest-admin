@@ -42,6 +42,9 @@
       <template v-if="field.multiple">
         {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join(',')}}
       </template>
+      <template v-else-if="field.multilingual">
+        {{_.get(model || {}, field.ref.split('.').concat([lang]))}}
+      </template>
       <template v-else>
         {{_.get(model || {}, field.ref)}}
       </template>

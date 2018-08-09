@@ -2,7 +2,7 @@
   <div>
     
     <div class="preview">
-      <div class="thumbnail" v-if="_.isArray(model)">
+      <div class="thumbnail" v-if="field.multiple">
         <b-draggable v-model="model" @input="update" class="row">
           <b-form-uploader-item class="col-4" :name="name" :id="`${id}_${k}`" :key="k"
           v-for="(v, k) in model" :field="field" :parent="parent" v-model="model[k]"
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      model: this.value,
+      model: this.value || [],
       file: null,
       current: this.value
     };

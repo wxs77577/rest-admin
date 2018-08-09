@@ -30,6 +30,11 @@ export default {
           headers: { Authorization: 'Bearer ' + store.state.auth.token },
           fieldName: 'file'
         },
+        // compress: {
+        //   width: 1600,
+        //   height: 1600,
+        //   quality: 80
+        // },
         uploadHandler(res) {
           let data
           try {

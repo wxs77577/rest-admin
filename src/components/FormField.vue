@@ -104,12 +104,15 @@
 
     <div v-else-if="['object'].includes(field.type)">
       <b-card>
-        <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
+        <b-form-builder :sub-form="name || ''" v-model="model" :languages="languages" 
+         :fields="myFields" ref="subForm" ></b-form-builder>
+
+        <!-- <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
           
           <b-form-field :value="_.get(model, `${key}`)"
           @input="model[key] = arguments[0]"
-          :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
-        </b-form-group>
+          :parent="parent" :name="`${name}_${key}`" :field="child" :id="`input_${name}_${key}`" />
+        </b-form-group> -->
       </b-card>
     </div>
     <div v-else>
@@ -124,7 +127,7 @@
       <i :class="field.icon" v-if="field.icon"></i>
       <span v-else v-html="field.left"></span>
     </b-input-group-prepend>
-    <b-form-input :state="state" :id="id" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
+    <b-form-input :state="state" :id="id" :name="name" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
   </b-input-group>
   </div>
 </template>
@@ -254,7 +257,7 @@ export default {
           }
         }
         if (this.field.multilingual) {
-          console.log(ret, this.currentLanguage)
+          // console.log(this.name, ret, this.currentLanguage)
           return _.get(ret, this.currentLanguage, '')
         }
         return ret;

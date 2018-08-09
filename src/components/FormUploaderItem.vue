@@ -6,8 +6,9 @@
         {{$t('messages.image_size', field.limit)}}
       </div>
       <div slot="footer" class="text-center">
-        <b-form-file ref="file" :id="fileName" v-model="file" 
+        <b-form-file ref="file" :id="fileName" :name="name" v-model="file" 
         v-bind="field" @input="upload" class="d-none" :multiple="false" />
+        <b-form-input :value="String(file || '')" @input="$emit('input', arguments[0])" v-if="field.showInput"></b-form-input>
         <b-btn v-if="field.showBrowse" @click="$emit('open-file-browser')">
           {{$t('actions.file_browser')}}
         </b-btn>

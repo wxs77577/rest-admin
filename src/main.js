@@ -31,6 +31,9 @@ Vue.use(BootstrapVue)
 
 import form from './form'
 
+import VueElementLoading from 'vue-element-loading'
+Vue.component('BLoading', VueElementLoading)
+
 Vue.prototype._ = _
 sync(store, router)
 

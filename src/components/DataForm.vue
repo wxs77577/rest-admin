@@ -1,5 +1,5 @@
 <template>
-  <b-card :header="header">
+  <component :is="tag" :header="header">
     <div class="data-form">
       <div class="row d-none">
         <div class="col col-md-8">
@@ -10,14 +10,17 @@
           <b-btn variant="primary" @click="$refs.form.submitForm()">{{$t('actions.save')}}</b-btn>
         </div>
       </div>
-      <b-form-builder :languages="$store.state.site.languages" group-by="group" v-if="loaded" :auth="auth" :layout="layout" :fields="fields" ref="form" v-model="model" :action="resourceUri" :method="method" @success="onSuccess"></b-form-builder>
+      <b-form-builder :languages="$store.state.site.languages" group-by="group" 
+      v-if="loaded" :auth="auth" :layout="layout" :fields="fields" ref="form" 
+      v-model="model" :action="resourceUri" :method="method" @success="onSuccess">
+      </b-form-builder>
     </div>
-  </b-card>
+  </component>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex"
-import _ from 'lodash'
+import { mapState, mapGetters } from "vuex";
+import _ from "lodash";
 
 export default {
   components: {},
@@ -38,25 +41,36 @@ export default {
   },
   data() {
     return {
+      redirect: -1,
       loaded: false,
       choices: {},
       fields: {},
       model: {},
-      errors: []
+      errors: [],
+      tag: "b-card",
+      header: `
+        ${_.get(this.currentMenu, "name", "") || ""}
+        <small> ${this.resource.toUpperCase()} </small>
+      `
     };
   },
   watch: {
-    '$route'(){
-      this.fetchForm()
+    $route() {
+      this.fetchForm();
     }
   },
   computed: {
     resourceUri() {
-      return this.resource + "/" + this.id;
+      let url = this.resource + "/" + this.id
+      let group = this.$route.params.group
+      if (group) {
+        url += '?group=' + group
+      }
+      return url
     },
     formUri() {
-      let url = this.resource + "/" + this.formPath + '/' +(this.id || '');
-      return url
+      let url = this.resource + "/" + this.formPath + "/" + (this.id || "");
+      return url;
     },
     isNew() {
       return !this.id;
@@ -66,14 +80,8 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, (v) => v.ref && v.ref.split(".").shift())
+        _.map(this.fields, v => v.ref && v.ref.split(".").shift())
       );
-    },
-    header() {
-      return `
-        ${this.currentMenu.name || ''}
-        <small> ${this.resource.toUpperCase()} </small>
-      `;
     },
     ...mapState(["nav", "auth"]),
     ...mapGetters(["currentMenu"])
@@ -81,7 +89,7 @@ export default {
   methods: {
     fetch() {
       if (this.isNew) {
-        this.loaded = true
+        this.loaded = true;
         return;
       }
       this.$http
@@ -93,24 +101,37 @@ export default {
           }
         })
         .then(({ data }) => {
-          this.loaded = true
+          this.loaded = true;
           this.model = data;
         });
     },
     fetchForm() {
-      
-      this.$http.get(this.formUri, {
-        params: this.$route.params
-      }).then(({ data }) => {
-        this.fields = data.fields;
-        this.layout = data.layout;
-
-        this.fetch();
-      });
+      this.$http
+        .get(this.formUri, {
+          params: this.$route.params
+        })
+        .then(({ data }) => {
+          this.fields = data.fields;
+          this.layout = data.layout;
+          this.redirect = data.redirect
+          if (data.header) {
+            this.header = data.header;
+          }
+          if (data.tag) {
+            this.tag = data.tag;
+          }
+          this.fetch();
+        });
     },
 
     onSuccess() {
-      this.$router.go(-1);
+      if (this.redirect === false) {
+        this.$fetchForm()
+      } else if (this.redirect === -1 || !this.redirect) {
+        this.$router.go(-1);
+      } else {
+        this.$router.go(this.redirect)
+      }
     }
   },
   mounted() {},

@@ -21,6 +21,7 @@
     "lodash": "^4.17.4",
     "simple-line-icons": "^2.4.1",
     "vue": "^2.5.16",
+    "vue-element-loading": "^1.0.4",
     "vue-html5-editor": "^1.1.1",
     "vue-i18n": "^7.6.0",
     "vue-router": "^3.0.1",

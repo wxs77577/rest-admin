@@ -12,6 +12,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: modules,
   state: {
+    loading: false,
     downloadUrl: null
   },
   getters: {
@@ -23,7 +24,14 @@ export default new Vuex.Store({
       Vue.nextTick(() => {
         this.downloadUrl = url
       })
-    }
+    },
+    [types.START_LOADING](state) {
+      state.loading = true
+    },
+    [types.STOP_LOADING](state) {
+      state.loading = false
+    },
+
   },
   actions: {
 

@@ -7,15 +7,16 @@ const API_URI = process.env.VUE_APP_API_URL || '/admin/api/'
 global.API_URI = API_URI
 axios.defaults.baseURL = API_URI
 axios.interceptors.request.use(config => {
+  store.commit(types.START_LOADING)
   config.headers.Authorization = 'Bearer ' + store.state.auth.token
   return config
 })
 axios.interceptors.response.use(response => {
-
+  store.commit(types.STOP_LOADING)
   return response;
 }, ({ response }) => {
   const { data, status, statusText } = response
-
+  
   switch (status) {
     case 422:
 

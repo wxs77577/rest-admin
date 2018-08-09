@@ -1,11 +1,13 @@
 <template>
   <div v-if="model">
-    <form ref="form" :action="actionUrl" :method="method" class="form form-inline" @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
+    <component :is="tag" ref="form" :action="actionUrl" :method="method" 
+    class="form form-inline" @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
       <input type="hidden" name="token" :value="auth.token">
 
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="'input_' + name" :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
+        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="getFieldId(name)" 
+        :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
 
       <slot name="actions">
@@ -13,11 +15,12 @@
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
         <slot name="extra-buttons"></slot>
       </slot>
-    </form>
+    </component>
 
     
 
-    <form ref="form" :action="actionUrl" :method="method"  class="form" @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
+    <component :is="tag" ref="form" :action="actionUrl" :method="method"  class="form" 
+    @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
       <input type="hidden" name="token" :value="auth.token">
       <b-tabs class="my-3" v-if="groupBy">
         <b-tab v-for="(subFields, tabName) in groupedFields" :title="tabName || $t('messages.default')" :key="tabName">
@@ -43,20 +46,22 @@
       </b-tabs>
       <div class="row" v-else>
         <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
-        v-for="(field, name) in fields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
+        v-for="(field, name) in fields" :key="[id,subForm,name].join()" v-bind="field" :label-for="getFieldId(name)"
         :label="field.label || $inflection.titleize(name)">
           <div class="">
-            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" v-model="model[name]" :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
+            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
+            @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
+            :name="getFieldName(name)" :field="field" :state="!hasError(name)" :id="getFieldId(name)" />
           </div>
         </b-form-group>
       </div>
       
 
-      <slot name="actions">
+      <slot name="actions" v-if="!subForm">
         <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
-    </form>
+    </component>
   </div>
 </template>
 
@@ -67,6 +72,10 @@ export default {
   name: "b-form-builder",
   components: {},
   props: {
+    subForm: {
+      type: String,
+      default: ''
+    },
     id: {
       type: String,
       default() {
@@ -151,9 +160,13 @@ export default {
   watch: {
     value(val) {
       this.model = val;
-    }
+    },
+    
   },
   computed: {
+    tag() {
+      return this.subForm ? "div" : "form";
+    },
     actionUrl() {
       return global.API_URI + this.action;
     },
@@ -172,15 +185,28 @@ export default {
     }
   },
   methods: {
+    getFieldId(name){
+      if (this.subForm) {
+        return `input_${this.subForm}_${name}`
+      }
+      return `input_${name}`
+    },
+    getFieldName(name){
+      if (this.subForm) {
+        return `${this.subForm}[${name}]`
+      }
+      return name
+    },
     setValue(name, value, lang) {
+      // console.log('setValue', name, value, lang, this.isSubForm)
       if (!this.fields[name].multilingual) {
-        return this.$set(this.model, name, value)
+        return this.$set(this.model, name, value);
         // return _.set(this.model, name, value);
       }
-      if (!this.model[name] && lang) {
+      if (lang && !_.isObject(this.model[name])) {
         this.$set(this.model, name, {});
       }
-      this.$set(this.model[name], lang, value)
+      this.$set(this.model[name], lang, value);
       // _.set(this.model, key, value);
       // console.log(key, value)
     },
@@ -239,6 +265,11 @@ export default {
   },
   mounted() {
     this.model = this.value;
+    
+    this.$watch('model', val => {
+      this.$emit('input', val)
+    }, {deep: true})
+
     for (let [k, v] of Object.entries(this.fields)) {
       if (v.type === "object" && !this.model[k]) {
         this.$set(this.model, k, {});

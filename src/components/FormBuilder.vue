@@ -177,7 +177,7 @@ export default {
         let tabName = v;
         if (v == "undefined") {
           v = null;
-          tabName = this.$t("messages.default");
+          tabName = _.get(this.layout, 'tabs.Default.name', this.$t("messages.default"));
         }
         ret[tabName] = _.pickBy(this.fields, field => field.group == v);
       });

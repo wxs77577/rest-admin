@@ -280,7 +280,7 @@ export default {
     };
   },
   methods: {
-    changeLanguage(lang, name) {
+    changeLanguage(lang) {
       this.currentLanguage = lang
       // this.$emit('change-language', lang, name)
       // global.console.log(lang, name)

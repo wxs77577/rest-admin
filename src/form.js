@@ -15,6 +15,13 @@ Vue.component('b-data-value', DataValue)
 import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
 
+import VueCropper from 'vue-cropper'
+Vue.component('b-cropper', VueCropper)
+
+import AvatarCropper from "./components/AvatarCropper.vue"
+Vue.component('avatar-cropper', AvatarCropper)
+
+
 
 export default {
   init() {
@@ -24,6 +31,17 @@ export default {
     Vue.use(VueHtml5Editor, {
       name: 'b-html-editor',
       language,
+      modules: [
+        {
+          name: "cropper",
+          icon: "fa fa-crop",
+          i18n: "cropper",
+          show: true,
+          handler: function (editor) {
+            editor.$emit('open-cropper')
+          }
+        },
+      ],
       image: {
         upload: {
           url: global.API_URI + "upload",

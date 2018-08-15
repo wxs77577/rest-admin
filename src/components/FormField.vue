@@ -43,8 +43,21 @@
   </div>
 
   <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
-  <b-html-editor ref="editor" :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model"
-  :content="model" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
+  <div v-else-if="['wysiwyg', 'html'].includes(field.type)">
+    <!-- <b-btn :id="`cropper_${id}`" variant="success">图片裁剪助手</b-btn> -->
+    <avatar-cropper v-if="field.cropper" 
+    :trigger="`#cropper_${id}`"
+    v-bind="cropperOptions"
+    ref="cropper"
+    @uploaded="cropperUploaded"
+    />
+
+    <b-html-editor ref="editor" :state="state"  :id="id" v-bind="field" v-model="model"
+    :content="model" @open-cropper="$refs.cropper.pickImage()" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
+    <!-- <b-cropper v-if="field.showCropper" ref="cropper" ></b-cropper> -->
+    
+  </div>
+  
 
   <div v-else-if="['json'].includes(field.type)">
     <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
@@ -181,6 +194,18 @@ export default {
     name: {}
   },
   computed: {
+    cropperOptions() {
+      return {
+        "upload-url": global.API_URI + "upload",
+        "upload-headers": { Authorization: "Bearer " + this.$store.state.auth.token },
+        "upload-form-name": "file",
+        "cropper-options": {
+
+        },
+        "output-options": this.field.cropper,
+        "labels": this.field.labels || { submit: "提交", cancel: "取消"},
+      };
+    },
     isSelect() {
       return ["select", "select2"].includes(this.field.type);
     },
@@ -258,7 +283,7 @@ export default {
         }
         if (this.field.multilingual) {
           // console.log(this.name, ret, this.currentLanguage)
-          return _.get(ret, this.currentLanguage, '')
+          return _.get(ret, this.currentLanguage, "");
         }
         return ret;
       },
@@ -274,14 +299,17 @@ export default {
       this.field.type == "array" ||
       this.field.is_table;
     return {
-      currentLanguage: 'en',
+      currentLanguage: "en",
       options: this.field.options || [],
       selectedValue: isArray && !this.value ? [] : this.value
     };
   },
   methods: {
+    cropperUploaded(res) {
+      this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`)
+    },
     changeLanguage(lang) {
-      this.currentLanguage = lang
+      this.currentLanguage = lang;
       // this.$emit('change-language', lang, name)
       // global.console.log(lang, name)
     },
@@ -340,6 +368,7 @@ export default {
     }
   },
   mounted() {
+
     if (this.field.type == "html") {
       // window.onscroll =  () => {
       //   const editor = this.$refs.editor.$el

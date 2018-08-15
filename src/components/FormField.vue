@@ -53,7 +53,7 @@
     />
 
     <b-html-editor ref="editor" :state="state"  :id="id" v-bind="field" v-model="model"
-    :content="model" @open-cropper="$refs.cropper.pickImage()" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
+    :content="model" @open-cropper="$refs.cropper && $refs.cropper.pickImage()" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
     <!-- <b-cropper v-if="field.showCropper" ref="cropper" ></b-cropper> -->
     
   </div>
@@ -200,7 +200,7 @@ export default {
         "upload-headers": { Authorization: "Bearer " + this.$store.state.auth.token },
         "upload-form-name": "file",
         "cropper-options": {
-
+          aspectRatio: _.get(this.field, 'cropper.ratio', 1)
         },
         "output-options": this.field.cropper,
         "labels": this.field.labels || { submit: "提交", cancel: "取消"},

@@ -15,9 +15,6 @@ Vue.component('b-data-value', DataValue)
 import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
 
-import VueCropper from 'vue-cropper'
-Vue.component('b-cropper', VueCropper)
-
 import AvatarCropper from "./components/AvatarCropper.vue"
 Vue.component('avatar-cropper', AvatarCropper)
 

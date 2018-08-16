@@ -34,12 +34,7 @@ npm i # 或者 cnpm i
 
 # 和本地测试API一起启动
 npm run test-api # 启动测试API
-npm run local # 启动REST-ADMIN客户端
-```
-
-> 或者你已经有一个后端API了？
-```bash
-API_URI=http://localhost:5555/admin/api/ npm run dev
+npm run serve # 启动REST-ADMIN客户端
 ```
 
 > 测试API的后台登录用户名及密码为 `admin` 和 `admin`

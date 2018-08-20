@@ -440,6 +440,7 @@ export default {
     }
   },
   created() {
+    this.initEditor()
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }

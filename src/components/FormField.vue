@@ -165,6 +165,7 @@ import BSelect from "vue-select";
 import BDatePicker from "vue2-datepicker";
 // import BUeditor from "./UEditor"
 import BFormUploader from "./FormUploader";
+import VueHtml5Editor from 'vue-html5-editor'
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
 import _ from "lodash";
@@ -305,6 +306,63 @@ export default {
     };
   },
   methods: {
+    initEditor() {
+      const language = this.lang == 'zh-CN' ? 'zh-cn' : 'en-us'
+      window.document.execCommand("defaultParagraphSeparator", false, "p");
+
+      Vue.use(VueHtml5Editor, {
+        name: 'b-html-editor',
+        language,
+        modules: [
+          {
+            name: "cropper",
+            icon: "fa fa-crop",
+            i18n: "cropper",
+            show: true,
+            handler: function (editor) {
+              editor.$emit('open-cropper')
+            }
+          },
+        ],
+        image: {
+          upload: {
+            url: global.API_URI + "upload",
+            headers: { Authorization: 'Bearer ' + store.state.auth.token },
+            fieldName: 'file'
+          },
+          // compress: {
+          //   width: 1600,
+          //   height: 1600,
+          //   quality: 80
+          // },
+          uploadHandler(res) {
+            let data
+            try {
+              data = JSON.parse(res)
+            } catch (e) {
+              this.$notify.error('上传失败')
+            }
+            return data.url
+          }
+        },
+        visibleModules: [
+          "text",
+          // "color",
+          // "font",
+          "align",
+          "list",
+          "link",
+          "unlink",
+          "tabulation",
+          // "image",
+          "hr",
+          "eraser",
+          "undo",
+          "full-screen",
+          // "info",
+        ],
+      });
+    },
     cropperUploaded(res) {
       this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`)
     },

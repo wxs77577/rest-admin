@@ -38,12 +38,7 @@ npm i # or cnpm i
 
 # start with local test api server
 npm run test-api # start test api server
-npm run local # start rest admin client
-```
-
-> or you have an exists rest api endpot.
-```bash
-API_URI=http://localhost:5555/admin/api/ npm run dev
+npm run serve # start rest admin client
 ```
 
 > The default username and password of test-api is `admin` and `admin`

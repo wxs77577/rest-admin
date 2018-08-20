@@ -317,7 +317,7 @@ export default {
         modules: [
           {
             name: "cropper",
-            icon: "fa fa-crop",
+            icon: "fa fa-image",
             i18n: "cropper",
             show: true,
             handler: function (editor) {
@@ -328,7 +328,7 @@ export default {
         image: {
           upload: {
             url: global.API_URI + "upload",
-            headers: { Authorization: 'Bearer ' + store.state.auth.token },
+            headers: { Authorization: 'Bearer ' + this.$store.state.auth.token },
             fieldName: 'file'
           },
           // compress: {
@@ -356,6 +356,7 @@ export default {
           "unlink",
           "tabulation",
           // "image",
+          "cropper",
           "hr",
           "eraser",
           "undo",

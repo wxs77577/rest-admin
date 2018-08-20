@@ -48,6 +48,6 @@ new Vue({
   i18n,
   render: h => h(App),
   created() {
-    form.init()
+    // form.init()
   }
 })

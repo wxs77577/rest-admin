@@ -156,6 +156,7 @@
 </style>
 
 <script>
+import Vue from 'vue'
 import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";

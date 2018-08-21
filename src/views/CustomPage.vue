@@ -1,12 +1,14 @@
 <template>
   <div class="card">
     <div class="card-header" v-if="data.header">{{data.header || data.title}}</div>
-    <div class="card-body custom-page" :class="{nopadding: data.nopadding}"  ref="out"></div>
+    <div class="card-body custom-page" :class="{nopadding: data.nopadding}" >
+      <component :is="name" v-if="name"></component>
+    </div>
   </div>
 </template>
 <style>
-.nopadding{
-  padding:0 !important;
+.nopadding {
+  padding: 0 !important;
 }
 </style>
 <script>
@@ -19,6 +21,7 @@ export default {
   data() {
     return {
       loaded: false,
+      name: null,
       page: {
         data: {}
       }
@@ -41,13 +44,27 @@ export default {
       this.fetchPage();
     },
     render() {},
-    fetchPage() {
-      this.$http.get(this.uri).then(({ data }) => {
-        data.methods = _.mapValues(data.methods, v => new Function(...v));
-        data.computed = _.mapValues(data.computed, v => new Function(...v));
-        this.page = data;
-        this.$refs.out.innerHTML = "";
-        new Vue(this.page).$mount(this.$refs.out, true);
+    async fetchPage() {
+      // this.$refs.out.innerHTML = "";
+      // new Vue(this.page).$mount(this.$refs.out, true);
+      this.loaded = false
+      this.name = 'page-' + (new Date()).getTime().toString()
+      Vue.component(this.name, (resolve, reject) => {
+        this.$http
+          .get(this.uri)
+          .then(({ data }) => {
+            const rawData = Object.assign({}, data.data)
+            data.data = () => rawData
+            data.methods = _.mapValues(data.methods, v => new Function(...v));
+            data.computed = _.mapValues(data.computed, v => new Function(...v));
+            
+            this.page = data;
+            this.loaded = true
+            return resolve(data);
+          })
+          .catch(err => {
+            return reject(err);
+          });
       });
     },
 

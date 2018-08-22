@@ -308,7 +308,7 @@ export default {
   },
   methods: {
     initEditor() {
-      const language = this.lang == 'zh-CN' ? 'zh-cn' : 'en-us'
+      const language = 'zh-cn'
       window.document.execCommand("defaultParagraphSeparator", false, "p");
 
       Vue.use(VueHtml5Editor, {
@@ -348,8 +348,8 @@ export default {
         },
         visibleModules: [
           "text",
-          // "color",
-          // "font",
+          "color",
+          "font",
           "align",
           "list",
           "link",

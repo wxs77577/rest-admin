@@ -28,6 +28,7 @@ app.use((req, res, next) => {
 router.get('/site', (req, res) => res.send({
   name: 'REST-ADMIN', //site name
   locale: 'en-US',
+  logo: 'http://rest-admin.genyii.com/logo.png',
   locale_switcher: true,
   url: 'https://github.com/wxs77577/rest-admin',
   footer: `

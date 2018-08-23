@@ -29,7 +29,7 @@ Vue.use(Snotify)
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 
-import form from './form'
+// import form from './form'
 
 import VueElementLoading from 'vue-element-loading'
 Vue.component('BLoading', VueElementLoading)

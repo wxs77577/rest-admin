@@ -4,7 +4,7 @@
     <div class="app-body1">
       <b-sidebar />
       <main class="main p-3">
-        <b-loading :active="$store.state.loading" spinner="bar-fade-scale"/>
+        <b-loading :active="$store.state.loading" spinner="bar-fade-scale" style="height:100vh;"/>
         <ol class="breadcrumb" v-if="false">
           <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
             <span class="active" v-if="isLast(index)">{{ item }}</span>

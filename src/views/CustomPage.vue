@@ -58,7 +58,9 @@ export default {
             data.methods = _.mapValues(data.methods, v => new Function(...v));
             data.computed = _.mapValues(data.computed, v => new Function(...v));
             
-            this.page = data;
+            this.page = Object.assign({}, data, {
+              data: rawData
+            });
             this.loaded = true
             return resolve(data);
           })

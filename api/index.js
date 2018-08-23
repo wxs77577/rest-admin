@@ -238,7 +238,7 @@ resourceRouter.get('/grid', ({ resource }, res) => {
 })
 
 // data FORM config for editing an user
-resourceRouter.get('/form', ({ resource }, res) => {
+resourceRouter.get('/form/:id?', ({ resource }, res) => {
   res.send({
     fields: _.pickBy(resource.fields, (v, k) => {
       return v.editable !== false && ![config.primaryKey, 'created_at', 'updated_at'].includes(k)

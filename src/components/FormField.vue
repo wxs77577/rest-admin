@@ -356,7 +356,7 @@ export default {
           "link",
           "unlink",
           "tabulation",
-          // "image",
+          "image",
           "cropper",
           "hr",
           "eraser",

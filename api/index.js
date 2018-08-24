@@ -78,9 +78,15 @@ router.get('/site', (req, res) => res.send({
     },
     {
       "name": "Settings",
-      "url": "/form?uri=site/settings",
+      "url": "/form/site.settings",
       "icon": "icon-settings",
       // a custom form.
+    },
+    {
+      "name": "Restore Data",
+      "url": "/page/restore",
+      "icon": "icon-settings",
+      // a custom page.
     },
     {
       name: 'Logout',
@@ -183,10 +189,33 @@ router.post('/site/settings', ({ body }, res) => {
 * CRUD for Resources
 */
 
-const resources = require('./resources')
+let resources = require('./resources')
+
+const rawResources = Object.assign({}, resources)
+
+router.all('/restore', (req, res) => {
+  if (req.body.restore) {
+    console.log('restore')
+    resources = Object.assign({}, rawResources)
+  }
+  return res.send({
+    data: {
+      header: 'Restore Data',
+      fields: {
+        restore: { type: 'switch', label: 'Restore Data ?' },
+      },
+    },
+    template: `
+      <div>
+        
+        <p>如果测试数据被玩坏了。。。</p>
+        <b-form-builder :fields="fields" submitText="Yeah!" action="restore"></b-form-builder>
+      </div>
+    `
+  })
+})
 
 const resourceRouter = express.Router()
-
 
 // user list data
 resourceRouter.get('/', ({ resource, query }, res) => {
@@ -303,5 +332,5 @@ router.use('/:resource', (req, res, next) => {
 app.use('/admin/api', router)
 const PORT = process.env.PORT || 8088
 app.listen(PORT, () => {
-  console.log(`Test API is listening at http://localhost:${PORT}`)
+  global.console.log(`Test API is listening at http://localhost:${PORT}`)
 })

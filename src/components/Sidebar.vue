@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <div class="text-center p-3 top" v-if="auth.user" >
+    <div class="text-center p-3 top" >
       <a :href="site.url" target="_blank">
         <b-img class="site-logo" :src="site.logo" fluid style="border-radius: 5px;" />
       </a>
@@ -9,8 +9,12 @@
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
       <div class="mt-3">
         <h5 style="letter-spacing:2px">{{site.name}}</h5>
-        <b-badge class="text-uppercase mr-1" v-if="auth.user.badge">{{auth.user.badge}}</b-badge> 
-        <span>{{auth.user.username}}</span>
+        <template v-if="auth.user">
+          <b-badge class="text-uppercase mr-1" v-if="auth.user.badge">
+            {{auth.user.badge}}
+          </b-badge> 
+          <span>{{auth.user.username}}</span>
+        </template>
       </div>
       <languages />
       <!-- <theme-switcher /> -->
@@ -90,7 +94,4 @@ export default {
     /* padding:1em; */
   }
 }
-
-
-
 </style>

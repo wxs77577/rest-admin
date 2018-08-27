@@ -156,7 +156,7 @@
 </style>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
@@ -166,7 +166,7 @@ import BSelect from "vue-select";
 import BDatePicker from "vue2-datepicker";
 // import BUeditor from "./UEditor"
 import BFormUploader from "./FormUploader";
-import VueHtml5Editor from 'vue-html5-editor'
+import VueHtml5Editor from "vue-html5-editor";
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
 import _ from "lodash";
@@ -199,14 +199,16 @@ export default {
     cropperOptions() {
       return {
         "upload-url": global.API_URI + "upload",
-        "upload-headers": { Authorization: "Bearer " + this.$store.state.auth.token },
+        "upload-headers": {
+          Authorization: "Bearer " + this.$store.state.auth.token
+        },
         "upload-form-name": "file",
         "cropper-options": {
-          viewMode:2,
-          aspectRatio: _.get(this.field, 'cropper.ratio', 1)
+          viewMode: 2,
+          aspectRatio: _.get(this.field, "cropper.ratio", 1)
         },
         "output-options": this.field.cropper,
-        "labels": this.field.labels || { submit: "提交", cancel: "取消"},
+        labels: this.field.labels || { submit: "提交", cancel: "取消" }
       };
     },
     isSelect() {
@@ -309,29 +311,28 @@ export default {
   },
   methods: {
     initEditor() {
-      const language = 'zh-cn'
+      const language = "zh-cn";
       window.document.execCommand("defaultParagraphSeparator", false, "p");
 
-      const visibleModules = [
-          "text",
-          "color",
-          "font",
-          "align",
-          "list",
-          "link",
-          "unlink",
-          "tabulation",
-          // "image",
-          this.field.cropper? "cropper" : "image",
-          "hr",
-          "eraser",
-          "undo",
-          "full-screen",
-          // "info",
-        ]
-        console.log(visibleModules)
+      const visibleModules = this.field.modules || [
+        "text",
+        "color",
+        "font",
+        "align",
+        "list",
+        "link",
+        "unlink",
+        "tabulation",
+        // "image",
+        this.field.cropper ? "cropper" : "image",
+        "hr",
+        "eraser",
+        "undo",
+        "full-screen"
+        // "info",
+      ];
       Vue.use(VueHtml5Editor, {
-        name: 'b-html-editor',
+        name: "b-html-editor",
         language,
         modules: [
           {
@@ -339,16 +340,18 @@ export default {
             icon: "fa fa-image",
             i18n: "cropper",
             show: true,
-            handler: function (editor) {
-              editor.$emit('open-cropper')
+            handler: function(editor) {
+              editor.$emit("open-cropper");
             }
-          },
+          }
         ],
         image: {
           upload: {
             url: global.API_URI + "upload",
-            headers: { Authorization: 'Bearer ' + this.$store.state.auth.token },
-            fieldName: 'file'
+            headers: {
+              Authorization: "Bearer " + this.$store.state.auth.token
+            },
+            fieldName: "file"
           },
           // compress: {
           //   width: 1600,
@@ -356,20 +359,20 @@ export default {
           //   quality: 80
           // },
           uploadHandler(res) {
-            let data
+            let data;
             try {
-              data = JSON.parse(res)
+              data = JSON.parse(res);
             } catch (e) {
-              this.$notify.error('上传失败')
+              this.$notify.error("上传失败");
             }
-            return data.url
+            return data.url;
           }
         },
-        visibleModules: visibleModules,
+        visibleModules: visibleModules
       });
     },
     cropperUploaded(res) {
-      this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`)
+      this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`);
     },
     changeLanguage(lang) {
       this.currentLanguage = lang;
@@ -431,7 +434,6 @@ export default {
     }
   },
   mounted() {
-
     if (this.field.type == "html") {
       // window.onscroll =  () => {
       //   const editor = this.$refs.editor.$el
@@ -445,8 +447,8 @@ export default {
     }
   },
   created() {
-    if (this.field.type == 'html') {
-      this.initEditor()
+    if (this.field.type == "html") {
+      this.initEditor();
     }
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();

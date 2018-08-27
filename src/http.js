@@ -15,6 +15,7 @@ axios.interceptors.response.use(response => {
   store.commit(types.STOP_LOADING)
   return response;
 }, ({ response }) => {
+  store.commit(types.STOP_LOADING)
   const { data, status, statusText } = response
   
   switch (status) {

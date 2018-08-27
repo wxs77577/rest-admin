@@ -312,6 +312,24 @@ export default {
       const language = 'zh-cn'
       window.document.execCommand("defaultParagraphSeparator", false, "p");
 
+      const visibleModules = [
+          "text",
+          "color",
+          "font",
+          "align",
+          "list",
+          "link",
+          "unlink",
+          "tabulation",
+          // "image",
+          this.field.cropper? "cropper" : "image",
+          "hr",
+          "eraser",
+          "undo",
+          "full-screen",
+          // "info",
+        ]
+        console.log(visibleModules)
       Vue.use(VueHtml5Editor, {
         name: 'b-html-editor',
         language,
@@ -347,23 +365,7 @@ export default {
             return data.url
           }
         },
-        visibleModules: [
-          "text",
-          "color",
-          "font",
-          "align",
-          "list",
-          "link",
-          "unlink",
-          "tabulation",
-          // "image",
-          this.field.cropper? "cropper" : "image",
-          "hr",
-          "eraser",
-          "undo",
-          "full-screen",
-          // "info",
-        ],
+        visibleModules: visibleModules,
       });
     },
     cropperUploaded(res) {
@@ -443,7 +445,9 @@ export default {
     }
   },
   created() {
-    this.initEditor()
+    if (this.field.type == 'html') {
+      this.initEditor()
+    }
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
       this.getAjaxOptions();
     }

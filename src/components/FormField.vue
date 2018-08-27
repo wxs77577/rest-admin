@@ -317,34 +317,62 @@ export default {
       const visibleModules = this.field.modules || [
         "text",
         "color",
-        "font",
+        // "font",
+        "heading",
         "align",
         "list",
         "link",
         "unlink",
         "tabulation",
-        // "image",
-        this.field.cropper ? "cropper" : "image",
+        "image",
+        // this.field.cropper ? "cropper" : "image",
         "hr",
         "eraser",
         "undo",
-        "full-screen"
+        "full-screen",
+        "cropper",
+
         // "info",
       ];
       Vue.use(VueHtml5Editor, {
         name: "b-html-editor",
         language,
+        showModuleName: false,
         modules: [
           {
             name: "cropper",
-            icon: "fa fa-image",
+            icon: "fa fa-crop text-danger",
             i18n: "cropper",
             show: true,
             handler: function(editor) {
               editor.$emit("open-cropper");
             }
+          },
+          {
+            name: "heading",
+            icon: "fa fa-header",
+            i18n: "heading",
+            show: true,
+            dashboard: {
+              template: `
+                <div>
+                  <button v-for="h in 6" type="button" @click="setHeading(h)">H{{h}}</button>
+                </div>
+              `,
+              methods: {
+                setHeading(heading) {
+                  this.$parent.execCommand("formatBlock", `h${heading}`);
+                }
+              }
+            }
           }
         ],
+        i18n: {
+          "zh-cn": {
+            cropper: "图片裁剪",
+            heading: "标题"
+          }
+        },
         image: {
           upload: {
             url: global.API_URI + "upload",

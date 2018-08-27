@@ -357,7 +357,7 @@ export default {
           "unlink",
           "tabulation",
           // "image",
-          this.field.searchable? "cropper" : "image",
+          this.field.cropper? "cropper" : "image",
           "hr",
           "eraser",
           "undo",

@@ -16,6 +16,9 @@ export default {
     locale_switcher: true,
     login_url: null,
     html: '',
+    css: [],
+    js: [],
+    skin: '',
   },
   mutations: {
     [types.SET_SITE](state, data) {
@@ -42,6 +45,8 @@ export default {
         if (data.locale) {
           commit(types.SET_LOCALE, data.locale)
         }
+
+        
       })
     }
   }

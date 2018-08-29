@@ -5,7 +5,7 @@
       <input type="hidden" name="token" :value="auth.token">
 
       <template v-for="(field, name) in fields">
-        <label :for="'input_' + name" class="m-1" :key="name">{{field.label || $inflection.titleize(name)}}</label>
+        <label :for="'input_' + name" class="m-1" :key="name" v-if="field.label !== false">{{field.label || $inflection.titleize(name)}}</label>
         <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="getFieldId(name)" 
         :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
@@ -29,7 +29,7 @@
               <b-row>
                 <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
             v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
-            :label="field.label || $inflection.titleize(name)">
+            :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
               <div class="">
                 <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
                 @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
@@ -47,7 +47,7 @@
       <div class="row" v-else>
         <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
         v-for="(field, name) in fields" :key="[id,subForm,name].join()" v-bind="field" :label-for="getFieldId(name)"
-        :label="field.label || $inflection.titleize(name)">
+        :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
           <div class="">
             <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
             @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"

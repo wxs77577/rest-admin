@@ -136,11 +136,15 @@
   </div>
 
   <b-input-group v-else>
-    <b-input-group-prepend is-text v-if="field.icon || field.left">
-      <i :class="field.icon" v-if="field.icon"></i>
-      <span v-else v-html="field.left"></span>
+    <b-input-group-prepend is-text v-if="field.prependIcon || field.prepend">
+      <i :class="field.prependIcon" v-if="field.prependIcon"></i>
+      <span v-else v-html="field.prepend"></span>
     </b-input-group-prepend>
     <b-form-input :state="state" :id="id" :name="name" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
+    <b-input-group-append is-text v-if="field.appendIcon || field.append">
+      <i :class="field.appendIcon" v-if="field.appendIcon"></i>
+      <span v-else v-html="field.append"></span>
+    </b-input-group-append>
   </b-input-group>
   </div>
 </template>

@@ -8,7 +8,7 @@
         {{$t('actions.create')}}
         </b-btn>
         <b-btn @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
-        <i class="icon-refresh"></i>
+        <i class="icon-reload"></i>
         {{$t('actions.reload')}}
         </b-btn>
         <b-btn v-for="button in _.get(actions, 'toolbar.extra', [])" 
@@ -17,7 +17,7 @@
           {{button.label}}
         </b-btn>
 
-        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(actions, 'toolbar.delete_all') !== false">
+        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(actions, 'toolbar.delete_all') === true">
         <i class="icon-trash"></i>
         {{$t('actions.delete_all')}}
         </b-btn>

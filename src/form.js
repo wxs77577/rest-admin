@@ -1,7 +1,4 @@
 import Vue from 'vue'
-import store from './store'
-
-import i18n from './i18n'
 
 import Switch from './components/Switch.vue'
 Vue.component('b-switch', Switch)

@@ -43,6 +43,7 @@
     "inflection": "^1.12.0",
     "lodash": "^4.17.10",
     "node-sass": "^4.9.0",
+    "nodemon": "^1.18.3",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.16"
   },

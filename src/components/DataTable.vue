@@ -2,43 +2,49 @@
   <b-card :header="header" class="page-container">
     <h1>{{title}}</h1>
     <div class="data-table">
-      <div class="py-1">
-        <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
-        <i class="icon-plus"></i>
-        {{$t('actions.create')}}
-        </b-btn>
-        <b-btn @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
-        <i class="icon-reload"></i>
-        {{$t('actions.reload')}}
-        </b-btn>
-        <b-btn v-for="button in _.get(actions, 'toolbar.extra', [])" 
-        :key="button.label"
-        v-bind="button">
-          {{button.label}}
-        </b-btn>
+      <div v-if="site.grid_style === 1">
+        <div class="py-1">
+          <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
+          <i class="icon-plus"></i>
+          {{$t('actions.create')}}
+          </b-btn>
+          <b-btn @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
+          <i class="icon-reload"></i>
+          {{$t('actions.reload')}}
+          </b-btn>
+          <b-btn v-for="button in _.get(actions, 'toolbar.extra', [])" 
+          :key="button.label"
+          v-bind="button">
+            {{button.label}}
+          </b-btn>
 
-        <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(actions, 'toolbar.delete_all') === true">
-        <i class="icon-trash"></i>
-        {{$t('actions.delete_all')}}
-        </b-btn>
+          <b-btn @click="removeAll" class="pull-right" variant="second" v-if="_.get(actions, 'toolbar.delete_all') === true">
+          <i class="icon-trash"></i>
+          {{$t('actions.delete_all')}}
+          </b-btn>
+        </div>
+        <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
+          <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
+            <div slot="extra-buttons" class="ml-2">
+              <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(actions, 'export')">{{$t('actions.search_and_export')}}</b-button>
+              <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+            </div>
+          </b-form-builder>
+        </div>
+        <div class="" v-if="description" v-html="description"></div>
+        <b-row>
+          <b-col cols="8">
+            <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
+          </b-col>
+          <b-col cols="4" class="text-right">
+            <p>{{$t('messages.paginate', {total: totalRows})}}</p>
+          </b-col>
+        </b-row>
       </div>
-      <div class="mb-2 data-table-search" v-if="!_.isEmpty(searchFields)">
-        <b-form-builder :inline="true" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
-          <div slot="extra-buttons" class="ml-2">
-            <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(actions, 'export')">{{$t('actions.search_and_export')}}</b-button>
-            <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
-          </div>
-        </b-form-builder>
+      <div v-else>
+分页代码
       </div>
-      <div class="" v-if="description" v-html="description"></div>
-      <b-row>
-        <b-col cols="8">
-          <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
-        </b-col>
-        <b-col cols="4" class="text-right">
-          <p>{{$t('messages.paginate', {total: totalRows})}}</p>
-        </b-col>
-      </b-row>
+
       <b-table class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
         <template v-for="(field, key) in _.omit(fields, '_actions')"  :slot="`HEAD_${key}`" slot-scope="row">
           <div :key="key" :class="{'text-right': ['number'].includes(field.type)}">
@@ -67,14 +73,19 @@
 
       </b-table>
 
-      <b-row>
-        <b-col cols="8">
-          <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
-        </b-col>
-        <b-col cols="4" class="text-right">
-          <p>{{$t('messages.paginate', {total: totalRows})}}</p>
-        </b-col>
-      </b-row>
+      <div v-if="site.grid_style === 1">
+        <b-row>
+          <b-col cols="8">
+            <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" />
+          </b-col>
+          <b-col cols="4" class="text-right">
+            <p>{{$t('messages.paginate', {total: totalRows})}}</p>
+          </b-col>
+        </b-row>
+      </div>
+      <div v-else>
+        分页代码
+      </div>
     </div>
   </b-card>
 </template>
@@ -108,7 +119,7 @@ export default {
       perPage: 6,
       sortBy: this.$config.primaryKey,
       sortDesc: true,
-      description: '',
+      description: "",
       fields: {},
       filter: {},
       choices: {},
@@ -117,15 +128,15 @@ export default {
       searchFields: {},
       searchModel: {},
       where: {},
-      title: '',
+      title: "",
       limitPages: 10
     };
   },
   computed: {
-    ...mapState(["site", 'i18n']),
-    ...mapGetters(["currentMenu", 'currentLanguage']),
-    actions(){
-      return _.get(this.fields, '_actions')
+    ...mapState(["site", "i18n"]),
+    ...mapGetters(["currentMenu", "currentLanguage"]),
+    actions() {
+      return _.get(this.fields, "_actions");
     },
     header() {
       return `
@@ -327,11 +338,11 @@ export default {
     max-width: inherit !important;
     max-height: 60px !important;
   }
-  thead th, thead td {
+  thead th,
+  thead td {
     position: sticky !important;
     top: 0;
     background: #fff;
-    
   }
   .data-table-search {
   }

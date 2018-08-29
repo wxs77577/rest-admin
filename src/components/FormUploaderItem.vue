@@ -12,7 +12,7 @@
         <b-btn v-if="field.showBrowse" @click="$emit('open-file-browser')">
           {{$t('actions.file_browser')}}
         </b-btn>
-        <label :for="`file_${id}`" class="btn btn-secondary m-0">
+        <label :for="`file_${id}`" class="btn btn-primary m-0">
           {{file ? $t('actions.change') : $t('actions.choose')}}
         </label>
         <b-btn @click="$emit('remove')">{{$t('actions.delete')}}</b-btn>

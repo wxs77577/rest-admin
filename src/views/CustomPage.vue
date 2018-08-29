@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card page-container">
     <div class="card-header" v-if="data.header">{{data.header || data.title}}</div>
     <div class="card-body custom-page" :class="{nopadding: data.nopadding}" >
       <component :is="name" v-if="name"></component>

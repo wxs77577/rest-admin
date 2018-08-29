@@ -1,5 +1,5 @@
 <template>
-  <b-card :header="header">
+  <b-card :header="header" class="page-container">
     <h1>{{title}}</h1>
     <div class="data-table">
       <div class="py-1">

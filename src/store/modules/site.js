@@ -19,6 +19,7 @@ export default {
     css: [],
     js: [],
     skin: '',
+    header: '',
   },
   mutations: {
     [types.SET_SITE](state, data) {

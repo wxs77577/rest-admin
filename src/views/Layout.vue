@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <!-- <b-header/> -->
+    <!--  -->
     <div class="app-body1">
       <b-sidebar />
       <main class="main p-3">
@@ -12,6 +12,8 @@
           </li>
         </ol>
         <div class="container-fluid">
+          <header v-if="$store.state.site.header" v-html="$store.state.site.header"></header>
+
           <router-view class="animated fadeIn" />
         </div>
       </main>

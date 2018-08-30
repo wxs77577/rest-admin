@@ -14,9 +14,9 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   store.commit(types.STOP_LOADING)
   return response;
-}, ({ response }) => {
+}, (err) => {
   store.commit(types.STOP_LOADING)
-  const { data, status, statusText } = response
+  const { data, status, statusText } = err
   
   switch (status) {
     case 422:
@@ -39,7 +39,7 @@ axios.interceptors.response.use(response => {
   } else {
     // console.error(data)
   }
-  return Promise.reject(response);
+  return Promise.reject(err);
 });
 
 Vue.prototype.$http = axios

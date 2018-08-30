@@ -41,8 +41,40 @@
           </b-col>
         </b-row>
       </div>
-      <div v-else>
-分页代码
+      <div v-else class="table-toolbar style-2" >
+        <div class="search-box">
+          <div class="flex">
+            <b-form-builder :inline="true" v-if="!_.isEmpty(searchFields)" :fields="searchFields" :action="searchUri" v-model="searchModel" :submitText="$t('actions.search')" backText="" method="get" :on-submit="onSearch">
+              <div slot="extra-buttons" class="ml-2">
+                <b-button type="button" @click="searchAndExport" variant="success" v-if="_.get(actions, 'export')">{{$t('actions.search_and_export')}}</b-button>
+                <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+              </div>
+            </b-form-builder>
+
+            <b-btn :to="resourceUri + '/create'" variant="link"  v-if="_.get(actions,'toolbar.create') !== false">
+            <i class="iconfont icon-xinjianshiti"></i>
+            {{$t('actions.create')}}
+            </b-btn>
+            <b-btn @click="fetchGrid" variant="link" v-if="_.get(actions, 'toolbar.reload') !== false">
+            <i class="iconfont icon-shuaxin"></i>
+            {{$t('actions.reload')}}
+            </b-btn>
+          </div>
+
+          <!-- <b-pagination :limit="limitPages" :total-rows="totalRows" :per-page="perPage" v-model="page" /> -->
+          <div class="flex">
+            <div class="result">共{{totalRows}}个结果</div>
+            <div class="pagination">
+              <span class="left-arrow iconfont icon-tuichu" @click="previousPage"></span>
+              <div class="go-page flex">
+                <input type="number" v-model="inputPage">
+                <div>/{{Math.ceil(totalRows/limitPages)}}</div>
+                <button @click="goPage">GO</button>
+              </div>
+              <span class="right-arrow iconfont icon-jinru" @click="nextPage"></span>
+            </div>
+          </div> 
+        </div>
       </div>
 
       <b-table class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :no-local-sorting="true" :fields="fields" :items="items">
@@ -84,7 +116,20 @@
         </b-row>
       </div>
       <div v-else>
-        分页代码
+        <div class="footer-pagination">
+          <div class="flex">
+            <div class="result">共{{totalRows}}个结果</div>
+            <div class="pagination">
+              <span class="left-arrow iconfont icon-tuichu" @click="previousPage"></span>
+              <div class="go-page flex">
+                <input type="number" v-model="inputPage">
+                <div>/{{Math.ceil(totalRows/limitPages)}}</div>
+                <button @click="goPage">GO</button>
+              </div>
+              <span class="right-arrow iconfont icon-jinru" @click="nextPage"></span>
+            </div>
+          </div> 
+        </div>
       </div>
     </div>
   </b-card>
@@ -116,6 +161,7 @@ export default {
       iframeSrc: null,
       pause: true, //修复切换页面时page等参数的自动变更会导致多次fetch的问题
       page: 1,
+      inputPage: 1,
       perPage: 6,
       sortBy: this.$config.primaryKey,
       sortDesc: true,
@@ -194,6 +240,7 @@ export default {
   },
   watch: {
     "$route.params.resource"() {
+      this.inputPage = 1
       this.pause = true;
       this.fetchGrid(true);
     },
@@ -214,6 +261,32 @@ export default {
     // }
   },
   methods: {
+    goPage() {
+      const totalPages = Math.ceil(this.totalRows/this.limitPages)
+      if (this.inputPage <= 0 || this.inputPage > totalPages) {
+        alert('请输入正确页码')
+        return
+      }
+      this.page = this.inputPage
+    },
+    previousPage() {
+      const totalPages = Math.ceil(this.totalRows/this.limitPages)
+      if (this.inputPage >= 2) {
+        this.inputPage--
+        this.page = this.inputPage
+      }else{
+        alert('已是第一页')
+      }
+    },
+    nextPage(){
+      const totalPages = Math.ceil(this.totalRows/this.limitPages)
+      if (this.inputPage < totalPages) {
+        this.inputPage++
+        this.page = this.inputPage
+      }else{
+        alert('后面没有了')
+      }
+    },
     fetch() {
       if (this.pause) {
         return;

@@ -1,5 +1,5 @@
 <template>
-  <b-card :header="header">
+  <b-card :header="header" class="page-view">
     <div class="data-view">
       <legend v-if="model[$config.primaryKey]">{{$t('actions.view')}}: {{model[$config.primaryKey]}}</legend>
       <table class="table ">

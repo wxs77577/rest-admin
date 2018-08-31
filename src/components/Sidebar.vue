@@ -7,7 +7,7 @@
       <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->
       
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
-      <div class="mt-3">
+      <div class="mt-3" v-if="site.grid_style === 1">
         <h5 style="letter-spacing:2px">{{site.name}}</h5>
         <template v-if="auth.user">
           <b-badge class="text-uppercase mr-1" v-if="auth.user.badge">
@@ -16,6 +16,7 @@
           <span>{{auth.user.username}}</span>
         </template>
       </div>
+      <div v-else></div>
       <languages />
       <!-- <theme-switcher /> -->
 
@@ -48,7 +49,6 @@
           </li>
           <li class="nav-item" v-else :key="index">
             <div>
-
               <router-link :to="item.url" class="nav-link" active-class="active">
                 <i :class="item.icon"></i> {{item.name}}
                 <b-badge v-bind="item.badge" v-if="item.badge">{{item.badge.text}}</b-badge>

@@ -265,16 +265,18 @@ export default {
       const totalPages = Math.ceil(this.totalRows/this.limitPages)
       if (this.inputPage <= 0 || this.inputPage > totalPages) {
         alert('请输入正确页码')
+        this.inputPage = 1
         return
       }
       this.page = this.inputPage
     },
     previousPage() {
       const totalPages = Math.ceil(this.totalRows/this.limitPages)
-      if (this.inputPage >= 2) {
+      if (this.inputPage >= 2 && this.inputPage < totalPages) {
         this.inputPage--
         this.page = this.inputPage
       }else{
+        this.inputPage = 1
         alert('已是第一页')
       }
     },
@@ -284,6 +286,7 @@ export default {
         this.inputPage++
         this.page = this.inputPage
       }else{
+        this.inputPage = 1
         alert('后面没有了')
       }
     },

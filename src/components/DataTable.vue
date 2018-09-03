@@ -68,7 +68,7 @@
               <span class="left-arrow iconfont icon-tuichu" @click="previousPage"></span>
               <div class="go-page flex">
                 <input type="number" v-model="inputPage">
-                <div>/{{Math.ceil(totalRows/limitPages)}}</div>
+                <div>/{{totalRows == 0 ? 1 : Math.ceil(totalRows/limitPages)}}</div>
                 <button @click="goPage">GO</button>
               </div>
               <span class="right-arrow iconfont icon-jinru" @click="nextPage"></span>
@@ -123,7 +123,7 @@
               <span class="left-arrow iconfont icon-tuichu" @click="previousPage"></span>
               <div class="go-page flex">
                 <input type="number" v-model="inputPage">
-                <div>/{{Math.ceil(totalRows/limitPages)}}</div>
+                <div>/{{totalRows == 0 ? 1 : Math.ceil(totalRows/limitPages)}}</div>
                 <button @click="goPage">GO</button>
               </div>
               <span class="right-arrow iconfont icon-jinru" @click="nextPage"></span>
@@ -266,18 +266,20 @@ export default {
       if (this.inputPage <= 0 || this.inputPage > totalPages) {
         alert('请输入正确页码')
         this.inputPage = 1
+        this.page = 1
         return
       }
       this.page = this.inputPage
     },
     previousPage() {
       const totalPages = Math.ceil(this.totalRows/this.limitPages)
-      if (this.inputPage >= 2 && this.inputPage < totalPages) {
+      if (this.inputPage > 1) {
         this.inputPage--
         this.page = this.inputPage
       }else{
-        this.inputPage = 1
         alert('已是第一页')
+        this.inputPage = 1
+        this.page = 1
       }
     },
     nextPage(){
@@ -286,8 +288,9 @@ export default {
         this.inputPage++
         this.page = this.inputPage
       }else{
-        this.inputPage = 1
         alert('后面没有了')
+        this.inputPage = 1
+        this.page = 1
       }
     },
     fetch() {

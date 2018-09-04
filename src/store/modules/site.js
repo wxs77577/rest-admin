@@ -9,6 +9,7 @@ export default {
     url: '',
     description: '',
     menu: menu,
+    currentMenu: {},
     languages: false,
     footer: ``,
     logo: '',
@@ -21,6 +22,7 @@ export default {
     skin: '',
     header: '',
     grid_style: 1,
+    page_header: '',
   },
   mutations: {
     [types.SET_SITE](state, data) {
@@ -31,25 +33,30 @@ export default {
         }
         state[k] = value
       }
-    },
-  },
-  getters: {
-    currentMenu(state, getters, rootState) {
-      const item = _.find(state.menu, { url: '/rest/' + rootState.route.params.resource }) || {}
-      return item
+      
     },
     
+    [types.SET_PAGE_HEADER](state, text) {
+      state.page_header = text
+    }
+  },
+  getters: {
   },
   actions: {
-    [types.FETCH_SITE]({ commit }) {
+    [types.FETCH_SITE]({ commit, dispatch }) {
       http.get('site').then(({ data }) => {
         commit(types.SET_SITE, data)
+        dispatch(types.FETCH_PAGE_HEADER)
         if (data.locale) {
           commit(types.SET_LOCALE, data.locale)
         }
 
-        
+
       })
-    }
+    },
+    [types.FETCH_PAGE_HEADER]({commit, state, rootState}) {
+      const menu = _.find(state.menu, { url: rootState.route.path }) || {}
+      commit(types.SET_PAGE_HEADER, menu.name || '')
+    },
   }
 }

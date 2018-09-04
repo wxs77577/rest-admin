@@ -1,6 +1,5 @@
 <template>
-  <b-card :header="header" class="page-container">
-    <h1>{{title}}</h1>
+  
     <div class="data-table">
       <div v-if="site.grid_style === 1">
         <div class="py-1">
@@ -132,7 +131,7 @@
         </div>
       </div>
     </div>
-  </b-card>
+
 </template>
 
 <script>

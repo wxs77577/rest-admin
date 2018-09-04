@@ -1,10 +1,5 @@
 <template>
-  <div class="card page-container">
-    <div class="card-header" v-if="data.header">{{data.header || data.title}}</div>
-    <div class="card-body custom-page" :class="{nopadding: data.nopadding}" >
-      <component :is="name" v-if="name"></component>
-    </div>
-  </div>
+  <component :is="name" v-if="name"></component>
 </template>
 <style>
 .nopadding {
@@ -55,12 +50,20 @@ export default {
           .then(({ data }) => {
             const rawData = Object.assign({}, data.data)
             data.data = () => rawData
-            data.methods = _.mapValues(data.methods, v => new Function(...v));
-            data.computed = _.mapValues(data.computed, v => new Function(...v));
+            if (data.methods) {
+              data.methods = _.mapValues(data.methods, v => new Function(...v));
+            }
+            if (data.computed) {
+              data.computed = _.mapValues(data.computed, v => new Function(...v));
+            }
+            if (data.created) {
+              data.created = new Function(...data.created);
+            }
+            if (data.mounted) {
+              data.mounted = new Function(...data.mounted);
+            }
             
-            this.page = Object.assign({}, data, {
-              data: rawData
-            });
+            this.page = Object.assign({}, data, {});
             this.loaded = true
             return resolve(data);
           })

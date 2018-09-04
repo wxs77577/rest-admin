@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :header="header">
+  <!-- <component :is="tag" :header="header"> -->
     <div class="data-form">
       <div class="row d-none">
         <div class="col col-md-8">
@@ -15,7 +15,7 @@
       v-model="model" :action="resourceUri" :method="method" @success="onSuccess">
       </b-form-builder>
     </div>
-  </component>
+  <!-- </component> -->
 </template>
 
 <script>

@@ -46,8 +46,16 @@ new Vue({
   router,
   store,
   i18n,
+  watch: {
+    
+  },
+  methods: {
+    
+  },
   render: h => h(App),
+  
   created() {
+    
     // form.init()
   }
 })

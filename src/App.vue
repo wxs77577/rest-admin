@@ -45,13 +45,14 @@ export default {
         tag.setAttribute("src", item);
         document.body.appendChild(tag);
       });
+    },
+    '$route.path'() {
+      this.$store.dispatch(types.FETCH_PAGE_HEADER)
     }
   },
   computed: {
     ...mapState(["site"])
   },
-  methods: {},
-  mounted() {},
   created() {
     this.$store.dispatch(types.FETCH_SITE);
   }

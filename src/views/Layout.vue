@@ -14,7 +14,13 @@
         <div class="container-fluid">
           <header v-if="$store.state.site.header" v-html="$store.state.site.header"></header>
 
-          <router-view class="animated fadeIn" />
+          <div class="card1 page-container">
+            <div class="card-header" v-if="$store.state.site.page_header">{{$store.state.site.page_header}}</div>
+            <div class="card-body1 page-body" >
+              <router-view class="animated fadeIn" />
+            </div>
+          </div>
+          
         </div>
       </main>
 
@@ -38,8 +44,12 @@ export default {
   computed: {},
   data() {
     return {
-      path: []
+      path: [],
+      header: '',
     };
+  },
+  watch: {
+
   },
   created() {}
 };

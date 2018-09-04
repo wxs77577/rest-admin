@@ -38,7 +38,7 @@
             <ul class="nav-dropdown-items">
               <li class="nav-item" v-for="child in item.children" :key="child.name">
                 <div>
-                  <router-link :to="child.url" class="nav-link" active-class="active">
+                  <router-link exact :to="child.url" class="nav-link" active-class="active">
                     <i :class="child.icon"></i> {{child.name}}
                     <b-badge v-bind="child.badge" v-if="child.badge">{{child.badge.text}}</b-badge>
 

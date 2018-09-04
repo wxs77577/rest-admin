@@ -49,7 +49,7 @@
           </li>
           <li class="nav-item" v-else :key="index">
             <div>
-              <router-link :to="item.url" class="nav-link" active-class="active">
+              <router-link exact :to="item.url" class="nav-link" active-class="active">
                 <i :class="item.icon"></i> {{item.name}}
                 <b-badge v-bind="item.badge" v-if="item.badge">{{item.badge.text}}</b-badge>
               </router-link>

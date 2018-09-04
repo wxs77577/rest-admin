@@ -263,7 +263,7 @@ export default {
     goPage() {
       const totalPages = Math.ceil(this.totalRows/this.limitPages)
       if (this.inputPage <= 0 || this.inputPage > totalPages) {
-        alert('请输入正确页码')
+        this.$snotify.warning('请输入正确页码')
         this.inputPage = 1
         this.page = 1
         return
@@ -276,7 +276,7 @@ export default {
         this.inputPage--
         this.page = this.inputPage
       }else{
-        alert('已是第一页')
+        this.$snotify.warning('已是第一页')
         this.inputPage = 1
         this.page = 1
       }
@@ -287,7 +287,7 @@ export default {
         this.inputPage++
         this.page = this.inputPage
       }else{
-        alert('后面没有了')
+        this.$snotify.warning('后面没有了')
         this.inputPage = 1
         this.page = 1
       }

@@ -11,7 +11,7 @@ export default {
     menu: menu,
     currentMenu: {},
     languages: false,
-    footer: ``,
+    footer: false,
     logo: '',
     locale: 'en-US',
     locale_switcher: true,
@@ -22,6 +22,7 @@ export default {
     skin: '',
     header: '',
     grid_style: 1,
+    sidebar_userinfo: true,
     page_header: '',
   },
   mutations: {

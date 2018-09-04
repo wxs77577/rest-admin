@@ -25,7 +25,7 @@
       </main>
 
     </div>
-    <b-footer/>
+    <b-footer v-if="$store.state.site.footer"/>
 
   </div>
 </template>

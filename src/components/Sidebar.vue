@@ -7,7 +7,7 @@
       <!-- <b-img class="site-logo" :src="require('../assets/img/gengyi-logo.svg')" fluid style="border-radius: 5px;" /> -->
       
       <!-- <b-img rounded="circle" :src="auth.user.avatar" height="70" blank-color="#777" alt="avatar" class="m-2" /> -->
-      <div class="mt-3" v-if="site.grid_style === 1">
+      <div class="mt-3" v-if="site.sidebar_userinfo !== false">
         <h5 style="letter-spacing:2px">{{site.name}}</h5>
         <template v-if="auth.user">
           <b-badge class="text-uppercase mr-1" v-if="auth.user.badge">

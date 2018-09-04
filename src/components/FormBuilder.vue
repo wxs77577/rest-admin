@@ -38,7 +38,7 @@
             </b-form-group>
               </b-row>
             </b-col>
-            <b-col :md="12 - _.get(layout, `tabs.${tabName}.cols`, 0)">
+            <b-col :md="12 - _.get(layout, `tabs.${tabName}.cols`, 0)" v-if="!!_.get(layout, `tabs.${tabName}.right`)">
               <div v-html="_.get(layout, `tabs.${tabName}.right`)"></div>
             </b-col>
           </div>

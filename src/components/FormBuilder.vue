@@ -24,7 +24,7 @@
       <input type="hidden" name="token" :value="auth.token">
       <b-tabs class="my-3" v-if="groupBy">
         <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, 'tabs.Default.name') || tabName || $t('messages.default')" :key="tabName">
-          <div class="row">
+          <div class="row form-cols">
             <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">
               <b-row>
                 <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 

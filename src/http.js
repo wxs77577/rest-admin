@@ -13,11 +13,15 @@ axios.interceptors.request.use(config => {
 })
 axios.interceptors.response.use(response => {
   store.commit(types.STOP_LOADING)
+  const pageHeader = _.get(response, 'data._meta.page_header')
+  if (pageHeader) {
+    store.commit(types.SET_PAGE_HEADER, pageHeader)
+  }
   return response;
 }, (err) => {
   store.commit(types.STOP_LOADING)
   const { data, status, statusText } = err
-  
+
   switch (status) {
     case 422:
 

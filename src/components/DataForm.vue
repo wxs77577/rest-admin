@@ -55,9 +55,7 @@ export default {
     };
   },
   watch: {
-    $route() {
-      this.fetchForm();
-    }
+    id: 'fetchForm'
   },
   computed: {
     resourceUri() {
@@ -89,6 +87,7 @@ export default {
   methods: {
     fetch() {
       if (this.isNew) {
+        this.model = {}
         this.loaded = true;
         return;
       }

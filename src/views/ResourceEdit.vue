@@ -5,28 +5,26 @@
 </template>
 
 <script>
-import BDataForm from '../components/DataForm'
+import BDataForm from "../components/DataForm";
 export default {
   name: "resource-edit",
   components: {
     BDataForm
   },
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     resource() {
-      return this.$route.params.resource
+      return this.$route.params.resource;
     }
   },
-  methods: {
-    
-  },
+  watch: {},
+  methods: {},
+
   created() {
     
   }

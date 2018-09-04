@@ -50,12 +50,15 @@ export default {
         if (data.locale) {
           commit(types.SET_LOCALE, data.locale)
         }
-
-
       })
     },
     [types.FETCH_PAGE_HEADER]({commit, state, rootState}) {
-      const menu = _.find(state.menu, { url: rootState.route.path }) || {}
+      let url = rootState.route.path
+      let menu = _.find(state.menu, { url }) || {}
+      if (!menu.name && url.indexOf('/rest/') > -1) {
+        url = url.match(/(\/rest\/\w+)/).pop()
+        menu = _.find(state.menu, { url }) || {}
+      }
       commit(types.SET_PAGE_HEADER, menu.name || '')
     },
   }

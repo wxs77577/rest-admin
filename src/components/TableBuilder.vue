@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 import BDataValue from "./DataValue";
 import { mapState, mapGetters } from "vuex";
 export default {

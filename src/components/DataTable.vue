@@ -271,7 +271,7 @@ export default {
       this.page = this.inputPage
     },
     previousPage() {
-      const totalPages = Math.ceil(this.totalRows/this.limitPages)
+      // const totalPages = Math.ceil(this.totalRows/this.limitPages)
       if (this.inputPage > 1) {
         this.inputPage--
         this.page = this.inputPage

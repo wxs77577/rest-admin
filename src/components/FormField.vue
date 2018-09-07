@@ -320,7 +320,7 @@ export default {
 
       const visibleModules = this.field.modules || [
         "text",
-        "color",
+        // "color",
         // "font",
         "heading",
         "align",

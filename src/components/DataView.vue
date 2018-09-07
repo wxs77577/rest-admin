@@ -1,5 +1,5 @@
 <template>
-  <b-card :header="header" class="page-view">
+  <div class="page-view">
     <div class="data-view">
       <legend v-if="model[$config.primaryKey]">{{$t('actions.view')}}: {{model[$config.primaryKey]}}</legend>
       <table class="table ">
@@ -25,7 +25,7 @@
     <div slot="footer">
       <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
     </div>
-  </b-card>
+  </div>
 </template>
 
 <script>

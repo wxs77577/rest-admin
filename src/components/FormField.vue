@@ -322,7 +322,7 @@ export default {
         "text",
         // "color",
         // "font",
-        "heading",
+        // "heading",
         "align",
         "list",
         "link",

@@ -23,7 +23,7 @@
     @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
       <input type="hidden" name="token" :value="auth.token">
       <b-tabs class="my-3" v-if="groupBy">
-        <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, 'tabs.Default.name') || tabName || $t('messages.default')" :key="tabName">
+        <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, `tabs.${tabName}.name`) || tabName || $t('messages.default')" :key="tabName">
           <div class="row form-cols">
             <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">
               <b-row>
@@ -173,9 +173,8 @@ export default {
     groupedFields() {
       const ret = {};
       _.keys(_.groupBy(this.fields, this.groupBy)).map(v => {
-        // console.log(v, v == 'undefined')
         let tabName = v;
-        if (v == "undefined") {
+        if (v === "undefined") {
           v = null;
           tabName = this.$t("messages.default");
         }

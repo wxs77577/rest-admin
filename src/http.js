@@ -18,10 +18,9 @@ axios.interceptors.response.use(response => {
     store.commit(types.SET_PAGE_HEADER, pageHeader)
   }
   return response;
-}, (err) => {
+}, ({response}) => {
   store.commit(types.STOP_LOADING)
-  const { data, status, statusText } = err
-
+  const { data, status, statusText } = response
   switch (status) {
     case 422:
 
@@ -38,12 +37,13 @@ axios.interceptors.response.use(response => {
   if (Array.isArray(msg)) {
     msg = msg[0].message
   }
+  
   if (msg) {
     Vue.prototype.$snotify.error(String(msg))
   } else {
     // console.error(data)
   }
-  return Promise.reject(err);
+  return Promise.reject(response);
 });
 
 Vue.prototype.$http = axios

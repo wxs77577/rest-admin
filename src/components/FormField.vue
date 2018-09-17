@@ -207,6 +207,9 @@ export default {
           Authorization: "Bearer " + this.$store.state.auth.token
         },
         "upload-form-name": "file",
+        "upload-form-data": {
+          from: 'cropper'
+        },
         "cropper-options": {
           viewMode: 2,
           aspectRatio: _.get(this.field, "cropper.ratio", 1)

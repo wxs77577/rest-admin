@@ -50,7 +50,7 @@
               </div>
             </b-form-builder>
 
-            <b-btn :to="resourceUri + '/create'" variant="link"  v-if="_.get(actions,'toolbar.create') !== false">
+            <b-btn :to="'/page/' + resourceUri + '.create'" variant="link"  v-if="_.get(actions,'toolbar.create') !== false">
             <i class="iconfont icon-xinjianshiti"></i>
             {{$t('actions.create')}}
             </b-btn>
@@ -371,6 +371,11 @@ export default {
       });
     },
     edit(item) {
+      if (this.site.grid_style == 2) {
+        return this.$router.push({
+          path: `/page/${this.resource}.${item[this.$config.primaryKey]}.edit`
+        })
+      }
       this.$router.push({
         path: this.resource + "/" + item[this.$config.primaryKey] + "/edit"
       });

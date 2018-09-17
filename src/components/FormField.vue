@@ -50,6 +50,7 @@
     v-bind="cropperOptions"
     ref="cropper"
     @uploaded="cropperUploaded"
+    @completed="cropperUploadComplete"
     />
 
     <b-html-editor ref="editor" :state="state"  :id="id" v-bind="field" v-model="model"
@@ -408,6 +409,11 @@ export default {
     },
     cropperUploaded(res) {
       this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`);
+    },
+    cropperUploadComplete(data){
+      if (data.message) {
+        this.$snotify.error(data.message)
+      }
     },
     changeLanguage(lang) {
       this.currentLanguage = lang;

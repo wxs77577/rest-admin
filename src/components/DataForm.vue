@@ -125,7 +125,7 @@ export default {
 
     onSuccess() {
       if (this.redirect === false) {
-        this.$fetchForm()
+        this.fetchForm()
       } else if (this.redirect === -1 || !this.redirect) {
         this.$router.go(-1);
       } else {

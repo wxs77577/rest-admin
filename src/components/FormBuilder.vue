@@ -22,7 +22,7 @@
     <component :is="tag" ref="form" :action="actionUrl" :method="method"  class="form" 
     @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
       <input type="hidden" name="token" :value="auth.token">
-      <b-tabs class="my-3" v-if="groupBy">
+      <b-tabs class="my-3" v-if="groupBy" :class="{'hide-group-name': _.get(layout, 'hideGroupName')}">
         <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, `tabs.${tabName}.name`) || tabName || $t('messages.default')" :key="tabName">
           <div class="row form-cols">
             <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">

@@ -21,16 +21,16 @@ export default {
     };
   },
   watch: {
-    "site.name"(name) {
-      window.document.title = name || "REST ADMIN DASHBOARD";
-    },
-    "site.skin"(name) {
-      const tag = document.getElementById("css-skin");
-      tag.setAttribute(
-        "href",
-        `https://cdn.bootcss.com/bootswatch/4.1.1/${name}/bootstrap.min.css`
-      );
-    },
+    // "site.name"(name) {
+    //   window.document.title = name || "REST ADMIN DASHBOARD";
+    // },
+    // "site.skin"(name) {
+    //   const tag = document.getElementById("css-skin");
+    //   tag.setAttribute(
+    //     "href",
+    //     `https://cdn.bootcss.com/bootswatch/4.1.1/${name}/bootstrap.min.css`
+    //   );
+    // },
     "site.css"(files) {
       files.map(item => {
         const tag = document.createElement("link");

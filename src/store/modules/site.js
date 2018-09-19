@@ -44,10 +44,12 @@ export default {
   getters: {
   },
   actions: {
-    [types.FETCH_SITE]({ commit, dispatch }) {
+    [types.FETCH_SITE]({ commit, dispatch, state }) {
       http.get('site').then(({ data }) => {
         commit(types.SET_SITE, data)
-        dispatch(types.FETCH_PAGE_HEADER)
+        if (!state.page_header) {
+          dispatch(types.FETCH_PAGE_HEADER)
+        }
         if (data.locale) {
           commit(types.SET_LOCALE, data.locale)
         }

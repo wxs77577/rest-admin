@@ -14,7 +14,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   store.commit(types.STOP_LOADING)
   const pageHeader = _.get(response, 'data._meta.page_header')
-  if (pageHeader) {
+  if (pageHeader || pageHeader === false) {
     store.commit(types.SET_PAGE_HEADER, pageHeader)
   }
   return response;

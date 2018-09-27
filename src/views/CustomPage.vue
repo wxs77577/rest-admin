@@ -7,9 +7,6 @@
 }
 </style>
 <script>
-import Vue from "vue";
-import _ from "lodash";
-
 export default {
   components: {},
   props: {},
@@ -37,31 +34,29 @@ export default {
     async fetchPage() {
       // this.$refs.out.innerHTML = "";
       // new Vue(this.page).$mount(this.$refs.out, true);
-      this.loaded = false
-      this.name = 'page-' + (new Date()).getTime().toString()
+      this.loaded = false;
+      this.name = "page-" + new Date().getTime().toString();
       // Vue.component(this.name, (resolve, reject) => {
-        this.$http
-          .get(this.uri)
-          .then(({ data }) => {
-            const rawData = Object.assign({}, data.data)
-            data.data = () => rawData
-            data.name = 'custom-page-' + (new Date).getTime()
-            if (data.methods) {
-              data.methods = _.mapValues(data.methods, v => new Function(...v));
-            }
-            if (data.computed) {
-              data.computed = _.mapValues(data.computed, v => new Function(...v));
-            }
-            if (data.created) {
-              data.created = new Function(...data.created);
-            }
-            if (data.mounted) {
-              data.mounted = new Function(...data.mounted);
-            }
-            
-            this.page = Object.assign({}, data, {});
-            this.loaded = true
-          })
+      this.$http.get(this.uri).then(({ data }) => {
+        const rawData = Object.assign({}, data.data);
+        data.data = () => rawData;
+        data.name = "custom-page-" + new Date().getTime();
+        const wrapFunction = v => new Function(...v);
+        const mapValues = (obj = {}) => {
+          return Object.entries(obj).reduce((acc, [k, v]) => {
+            acc[k] = wrapFunction(v);
+            return acc;
+          }, {});
+        };
+
+        data.methods = mapValues(data.methods, wrapFunction);
+        data.computed = mapValues(data.computed, wrapFunction);
+        data.created = data.created ? wrapFunction(data.created) : null;
+        data.mounted = data.mounted ? wrapFunction(data.mounted) : null;
+
+        this.page = Object.assign({}, data, {});
+        this.loaded = true;
+      });
       // });
     },
 

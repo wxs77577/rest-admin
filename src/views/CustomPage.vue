@@ -1,5 +1,5 @@
 <template>
-  <component :is="name" v-if="name"></component>
+  <component :is="page" v-if="page"></component>
 </template>
 <style>
 .nopadding {
@@ -17,16 +17,11 @@ export default {
     return {
       loaded: false,
       name: null,
-      page: {
-        data: {}
-      }
+      page: false
     };
   },
 
   computed: {
-    data() {
-      return this.page.data;
-    },
     uri() {
       return this.$route.params.uri.replace(/\./g, "/");
     }
@@ -44,12 +39,13 @@ export default {
       // new Vue(this.page).$mount(this.$refs.out, true);
       this.loaded = false
       this.name = 'page-' + (new Date()).getTime().toString()
-      Vue.component(this.name, (resolve, reject) => {
+      // Vue.component(this.name, (resolve, reject) => {
         this.$http
           .get(this.uri)
           .then(({ data }) => {
             const rawData = Object.assign({}, data.data)
             data.data = () => rawData
+            data.name = 'custom-page-' + (new Date).getTime()
             if (data.methods) {
               data.methods = _.mapValues(data.methods, v => new Function(...v));
             }
@@ -65,12 +61,8 @@ export default {
             
             this.page = Object.assign({}, data, {});
             this.loaded = true
-            return resolve(data);
           })
-          .catch(err => {
-            return reject(err);
-          });
-      });
+      // });
     },
 
     onSuccess(data) {

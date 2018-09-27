@@ -53,6 +53,7 @@ export default {
         data.computed = mapValues(data.computed, wrapFunction);
         data.created = data.created ? wrapFunction(data.created) : null;
         data.mounted = data.mounted ? wrapFunction(data.mounted) : null;
+        data.watch = data.watch ? wrapFunction(data.watch) : null;
 
         this.page = Object.assign({}, data, {});
         this.loaded = true;

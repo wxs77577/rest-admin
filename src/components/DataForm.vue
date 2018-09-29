@@ -67,7 +67,7 @@ export default {
       return url
     },
     formUri() {
-      let url = this.resource + "/" + this.formPath + "/" + (this.id || "");
+      let url = this.resource + "/" + this.formPath + "?id=" + (this.id || "");
       return url;
     },
     isNew() {

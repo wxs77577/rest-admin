@@ -130,6 +130,10 @@ export default {
       type: Function,
       required: false
     },
+    beforeSubmit: {
+      type: Function,
+      required: false
+    },
     action: {},
     method: {
       default: "post"
@@ -233,6 +237,12 @@ export default {
       this.$refs.submitButton.click();
     },
     handleSubmit() {
+      if (this.beforeSubmit) {
+        const ret = this.beforeSubmit(this.model)
+        if (ret === false) {
+          return false
+        }
+      }
       if (this.submitRawForm) {
         this.$refs.form.submit();
         return true;

@@ -191,7 +191,7 @@ export default {
     },
     with() {
       return _.filter(
-        _.map(this.fields, v => v.ref && v.ref.split(".").shift())
+        _.map(this.fields, v => v.ref && v.ref.split(".").slice(0, -1).join('.'))
       );
     },
     searchUri() {
@@ -322,7 +322,8 @@ export default {
     },
     searchAndExport() {
       const query = JSON.stringify({
-        where: _.clone(this.searchModel)
+        where: _.clone(this.searchModel),
+        with: _.clone(this.with)
       });
       this.iframeSrc = "";
       setTimeout(() => {

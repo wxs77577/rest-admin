@@ -18,6 +18,8 @@ Vue.component('b-table-builder', TableBuilder)
 import AvatarCropper from "./components/AvatarCropper.vue"
 Vue.component('avatar-cropper', AvatarCropper)
 
+import CustomComponet from './components/CustomComponent.vue'
+Vue.component('custom-component', CustomComponet)
 
 
 export default {

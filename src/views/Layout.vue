@@ -12,7 +12,8 @@
           </li>
         </ol>
         <div class="container-fluid">
-          <header v-if="$store.state.site.header" v-html="$store.state.site.header"></header>
+          
+          <custom-component :config="$store.state.site.header"></custom-component>
 
           <div class="card1 page-container">
             <div class="card-header" v-if="$store.state.site.page_header">{{$store.state.site.page_header}}</div>

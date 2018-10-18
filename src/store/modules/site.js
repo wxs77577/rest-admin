@@ -2,6 +2,7 @@ import types from '../types'
 import menu from '../../menu'
 import _ from 'lodash'
 import http from '../../http'
+import Vue from 'vue'
 
 export default {
   state: {
@@ -20,10 +21,11 @@ export default {
     css: [],
     js: [],
     skin: '',
-    header: '',
+    header: null,
     grid_style: 1,
     sidebar_userinfo: true,
     page_header: '',
+    components: []
   },
   mutations: {
     [types.SET_SITE](state, data) {

@@ -1,5 +1,5 @@
 <template>
-  <component :is="page" v-if="page"></component>
+  <custom-component :config="page" v-if="page"></custom-component>
 </template>
 <style>
 .nopadding {
@@ -7,14 +7,15 @@
 }
 </style>
 <script>
+
+
 export default {
-  components: {},
   props: {},
   data() {
     return {
       loaded: false,
       name: null,
-      page: false
+      page: null
     };
   },
 
@@ -32,33 +33,10 @@ export default {
     },
     render() {},
     async fetchPage() {
-      // this.$refs.out.innerHTML = "";
-      // new Vue(this.page).$mount(this.$refs.out, true);
-      this.loaded = false;
-      this.name = "page-" + new Date().getTime().toString();
-      // Vue.component(this.name, (resolve, reject) => {
       this.$http.get(this.uri).then(({ data }) => {
-        const rawData = Object.assign({}, data.data);
-        data.data = () => rawData;
-        data.name = "custom-page-" + new Date().getTime();
-        const wrapFunction = v => new Function(...v);
-        const mapValues = (obj = {}) => {
-          return Object.entries(obj).reduce((acc, [k, v]) => {
-            acc[k] = wrapFunction(v);
-            return acc;
-          }, {});
-        };
-
-        data.methods = mapValues(data.methods, wrapFunction);
-        data.computed = mapValues(data.computed, wrapFunction);
-        data.created = data.created ? wrapFunction(data.created) : null;
-        data.mounted = data.mounted ? wrapFunction(data.mounted) : null;
-        data.watch = data.watch ? wrapFunction(data.watch) : null;
-
-        this.page = Object.assign({}, data, {});
-        this.loaded = true;
+        data.name = "custom-page-" + new Date().getTime().toString();
+        this.page = Object.assign({}, data)
       });
-      // });
     },
 
     onSuccess(data) {

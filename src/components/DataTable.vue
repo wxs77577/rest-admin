@@ -198,7 +198,7 @@ export default {
       return this.resource;
     },
     resourceUri() {
-      return this.resource;
+      return [this.site.resource_prefix, this.resource].map(v => v.trim('/')).join('/');
     },
     gridUri() {
       return this.resource + "/" + this.gridPath;
@@ -238,6 +238,11 @@ export default {
     }
   },
   watch: {
+    "site.fetched"(val){
+      if (val) {
+        this.fetchGrid(true)
+      }
+    },
     "$route.params.resource"() {
       this.inputPage = 1
       this.pause = true;
@@ -333,6 +338,12 @@ export default {
       }, 50);
     },
     fetchGrid(fetchData = false) {
+      if (this.$store.state.site.use_field_apis === false) {
+        this.pause = false;
+        this.applyQuery();
+        this.fetch();
+        return
+      }
       this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
@@ -405,8 +416,9 @@ export default {
       this.fetch();
     }
   },
+  
   mounted() {
-    this.fetchGrid(true);
+    // this.fetchGrid(true);
 
     // console.log('mounted');
   },

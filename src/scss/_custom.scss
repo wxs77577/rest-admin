@@ -92,7 +92,10 @@ input.input{
   box-shadow: none !important;
 }
 [class*="btn"], .page-link{
-  // border-radius: $border-radius !important;
+  
+}
+.page-link {
+  border-color: #eee !important;
 }
 .mx-datepicker{
   min-width: inherit !important;
@@ -103,9 +106,7 @@ input.input{
   border-radius: $border-radius !important;
 }
 
-.card-body .btn{
-  margin:2px;
-}
+
 .nav-tabs .nav-item{
   margin-bottom: 0 !important;
 }
@@ -124,6 +125,6 @@ input.input{
   cursor: pointer;
 }
 .page-container{
-  margin: 2em;
+  // margin: 2em;
   padding-bottom: 3em;
 }

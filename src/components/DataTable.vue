@@ -2,16 +2,16 @@
   
     <div class="data-table">
       <div v-if="site.grid_style === 1">
-        <div class="py-1">
-          <b-btn :to="resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
+        <div class="pb-3">
+          <b-btn class="mr-2" :to="'/' + resourceUri + '/create'" variant="secondary" v-if="_.get(actions,'toolbar.create') !== false">
           <i class="icon-plus"></i>
           {{$t('actions.create')}}
           </b-btn>
-          <b-btn @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
+          <b-btn class="mr-2" @click="fetchGrid" variant="success" v-if="_.get(actions, 'toolbar.reload') !== false">
           <i class="icon-reload"></i>
           {{$t('actions.reload')}}
           </b-btn>
-          <b-btn v-for="button in _.get(actions, 'toolbar.extra', [])" 
+          <b-btn class="mr-2" v-for="button in _.get(actions, 'toolbar.extra', [])" 
           :key="button.label"
           v-bind="button">
             {{button.label}}
@@ -87,16 +87,16 @@
         </template>
         
         <template slot="_actions" slot-scope="row" >
-          <b-btn size="sm" v-for="(button, key) in _.get(actions, 'addon')" :key="key" v-bind="button">{{button.label}}</b-btn>
-          <b-btn size="sm" variant="success" @click.stop="show(row.item)" v-if="_.get(actions, 'buttons.show') !== false">
+          <b-btn size="sm" class="mr-2" v-for="(button, key) in _.get(actions, 'addon')" :key="key" v-bind="button">{{button.label}}</b-btn>
+          <b-btn size="sm" class="mr-2" variant="success" @click.stop="show(row.item)" v-if="_.get(actions, 'buttons.show') !== false">
             <i class="icon-eye"></i>
             {{$t('actions.view')}}
           </b-btn>
-          <b-btn size="sm" variant="primary" @click.stop="edit(row.item)" v-if="_.get(actions, 'buttons.edit') !== false">
+          <b-btn size="sm" class="mr-2" variant="primary" @click.stop="edit(row.item)" v-if="_.get(actions, 'buttons.edit') !== false">
             <i class="icon-pencil"></i>
             {{$t('actions.edit')}}
           </b-btn>
-          <b-btn size="sm" variant="second" @click.stop="remove(row.item)" v-if="_.get(actions, 'buttons.delete') !== false">
+          <b-btn size="sm" class="mr-2" variant="second" @click.stop="remove(row.item)" v-if="_.get(actions, 'buttons.delete') !== false">
             <i class="icon-trash"></i>
             {{$t('actions.delete')}}
           </b-btn>
@@ -201,7 +201,7 @@ export default {
       return [this.site.resource_prefix, this.resource].map(v => v.trim('/')).join('/');
     },
     gridUri() {
-      return this.resource + "/" + this.gridPath;
+      return [this.site.resource_prefix, this.resource, this.gridPath].filter(v => v).join('/');
     },
     sort: {
       get() {
@@ -301,6 +301,7 @@ export default {
       if (this.pause) {
         return;
       }
+      this.pause = true
       this.$http
         .get(this.resourceUri, {
           params: {
@@ -323,6 +324,7 @@ export default {
           this.description = data.description;
           this.totalRows = total;
           this.perPage = perPage;
+          this.pause = false
         });
     },
     searchAndExport() {
@@ -338,12 +340,12 @@ export default {
       }, 50);
     },
     fetchGrid(fetchData = false) {
-      if (this.$store.state.site.use_field_apis === false) {
-        this.pause = false;
-        this.applyQuery();
-        this.fetch();
-        return
-      }
+      // if (this.$store.state.site.use_field_apis === false) {
+      //   this.pause = false;
+      //   this.applyQuery();
+      //   this.fetch();
+      //   return
+      // }
       this.query = {};
       this.$http.get(this.gridUri).then(({ data }) => {
         this.fields = data.fields;
@@ -418,7 +420,7 @@ export default {
   },
   
   mounted() {
-    // this.fetchGrid(true);
+    this.site.fetched && this.fetchGrid(true);
 
     // console.log('mounted');
   },

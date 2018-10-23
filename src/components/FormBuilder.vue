@@ -58,8 +58,8 @@
       
 
       <slot name="actions" v-if="!subForm">
-        <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
-        <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        <b-button type="submit" variant="primary" class="mr-2" ref="submitButton">{{submitText}}</b-button>
+        <b-button type="button" variant="secondary" class="mr-2" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
     </component>
   </div>

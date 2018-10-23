@@ -15,9 +15,9 @@
           
           <custom-component :config="$store.state.site.header"></custom-component>
 
-          <div class="card1 page-container">
+          <div class="card page-container">
             <div class="card-header" v-if="$store.state.site.page_header">{{$store.state.site.page_header}}</div>
-            <div class="card-body1 page-body" >
+            <div class="card-body page-body" >
               <router-view class="animated fadeIn" />
             </div>
           </div>

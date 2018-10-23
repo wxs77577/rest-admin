@@ -1,20 +1,31 @@
 <template>
   <!-- <component :is="tag" :header="header"> -->
-    <div class="data-form">
-      <div class="row d-none">
-        <div class="col col-md-8">
-          <legend v-if="model[$config.primaryKey] && false">{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
-        </div>
-        <div class="col col-md-4 text-right hidden-sm-down">
-          <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
-          <b-btn variant="primary" @click="$refs.form.submitForm()">{{$t('actions.save')}}</b-btn>
-        </div>
+  <div class="data-form">
+    <div class="row d-none">
+      <div class="col col-md-8">
+        <legend
+          v-if="model[$config.primaryKey] && false"
+        >{{$t('actions.edit')}}: {{model[$config.primaryKey]}}</legend>
       </div>
-      <b-form-builder :languages="$store.state.site.languages" group-by="group" 
-      v-if="loaded" :auth="auth" :layout="layout" :fields="fields" ref="form" 
-      v-model="model" :action="resourceUri" :method="method" @success="onSuccess">
-      </b-form-builder>
+      <div class="col col-md-4 text-right hidden-sm-down">
+        <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
+        <b-btn variant="primary" @click="$refs.form.submitForm()">{{$t('actions.save')}}</b-btn>
+      </div>
     </div>
+    <b-form-builder
+      :languages="$store.state.site.languages"
+      group-by="group"
+      v-if="loaded"
+      :auth="auth"
+      :layout="layout"
+      :fields="fields"
+      ref="form"
+      v-model="model"
+      :action="resourceUri"
+      :method="method"
+      @success="onSuccess"
+    ></b-form-builder>
+  </div>
   <!-- </component> -->
 </template>
 
@@ -55,19 +66,29 @@ export default {
     };
   },
   watch: {
-    id: 'fetchForm'
+    id: "fetchForm",
+    "site.fetched"(val){
+      if (val) {
+        this.fetchForm(true)
+      }
+    },
   },
   computed: {
     resourceUri() {
-      let url = this.resource + "/" + this.id
-      let group = this.$route.params.group
+      let url = [this.site.resource_prefix, this.resource, this.id]
+        .filter(v => v)
+        .join("/");
+      let group = this.$route.params.group;
       if (group) {
-        url += '?group=' + group
+        url += "?group=" + group;
       }
-      return url
+      return url;
     },
     formUri() {
-      let url = this.resource + "/" + this.formPath + "?id=" + (this.id || "");
+      let url = [this.site.resource_prefix, this.resource, this.formPath]
+        .filter(v => v)
+        .join("/");
+      url += "?id=" + (this.id || "");
       return url;
     },
     isNew() {
@@ -81,13 +102,13 @@ export default {
         _.map(this.fields, v => v.ref && v.ref.split(".").shift())
       );
     },
-    ...mapState(["nav", "auth"]),
+    ...mapState(["nav", "auth", "site"]),
     ...mapGetters(["currentMenu"])
   },
   methods: {
     fetch() {
       if (this.isNew) {
-        this.model = {}
+        this.model = {};
         this.loaded = true;
         return;
       }
@@ -112,7 +133,7 @@ export default {
         .then(({ data }) => {
           this.fields = data.fields;
           this.layout = data.layout;
-          this.redirect = data.redirect
+          this.redirect = data.redirect;
           if (data.header) {
             this.header = data.header;
           }
@@ -125,17 +146,19 @@ export default {
 
     onSuccess() {
       if (this.redirect === false) {
-        this.fetchForm()
+        this.fetchForm();
       } else if (this.redirect === -1 || !this.redirect) {
         this.$router.go(-1);
       } else {
-        this.$router.go(this.redirect)
+        this.$router.go(this.redirect);
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.site.fetched && this.fetchForm()
+  },
   created() {
-    this.fetchForm();
+    // this.fetchForm();
   }
 };
 </script>

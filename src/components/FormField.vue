@@ -342,6 +342,8 @@ export default {
 
         // "info",
       ];
+      const cropperClass = _.get(this.field, 'cropper.icon', "fa fa-crop text-danger")
+      
       Vue.use(VueHtml5Editor, {
         name: "b-html-editor",
         language,
@@ -349,7 +351,7 @@ export default {
         modules: [
           {
             name: "cropper",
-            icon: "fa fa-crop text-danger",
+            icon: cropperClass,
             i18n: "cropper",
             show: true,
             handler: function(editor) {

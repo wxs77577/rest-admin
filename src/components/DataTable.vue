@@ -198,7 +198,7 @@ export default {
       return this.resource;
     },
     resourceUri() {
-      return [this.site.resource_prefix, this.resource].map(v => v.trim('/')).join('/');
+      return [this.site.resource_prefix, this.resource].map(v => v.trim('/')).filter(v => v).join('/');
     },
     gridUri() {
       return [this.site.resource_prefix, this.resource, this.gridPath].filter(v => v).join('/');

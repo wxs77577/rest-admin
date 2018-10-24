@@ -1,5 +1,7 @@
 <template>
-  <component :is="component" v-if="component"></component>
+  <div>
+    <component :is="component" ></component>
+  </div>
 </template>
 
 <script>
@@ -23,6 +25,7 @@ export default {
       const config = this.config;
       const rawData = Object.assign({}, config.data);
       component.data = rawData;
+      component.name = config.name
       if (typeof component.data !== "function") {
         component.data = function() {
           return Object.assign({}, rawData);

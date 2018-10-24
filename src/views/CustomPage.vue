@@ -1,5 +1,7 @@
 <template>
-  <custom-component :config="page" v-if="page"></custom-component>
+  <div>
+    <custom-component :config="page"></custom-component>
+  </div>
 </template>
 <style>
 .nopadding {

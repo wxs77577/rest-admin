@@ -110,6 +110,7 @@ export default {
       default: null
     },
     value: {
+      type: Object,
       default() {
         return {};
       }
@@ -163,7 +164,7 @@ export default {
   },
   watch: {
     value(val) {
-      this.model = val;
+      this.model = Object.assign({}, val);
     },
     
   },
@@ -203,7 +204,7 @@ export default {
     setValue(name, value, lang) {
       
       if (!this.fields[name].multilingual) {
-        // return this.$set(this.model, name, value);
+        return this.$set(this.model, name, value);
         _.set(this.model, name, value);
       } else if (lang && !_.isObject(this.model[name])) {
         _.set(this.model, name, {});
@@ -272,7 +273,7 @@ export default {
     }
   },
   mounted() {
-    this.model = this.value;
+    this.model = Object.assign({}, this.value);
     
     for (let [k, v] of Object.entries(this.fields)) {
       if (v.type === "object" && !this.model[k]) {

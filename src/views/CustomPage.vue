@@ -55,7 +55,9 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    
+  },
   created() {
     this.fetchPage();
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="component"></component>
+    <component :is="component" v-if="component"></component>
   </div>
 </template>
 
@@ -11,13 +11,24 @@ export default {
       required: true
     }
   },
-  computed: {
-    component() {
+  data(){
+    return {
+      component: null
+    }
+  },
+  mounted() {
+
+  },
+  watch: {
+    config: 'setComponent'
+  },
+  methods: {
+    setComponent() {
       if (!this.config) {
-        return null;
+        return this.component = null;
       }
       if (typeof this.config === 'string') {
-        return {
+        return this.component = {
           template: this.config
         }
       }
@@ -51,7 +62,7 @@ export default {
       component.watch = config.watch ? wrapFunction(config.watch) : null;
       component.template = config.template
       component.render = wrapFunction(config.render)
-      return Object.assign({}, component, {});
+      this.component = Object.assign({}, component, {});
     }
   }
 };

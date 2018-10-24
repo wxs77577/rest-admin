@@ -36,7 +36,7 @@ export default {
     render() {},
     async fetchPage() {
       this.$http.get(this.uri).then(({ data }) => {
-        data.name = "custom-page-" + new Date().getTime().toString();
+        data.name = "server-page-" + new Date().getTime().toString();
         this.page = Object.assign({}, data)
       });
     },

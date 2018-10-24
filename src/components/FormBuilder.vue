@@ -201,17 +201,16 @@ export default {
       return name
     },
     setValue(name, value, lang) {
-      // console.log('setValue', name, value, lang, this.isSubForm)
+      
       if (!this.fields[name].multilingual) {
-        return this.$set(this.model, name, value);
-        // return _.set(this.model, name, value);
+        // return this.$set(this.model, name, value);
+        _.set(this.model, name, value);
+      } else if (lang && !_.isObject(this.model[name])) {
+        _.set(this.model, name, {});
+      } else {
+        _.set(this.model[name], lang, value);
       }
-      if (lang && !_.isObject(this.model[name])) {
-        this.$set(this.model, name, {});
-      }
-      this.$set(this.model[name], lang, value);
-      // _.set(this.model, key, value);
-      // console.log(key, value)
+      return this.$emit('input', this.model)
     },
     titlize() {},
     isShowField(field) {
@@ -275,10 +274,6 @@ export default {
   mounted() {
     this.model = this.value;
     
-    this.$watch('model', val => {
-      this.$emit('input', val)
-    }, {deep: true})
-
     for (let [k, v] of Object.entries(this.fields)) {
       if (v.type === "object" && !this.model[k]) {
         this.$set(this.model, k, {});

@@ -117,7 +117,8 @@ export default {
       return 'long'
     },
     value() {
-      let value = _.get(this.model || {},this.name);
+      const path = this.name.replace(/\]/g, '').replace(/\[/g, '.').split('.').pop()
+      let value = _.get(this.model || {}, path);
       if (!value) {
         return value
       }

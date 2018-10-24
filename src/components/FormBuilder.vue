@@ -6,7 +6,8 @@
 
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name" v-if="field.label !== false">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" v-model="model[name]" :id="getFieldId(name)" 
+        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" 
+        @input="setValue(name, arguments[0], arguments[1])" :value="model[name]" :id="getFieldId(name)" 
         :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
 
@@ -202,14 +203,13 @@ export default {
       return name
     },
     setValue(name, value, lang) {
-      
       if (!this.fields[name].multilingual) {
-        return this.$set(this.model, name, value);
-        _.set(this.model, name, value);
+        this.$set(this.model, name, value);
+        // _.set(this.model, name, value);
       } else if (lang && !_.isObject(this.model[name])) {
-        _.set(this.model, name, {});
+        this.$set(this.model, name, {});
       } else {
-        _.set(this.model[name], lang, value);
+        this.$set(this.model[name], lang, value);
       }
       return this.$emit('input', this.model)
     },

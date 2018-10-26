@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="languages mb-1" v-if="field.multilingual">
+    <div class="languages mb-1" v-if="isIntl">
       <span 
       class="badge mr-1 mb-0 pointer" :class="`badge-${currentLanguage === key ? 'primary' : 'secondary'}`"
       v-for="(lang, key) in languages" 
@@ -278,6 +278,9 @@ export default {
         this.field.is_table
       );
     },
+    isIntl(){
+      return this.field.intl || this.field.multilingual
+    },
     model: {
       get() {
         const isArray =
@@ -294,8 +297,8 @@ export default {
             ret = {};
           }
         }
-        if (this.field.multilingual) {
-          // console.log(this.name, ret, this.currentLanguage)
+        if (this.isIntl) {
+          console.log(this.name, ret, this.currentLanguage)
           return _.get(ret, this.currentLanguage, "");
         }
         return ret;
@@ -312,7 +315,7 @@ export default {
       this.field.type == "array" ||
       this.field.is_table;
     return {
-      currentLanguage: "en",
+      currentLanguage: this.field.currentLanguage || 'en',
       options: this.field.options || [],
       selectedValue: isArray && !this.value ? [] : this.value
     };

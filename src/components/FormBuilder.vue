@@ -203,7 +203,8 @@ export default {
       return name
     },
     setValue(name, value, lang) {
-      if (!this.fields[name].multilingual) {
+      const isIntl = this.fields[name].multilingual || this.fields[name].intl
+      if (!isIntl) {
         this.$set(this.model, name, value);
         // _.set(this.model, name, value);
       } else if (lang && !_.isObject(this.model[name])) {

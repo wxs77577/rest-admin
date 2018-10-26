@@ -42,7 +42,7 @@
       <template v-if="field.multiple">
         {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join(',')}}
       </template>
-      <template v-else-if="field.multilingual">
+      <template v-else-if="isIntl">
         {{_.get(model || {}, field.ref.split('.').concat([lang]))}}
       </template>
       <template v-else>
@@ -116,6 +116,9 @@ export default {
     timeFormat() {
       return 'long'
     },
+    isIntl(){
+      return this.field.intl || this.field.multilingual
+    },
     value() {
       const path = this.name.replace(/\]/g, '').replace(/\[/g, '.').split('.').pop()
       let value = _.get(this.model || {}, path);
@@ -129,7 +132,7 @@ export default {
         );
         return options[value];
       }
-      if (this.lang && this.field.multilingual) {
+      if (this.lang && this.isIntl) {
         return _.get(value, this.lang, null)
       }
       return value;

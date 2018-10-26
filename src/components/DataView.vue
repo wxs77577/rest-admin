@@ -10,12 +10,12 @@
               <div v-if="['array'].includes(field.type)">
                 <b-table :items="model[key]" :fields="field.fields">
                   <template v-for="(child, k) in field.fields" :slot="k" slot-scope="row">
-                    <b-data-value :field="child" :name="k" :key="k" :model="row.item" />
+                    <b-data-value :lang="currentLanguage" :field="child" :name="k" :key="k" :model="row.item" />
                   </template>
                 </b-table>
               </div>
               <div v-else>
-                <b-data-value :field="field" :name="key" :model="model" />
+                <b-data-value :lang="currentLanguage" :field="field" :name="key" :model="model" />
               </div>
             </td>
           </tr>
@@ -65,10 +65,17 @@ export default {
 
   computed: {
     resourceUri() {
-      return this.resource + "/" + this.id;
+      let url = [this.site.resource_prefix, this.resource, this.id]
+        .filter(v => v)
+        .join("/");
+      return url;
     },
     viewUri() {
-      return this.resource + "/" + this.viewPath;
+      let url = [this.site.resource_prefix, this.resource, this.viewPath]
+        .filter(v => v)
+        .join("/");
+      url += "?id=" + (this.id || "");
+      return url;
     },
     with() {
       return _.filter(
@@ -77,10 +84,10 @@ export default {
     },
 
     ...mapState(['site']),
-    ...mapGetters(['currentMenu']),
+    ...mapGetters(["currentMenu", "currentLanguage"]),
     header() {
       return `
-        ${this.currentMenu.name}
+        ''
         <small> ${this.resource.toUpperCase()} </small>
       `
     },
@@ -103,11 +110,19 @@ export default {
       });
     },
   },
+  watch: {
+    id: "fetchForm",
+    "site.fetched"(val){
+      if (val) {
+        this.fetchView(true)
+      }
+    },
+  },
   mounted() {
 
   },
   created() {
-    this.fetchView();
+    this.site.fetched && this.fetchView();
 
 
   }

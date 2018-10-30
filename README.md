@@ -17,7 +17,7 @@ REST-ADMIN is trying to make it easier to built an admin dashboard for any backe
 |--|--|
 |![](./screenshots/1.png) Login Page|![](./screenshots/2.png) Data Table for users|
 |![](./screenshots/3.png) Data Table for posts|![](./screenshots/4.png) Data Form for post|
-|![](./screenshots/tfs-qrcode.png) Wechat Group|![](./screenshots/tfs-logo.png) Free Videos|
+|![](./screenshots/tfs-qrcode.png) Wechat Group (Search Wechat `johnny77577` to join in)|![](./screenshots/tfs-logo.png) Free Videos|
 ## Features
 - Based on the latest Bootstrap(v4) and Vue.js, it means you can easily change any skin based on bootstrap css framework.
 - Plain vue.js project, can be used for any backend restful api.

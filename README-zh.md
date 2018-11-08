@@ -1,5 +1,7 @@
 # REST-ADMIN
 
+### 如果觉得有用，请在爱发电上赞助我： https://afdian.net/@johnny ，让我可以分出更多精力来完善它。
+
 > 一个基于 Vue.js 和 Boostrap 4的后台UI.
 
 REST-ADMIN试图让你在构建后台管理界面的时候更轻松点，所有你需要做的仅仅是提供一个后台服务的RESTFul API而已。
@@ -13,7 +15,7 @@ REST-ADMIN试图让你在构建后台管理界面的时候更轻松点，所有�
 |--|--|
 |![](./screenshots/1.png) 登录|![](./screenshots/2.png) 用户列表|
 |![](./screenshots/3.png) 博客列表|![](./screenshots/4.png) 博客编辑表单|
-|![](./screenshots/tfs-qrcode.png) 全栈之巅微信群|![](./screenshots/tfs-logo.png) 免费视频教程-《全栈之巅》微信小程序|
+|![](./screenshots/tfs-qrcode.png) 全栈之巅微信群 <br> 加微信拉群: johnny77577|![](./screenshots/tfs-logo.png) 免费视频教程-《全栈之巅》微信小程序|
 
 ## 功能
 - 基于最新的Bootstrap和VueJs，这意味着你可以方便地切换各种基于bootstrap框架的CSS皮肤

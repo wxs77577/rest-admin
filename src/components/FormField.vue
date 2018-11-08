@@ -1,152 +1,264 @@
 <template>
   <div>
     <div class="languages mb-1" v-if="isIntl">
-      <span 
-      class="badge mr-1 mb-0 pointer" :class="`badge-${currentLanguage === key ? 'primary' : 'secondary'}`"
-      v-for="(lang, key) in languages" 
-      :key="key" 
-      @click="changeLanguage(key, name)">{{lang}}</span>
+      <span
+        class="badge mr-1 mb-0 pointer"
+        :class="`badge-${currentLanguage === key ? 'primary' : 'secondary'}`"
+        v-for="(lang, key) in languages"
+        :key="key"
+        @click="changeLanguage(key, name)"
+      >{{lang}}</span>
     </div>
-    <b-form-select v-if="['select'].includes(field.type)" 
-   :formatter="getFormatter(field, value)" :id="id" :options="options"
-   v-bind="field" :value="selectedValue" @input="handleSelect" :name="name" ></b-form-select> 
-   
-  <div v-else-if="['select2'].includes(field.type)">
-    <b-select :name="name" @search="getAjaxOptions" label="text" v-bind="field" :options="options"
-   :value="selectedValue" @input="handleSelect" :placeholder="field.placeholder || ''" selectLabel="" />
-  </div>
-  <b-tree-select :normalizer="treeSelectNormalizer" value-consists-of="LEAF_PRIORITY" v-else-if="['tree', 'treeselect'].includes(field.type)" v-bind="field" v-model="model" />
-  <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
-  <b-date-picker v-else-if="['date', 'datetime'].includes(field.type)" :name="name" v-bind="field" v-model="model" />
-
-  <b-form-radio-group v-else-if="['radiolist'].includes(field.type)" :name="name" v-bind="field" v-model="model">
-    <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
-  </b-form-radio-group>
-
-  <b-form-checkbox-group :name="name" v-else-if="['checkboxlist'].includes(field.type)" v-bind="field" v-model="model">
-    <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
-  </b-form-checkbox-group>
-
-  <div v-else-if="['checkboxtable'].includes(field.type)" class="checkboxtable">
-    <div v-for="(options, group) in groupedOptions" :key="group" class="mt-1">
-      <b-form-checkbox-group :name="name" :options="options" v-bind="field" v-model="model"></b-form-checkbox-group>
+    <b-form-select
+      v-if="['select'].includes(field.type)"
+      :formatter="getFormatter(field, value)"
+      :id="id"
+      :options="options"
+      v-bind="field"
+      :value="selectedValue"
+      @input="handleSelect"
+      :name="name"
+    ></b-form-select>
+    <div v-else-if="['select2'].includes(field.type)">
+      <b-select
+        :name="name"
+        @search="getAjaxOptions"
+        label="text"
+        v-bind="field"
+        :options="options"
+        :value="selectedValue"
+        @input="handleSelect"
+        :placeholder="field.placeholder || ''"
+        selectLabel
+      />
     </div>
-  </div>
-
-  <b-form-textarea :name="name" v-else-if="['textarea'].includes(field.type)" :id="id" v-model="model" v-bind="field" :rows="field.rows || 3" />
-
-  <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
-  <component :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'" v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
-  :field="field" v-model="model" :id="id" :name="name" :parent="parent" />
-  <div v-else-if="['switch', 'checkbox'].includes(field.type)">
-    <b-switch variant="success" v-bind="field" pill type="3d" :id="id" v-model="model" />
-  </div>
-
-  <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
-  <div v-else-if="['wysiwyg', 'html'].includes(field.type)">
-    <!-- <b-btn :id="`cropper_${id}`" variant="success">图片裁剪助手</b-btn> -->
-    <avatar-cropper v-if="field.cropper" 
-    :trigger="`#cropper_${id}`"
-    v-bind="cropperOptions"
-    ref="cropper"
-    @uploaded="cropperUploaded"
-    @completed="cropperUploadComplete"
+    <b-tree-select
+      :normalizer="treeSelectNormalizer"
+      value-consists-of="LEAF_PRIORITY"
+      v-else-if="['tree', 'treeselect'].includes(field.type)"
+      v-bind="field"
+      v-model="model"
     />
+    <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
 
-    <b-html-editor ref="editor" :state="state"  :id="id" v-bind="field" v-model="model"
-    :content="model" @open-cropper="$refs.cropper && $refs.cropper.pickImage()" @change="htmlEditorInput" @keyup.native.enter="wrapFirstLine" />
-    <!-- <b-cropper v-if="field.showCropper" ref="cropper" ></b-cropper> -->
-    
-  </div>
-  
-
-  <div v-else-if="['json'].includes(field.type)">
-    <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5" />
-     <!-- <v-jsoneditor v-if="model" :value="JSON.parse(model)" 
-     @input="model = JSON.stringify(arguments[0])"
-     :options="{}" /> -->
-  </div>
-
-  <div v-else-if="field.fields">
-    <div v-if="['array'].includes(field.type) || field.is_array || parent.is_array">
-
-      <b-table hover bordered :items="model" :fields="myFields" v-if="field.is_table || parent.is_table">
-        <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
-          <b-form-field :parent="parent" v-model="model[row.index][k]" :field="child"
-          :name="`input_${row.index}_${k}`" :key="`input_${row.index}_${k}`" :id="`input_${row.index}_${k}`" />
-        </template>
-        <template slot="HEAD__actions" slot-scope="row">
-          <b-btn size="sm" @click="model.push({});">
-            <i class="icon-plus"></i> {{$t('actions.add')}}
-          </b-btn>
-        </template>
-        <template slot="_actions" slot-scope="row">
-          <b-btn size="sm" @click="model.splice(row.index + 1, 0, {});">
-            <i class="icon-plus"></i> {{$t('actions.add')}}
-          </b-btn>
-          <b-btn size="sm" @click="model.splice(row.index, 1);">
-            <i class="icon-trash"></i> {{$t('actions.delete')}}
-          </b-btn>
-        </template>
-      </b-table>
-      
-      <b-draggable v-model="model" v-else>
-        <transition-group tag="div" class="row">
-          <b-col v-for="(item, i) in model" :key="i" cols :lg="field.item_cols || 6">
-            <b-card>
-              <b-row slot="header" class="justify-content-between">
-                <b-col>No. {{i + 1}}</b-col>
-                <b-col right class="text-right">
-                  <b-btn size="sm" @click="model.splice(i, 1)">
-                    <i class="icon-trash"></i> {{$t('actions.delete')}}</b-btn>
-                </b-col>
-              </b-row>
-
-              <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${i}_${key}`">
-                <b-form-field v-model="model[i][key]" :parent="parent" :name="`${name}.${i}.${key}`" :field="child" :id="`input_${name}_${i}_${key}`" />
-              </b-form-group>
-            </b-card>
-          </b-col>
-          <b-col cols :lg="field.item_cols || 6" :key="-1" class="d-flex align-items-center justify-content-center">
-            <b-btn size="lg" class="p-5" block @click="model = !model? [] : model; model.push({})">
-              <i class="fa fa-plus"></i>
-            </b-btn>
-          </b-col>
-        </transition-group>
-      </b-draggable>
+    <b-date-picker
+      v-else-if="['date', 'datetime'].includes(field.type)"
+      :name="name"
+      v-bind="field"
+      v-model="model"
+    />
+    <b-form-radio-group
+      v-else-if="['radiolist'].includes(field.type)"
+      :name="name"
+      v-bind="field"
+      v-model="model"
+    >
+      <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
+    </b-form-radio-group>
+    <b-form-checkbox-group
+      :name="name"
+      v-else-if="['checkboxlist'].includes(field.type)"
+      v-bind="field"
+      v-model="model"
+    >
+      <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
+    </b-form-checkbox-group>
+    <div v-else-if="['checkboxtable'].includes(field.type)" class="checkboxtable">
+      <div v-for="(options, group) in groupedOptions" :key="group" class="mt-1">
+        <b-form-checkbox-group :name="name" :options="options" v-bind="field" v-model="model"></b-form-checkbox-group>
+      </div>
     </div>
+    <b-form-textarea
+      :name="name"
+      v-else-if="['textarea'].includes(field.type)"
+      :id="id"
+      v-model="model"
+      v-bind="field"
+      :rows="field.rows || 3"
+    />
+    <div v-else-if="['file-picker'].includes(field.type)">
+      <b-btn v-b-modal.file-manager>选择文件</b-btn>
+    </div>
+    <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
 
-    <div v-else-if="['object'].includes(field.type)">
-      <b-card>
-        <b-form-builder :sub-form="name || ''" v-model="model" :languages="languages" 
-         :fields="myFields" ref="subForm" ></b-form-builder>
+    <component
+      :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'"
+      v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
+      :field="field"
+      v-model="model"
+      :id="id"
+      :name="name"
+      :parent="parent"
+    />
+    <div v-else-if="['switch', 'checkbox'].includes(field.type)">
+      <b-switch variant="success" v-bind="field" pill type="3d" :id="id" v-model="model"/>
+    </div>
+    <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
 
-        <!-- <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
+    <div v-else-if="['wysiwyg', 'html'].includes(field.type)">
+      <!-- <b-btn :id="`cropper_${id}`" variant="success">图片裁剪助手</b-btn> -->
+      <avatar-cropper
+        v-if="field.cropper"
+        :trigger="`#cropper_${id}`"
+        v-bind="cropperOptions"
+        ref="cropper"
+        @uploaded="cropperUploaded"
+        @completed="cropperUploadComplete"
+      />
+      <b-html-editor
+        ref="editor"
+        :state="state"
+        :id="id"
+        v-bind="field"
+        v-model="model"
+        :content="model"
+        @open-cropper="$refs.cropper && $refs.cropper.pickImage()"
+        @change="htmlEditorInput"
+        @keyup.native.enter="wrapFirstLine"
+      />
+      <!-- <b-cropper v-if="field.showCropper" ref="cropper" ></b-cropper> -->
+    </div>
+    <div v-else-if="['json'].includes(field.type)">
+      <b-form-textarea :id="id" v-model="model" v-bind="field" :rows="field.rows || 5"/>
+      <!-- <v-jsoneditor v-if="model" :value="JSON.parse(model)" 
+     @input="model = JSON.stringify(arguments[0])"
+      :options="{}" />-->
+    </div>
+    <div v-else-if="field.fields">
+      <div v-if="['array'].includes(field.type) || field.is_array || parent.is_array">
+        <b-table
+          hover
+          bordered
+          :items="model"
+          :fields="myFields"
+          v-if="field.is_table || parent.is_table"
+        >
+          <template v-for="(child, k) in myFields" :slot="k" slot-scope="row">
+            <b-form-field
+              :parent="parent"
+              v-model="model[row.index][k]"
+              :field="child"
+              :name="`input_${row.index}_${k}`"
+              :key="`input_${row.index}_${k}`"
+              :id="`input_${row.index}_${k}`"
+            />
+          </template>
+          <template slot="HEAD__actions" slot-scope="row">
+            <b-btn size="sm" @click="model.push({});">
+              <i class="icon-plus"></i>
+              {{$t('actions.add')}}
+            </b-btn>
+          </template>
+          <template slot="_actions" slot-scope="row">
+            <b-btn size="sm" @click="model.splice(row.index + 1, 0, {});">
+              <i class="icon-plus"></i>
+              {{$t('actions.add')}}
+            </b-btn>
+            <b-btn size="sm" @click="model.splice(row.index, 1);">
+              <i class="icon-trash"></i>
+              {{$t('actions.delete')}}
+            </b-btn>
+          </template>
+        </b-table>
+        <b-draggable v-model="model" v-else>
+          <transition-group tag="div" class="row">
+            <b-col v-for="(item, i) in model" :key="i" cols="" :lg="field.item_cols || 6">
+              <b-card>
+                <b-row slot="header" class="justify-content-between">
+                  <b-col>No. {{i + 1}}</b-col>
+                  <b-col right class="text-right">
+                    <b-btn size="sm" @click="model.splice(i, 1)">
+                      <i class="icon-trash"></i>
+                      {{$t('actions.delete')}}
+                    </b-btn>
+                  </b-col>
+                </b-row>
+                <b-form-group
+                  v-for="(child, key) in myFields"
+                  :key="key"
+                  v-bind="child"
+                  :label-for="`input_${name}_${i}_${key}`"
+                >
+                  <b-form-field
+                    v-model="model[i][key]"
+                    :parent="parent"
+                    :name="`${name}.${i}.${key}`"
+                    :field="child"
+                    :id="`input_${name}_${i}_${key}`"
+                  />
+                </b-form-group>
+              </b-card>
+            </b-col>
+            <b-col
+              cols=""
+              :lg="field.item_cols || 6"
+              :key="-1"
+              class="d-flex align-items-center justify-content-center"
+            >
+              <b-btn
+                size="lg"
+                class="p-5"
+                block
+                @click="model = !model? [] : model; model.push({})"
+              >
+                <i class="fa fa-plus"></i>
+              </b-btn>
+            </b-col>
+          </transition-group>
+        </b-draggable>
+      </div>
+      <div v-else-if="['object'].includes(field.type)">
+        <b-card>
+          <b-form-builder
+            :sub-form="name || ''"
+            v-model="model"
+            :languages="languages"
+            :fields="myFields"
+            ref="subForm"
+          ></b-form-builder>
+          <!-- <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
           
           <b-form-field :value="_.get(model, `${key}`)"
           @input="model[key] = arguments[0]"
           :parent="parent" :name="`${name}_${key}`" :field="child" :id="`input_${name}_${key}`" />
-        </b-form-group> -->
-      </b-card>
+          </b-form-group>-->
+        </b-card>
+      </div>
+      <div v-else>
+        <b-form-group
+          v-for="(child, key) in myFields"
+          :key="key"
+          v-bind="child"
+          :label-for="`input_${name}_${key}`"
+        >
+          <b-form-field
+            v-model="model[key]"
+            :parent="parent"
+            :name="key"
+            :field="child"
+            :id="`input_${name}_${key}`"
+          />
+        </b-form-group>
+      </div>
     </div>
-    <div v-else>
-      <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
-        <b-form-field v-model="model[key]" :parent="parent" :name="key" :field="child" :id="`input_${name}_${key}`" />
-      </b-form-group>
-    </div>
-  </div>
-
-  <b-input-group v-else>
-    <b-input-group-prepend is-text v-if="field.prependIcon || field.prepend">
-      <i :class="field.prependIcon" v-if="field.prependIcon"></i>
-      <span v-else v-html="field.prepend"></span>
-    </b-input-group-prepend>
-    <b-form-input :state="state" :id="id" :name="name" v-bind="field" v-model="model" :formatter="getFormatter(field, value)" />
-    <b-input-group-append is-text v-if="field.appendIcon || field.append">
-      <i :class="field.appendIcon" v-if="field.appendIcon"></i>
-      <span v-else v-html="field.append"></span>
-    </b-input-group-append>
-  </b-input-group>
+    <b-input-group v-else>
+      <b-input-group-prepend is-text v-if="field.prependIcon || field.prepend">
+        <i :class="field.prependIcon" v-if="field.prependIcon"></i>
+        <span v-else v-html="field.prepend"></span>
+      </b-input-group-prepend>
+      <b-form-input
+        :state="state"
+        :id="id"
+        :name="name"
+        v-bind="field"
+        v-model="model"
+        :formatter="getFormatter(field, value)"
+      />
+      <b-input-group-append is-text v-if="field.appendIcon || field.append">
+        <i :class="field.appendIcon" v-if="field.appendIcon"></i>
+        <span v-else v-html="field.append"></span>
+      </b-input-group-append>
+    </b-input-group>
   </div>
 </template>
 <style>
@@ -209,7 +321,7 @@ export default {
         },
         "upload-form-name": "file",
         "upload-form-data": {
-          from: 'cropper'
+          from: "cropper"
         },
         "cropper-options": {
           viewMode: 2,
@@ -278,8 +390,8 @@ export default {
         this.field.is_table
       );
     },
-    isIntl(){
-      return this.field.intl || this.field.multilingual
+    isIntl() {
+      return this.field.intl || this.field.multilingual;
     },
     model: {
       get() {
@@ -298,7 +410,7 @@ export default {
           }
         }
         if (this.isIntl) {
-          console.log(this.name, ret, this.currentLanguage)
+          console.log(this.name, ret, this.currentLanguage);
           return _.get(ret, this.currentLanguage, "");
         }
         return ret;
@@ -315,7 +427,7 @@ export default {
       this.field.type == "array" ||
       this.field.is_table;
     return {
-      currentLanguage: this.field.currentLanguage || 'en',
+      currentLanguage: this.field.currentLanguage || "en",
       options: this.field.options || [],
       selectedValue: isArray && !this.value ? [] : this.value
     };
@@ -341,12 +453,16 @@ export default {
         "eraser",
         "undo",
         "full-screen",
-        "cropper",
+        "cropper"
 
         // "info",
       ];
-      const cropperClass = _.get(this.field, 'cropper.icon', "fa fa-crop text-danger")
-      
+      const cropperClass = _.get(
+        this.field,
+        "cropper.icon",
+        "fa fa-crop text-danger"
+      );
+
       Vue.use(VueHtml5Editor, {
         name: "b-html-editor",
         language,
@@ -415,9 +531,9 @@ export default {
     cropperUploaded(res) {
       this.$refs.editor.execCommand("insertHTML", `<img src="${res.url}" />`);
     },
-    cropperUploadComplete(data){
+    cropperUploadComplete(data) {
       if (data.message) {
-        this.$snotify.error(data.message)
+        this.$snotify.error(data.message);
       }
     },
     changeLanguage(lang) {

@@ -38,6 +38,11 @@
       </b-badge>
     </template>
 
+    <template v-else-if="field.refLabel">
+      <template>
+        {{_.get(model || {}, [name, ...field.refLabel.split('.')])}}
+      </template>
+    </template>
     <template v-else-if="field.ref">
       <template v-if="field.multiple">
         {{_.map(_.get(model || {}, field.ref.split('.')[0]), field.ref.split('.')[1]).join(',')}}

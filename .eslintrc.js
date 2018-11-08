@@ -1,10 +1,11 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true,
-        "commonjs": true
-    },
-    "extends": "eslint:recommended",
-    
-};
+  extends: [
+    // add more generic rulesets here, such as:
+    // 'eslint:recommended',
+    'plugin:vue/essential'
+  ],
+  rules: {
+    // override/add rules settings here, such as:
+    // 'vue/no-unused-vars': 'error'
+  }
+}

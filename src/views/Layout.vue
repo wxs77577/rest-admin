@@ -2,7 +2,7 @@
   <div class="app">
     <!--  -->
     <div class="app-body1">
-      <b-sidebar />
+      <b-sidebar/>
       <main class="main p-3">
         <b-loading :active="$store.state.loading" spinner="bar-fade-scale" style="height:100vh;"/>
         <ol class="breadcrumb" v-if="false">
@@ -12,22 +12,21 @@
           </li>
         </ol>
         <div class="container-fluid">
-          
           <custom-component :config="$store.state.site.header"></custom-component>
-
           <div class="card page-container">
-            <div class="card-header" v-if="$store.state.site.page_header">{{$store.state.site.page_header}}</div>
-            <div class="card-body page-body" >
-              <router-view class="animated fadeIn" />
+            <div
+              class="card-header"
+              v-if="$store.state.site.page_header"
+            >{{$store.state.site.page_header}}</div>
+            <div class="card-body page-body">
+              <router-view class="animated fadeIn"/>
             </div>
           </div>
-          
         </div>
       </main>
-
     </div>
     <b-footer v-if="$store.state.site.footer"/>
-
+    <!-- <b-file-manager></b-file-manager> -->
   </div>
 </template>
 
@@ -35,29 +34,28 @@
 import BHeader from "../components/Header";
 import BSidebar from "../components/Sidebar";
 import BFooter from "../components/Footer";
+// import BFileManager from "../components/FileManager";
 
 export default {
   components: {
     BHeader,
     BSidebar,
-    BFooter
+    BFooter,
+    // BFileManager
   },
   computed: {},
   data() {
     return {
       path: [],
-      header: '',
+      header: ""
     };
   },
-  watch: {
-
-  },
+  watch: {},
   created() {}
 };
 </script>
 
 <style>
-
 .sidebar-fixed .sidebar {
   height: 100%;
 }

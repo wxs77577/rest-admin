@@ -296,7 +296,8 @@ export default {
               .split(".")
               .slice(0, -1)
               .join(".")
-        ).concat(_.map(this.fields, (v, k) => (v.ref ? k : null)))
+        )
+        //.concat(_.map(this.fields, (v, k) => (v.ref ? k : null)))
       );
     },
     searchUri() {

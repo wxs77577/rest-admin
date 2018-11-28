@@ -8,6 +8,7 @@ const config = require('./config')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use('/static', express.static(__dirname + '/static'))
 app.get('/', (req, res) => {
   res.send({
     welcome: 'Test api for rest-admin is running.'
@@ -47,6 +48,9 @@ router.get('/site', (req, res) => res.send({
   })();
   </script>
   `,
+  css: [
+    `${req.protocol}://${req.host}/static/custom.css`
+  ],
   menu: [ //site menu
     {
       name: 'Home',

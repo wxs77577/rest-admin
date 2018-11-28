@@ -92,7 +92,7 @@ const products = {
       cols: 3, label: 'Categories', multiple: true, ref: 'categories.name',
       type: 'tree', options: findChildren(categories.data), sortable: true,
     },
-    slug: { cols: 3, searchable: true },
+    // slug: { cols: 3, searchable: true },
     name: { cols: 6, searchable: true, description: 'Give me an awesome title.' },
     views: { type: 'number', cols: 3, listable: false },
     sort: { type: 'number', cols: 3, sortable: true },

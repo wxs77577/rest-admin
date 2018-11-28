@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@riophae/vue-treeselect": "^0.0.28",
+    "@riophae/vue-treeselect": "^0.0.37",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.0",
     "bootstrap-vue": "^2.0.0-rc.11",

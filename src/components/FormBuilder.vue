@@ -27,7 +27,7 @@
         <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, `tabs.${tabName}.name`) || tabName || $t('messages.default')" :key="tabName">
           <div class="row form-cols">
             <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">
-              <b-row>
+              <b-row class="mt-4">
                 <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
             v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
             :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">

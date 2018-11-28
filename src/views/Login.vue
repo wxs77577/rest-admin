@@ -85,15 +85,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../scss/bootstrap-variables';
-.login-container{
-  height: 100%;
-  background: map-get($theme-colors, light );
-}
-.login-bg{
 
-}
-.card.login-desc{
-  background: map-get($theme-colors, primary );
-}
 </style>

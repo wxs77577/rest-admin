@@ -68,7 +68,7 @@ export default {
       } else if (redirect) {
         this.$router.push({path: redirect})
       } else {
-        this.$router.go(-1);
+        // this.$router.go(-1);
       }
     }
   },

@@ -26,15 +26,15 @@ app.use((req, res, next) => {
 
 // for basic site config
 router.get('/site', (req, res) => res.send({
-  name: 'REST-ADMIN', //site name
+  name: 'DASHBOARD', //site name
   locale: 'en-US',
   logo: 'http://rest-admin.genyii.com/logo.png',
   locale_switcher: true,
   url: 'https://github.com/wxs77577/rest-admin',
-  footer: `
-  <span><a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a> &copy; 2018</span>
+  grid_style: 1,
+  footer1: `
   <span class="ml-auto">
-    GitHub <a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a>
+    GitHub <a href="https://github.com/wxs77577/rest-admin">https://github.com/wxs77577/rest-admin</a>
   </span>
   <script>
   //Baidu Statistic
@@ -89,9 +89,19 @@ router.get('/site', (req, res) => res.send({
       // a custom page.
     },
     {
+      divider: true
+    },
+    {
       name: 'Logout',
       url: '/login',
       icon: 'icon-lock',
+    },
+
+    {
+      name: 'Github',
+      external: true,
+      url: 'https://github.com/wxs77577/rest-admin',
+      icon: 'fa fa-github',
     },
   ]
 }))
@@ -169,9 +179,18 @@ const settingForm = {
   fields: {
     name: { label: "Site Name", input_cols: 4 },
     logo: { label: "Site Logo", type: "image", input_cols: 4 },
+    menu: {
+      type: 'array', is_table: true, fields: {
+        name: {},
+        _actions: {}
+      }
+    },
   },
-  model: {
+  value: {
     name: 'REST ADMIN',
+    menu: [
+      
+    ]
   }
 }
 

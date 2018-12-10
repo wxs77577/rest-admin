@@ -91,7 +91,7 @@
       :parent="parent"
     />
     <div v-else-if="['switch', 'checkbox'].includes(field.type)">
-      <b-switch variant="success" v-bind="field" pill type="3d" :id="id" v-model="model"/>
+      <b-form-checkbox variant="success" v-bind="field" size="lg" pill type="3d" :id="id" v-model="model"/>
     </div>
     <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
 

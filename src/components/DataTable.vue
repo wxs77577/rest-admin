@@ -130,7 +130,7 @@
       </div>
     </div>
     <b-table
-      class="data-table"
+      class="data-table bg-white"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :no-local-sorting="true"

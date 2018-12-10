@@ -13,12 +13,25 @@
 @import "node_modules/bootstrap/scss/bootstrap";
 
 // Override core variables
-@import "core-variables";
+// @import "core-variables";
 
 // Import core styles
-@import "core/core";
+// @import "core/core";
 
 
 // Custom styles
-@import "custom";
-@import "skin";
+// @import "custom";
+// @import "skin";
+
+.card {
+  // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-white {
+  .progress{
+    background-color:rgba(255, 255, 255, 0.3);
+    .progress-bar {
+      background: #fff;
+    }
+  }
+}

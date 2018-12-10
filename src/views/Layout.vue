@@ -1,29 +1,36 @@
 <template>
   <div class="app">
-    <!--  -->
-    <div class="app-body1">
+    <!-- <b-header></b-header> -->
+    
+    <div class="app-body">
       <b-sidebar/>
-      <main class="main p-3">
-        <b-loading :active="$store.state.loading" spinner="bar-fade-scale" style="height:100vh;"/>
-        <ol class="breadcrumb" v-if="false">
-          <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
-            <span class="active" v-if="isLast(index)">{{ item }}</span>
-            <router-link :to="item" v-else>{{ item }}</router-link>
-          </li>
-        </ol>
-        <div class="container-fluid">
-          <custom-component :config="$store.state.site.header"></custom-component>
-          <div class="card page-container">
-            <div
-              class="card-header"
-              v-if="$store.state.site.page_header"
-            >{{$store.state.site.page_header}}</div>
-            <div class="card-body page-body">
-              <router-view class="animated fadeIn"/>
+      
+        <main class="main">
+          <b-loading :active="$store.state.loading" spinner="bar-fade-scale" style="height:100vh;"/>
+          <ol class="breadcrumb" v-if="false">
+            <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
+              <span class="active" v-if="isLast(index)">{{ item }}</span>
+              <router-link :to="item" v-else>{{ item }}</router-link>
+            </li>
+          </ol>
+          <div class="page-container pt-4 container-fluid">
+            <custom-component :config="$store.state.site.header"></custom-component>
+            <div class="card1 ">
+              <div
+                class="page-header h2 pb-2"
+                v-if="$store.state.site.page_header"
+              >{{$store.state.site.page_header}}</div>
+              <div class="page-body ">
+                <router-view class="animated fadeIn"/>
+              </div>
             </div>
+
+            
           </div>
-        </div>
-      </main>
+            
+        </main>
+        
+      
     </div>
     <b-footer v-if="$store.state.site.footer"/>
     <!-- <b-file-manager></b-file-manager> -->
@@ -40,7 +47,7 @@ export default {
   components: {
     BHeader,
     BSidebar,
-    BFooter,
+    BFooter
     // BFileManager
   },
   computed: {},
@@ -56,7 +63,9 @@ export default {
 </script>
 
 <style>
-.sidebar-fixed .sidebar {
-  height: 100%;
+
+main.main{
+  margin-left:200px;
+  padding-bottom: 2em;
 }
 </style>

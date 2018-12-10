@@ -75,7 +75,7 @@ export default {
   props: {
     subForm: {
       type: String,
-      default: ''
+      default: ""
     },
     id: {
       type: String,
@@ -163,12 +163,7 @@ export default {
       errors: []
     };
   },
-  watch: {
-    value(val) {
-      this.model = Object.assign({}, val);
-    },
-    
-  },
+  watch: {},
   computed: {
     tag() {
       return this.subForm ? "div" : "form";
@@ -190,20 +185,20 @@ export default {
     }
   },
   methods: {
-    getFieldId(name){
+    getFieldId(name) {
       if (this.subForm) {
-        return `input_${this.subForm}_${name}`
+        return `input_${this.subForm}_${name}`;
       }
-      return `input_${name}`
+      return `input_${name}`;
     },
-    getFieldName(name){
+    getFieldName(name) {
       if (this.subForm) {
-        return `${this.subForm}[${name}]`
+        return `${this.subForm}[${name}]`;
       }
-      return name
+      return name;
     },
     setValue(name, value, lang) {
-      const isIntl = this.fields[name].multilingual || this.fields[name].intl
+      const isIntl = this.fields[name].multilingual || this.fields[name].intl;
       if (!isIntl) {
         this.$set(this.model, name, value);
         // _.set(this.model, name, value);
@@ -212,7 +207,7 @@ export default {
       } else {
         this.$set(this.model[name], lang, value);
       }
-      return this.$emit('input', this.model)
+      return this.$emit("input", this.model);
     },
     titlize() {},
     isShowField(field) {
@@ -239,9 +234,9 @@ export default {
     },
     handleSubmit() {
       if (this.beforeSubmit) {
-        const ret = this.beforeSubmit(this.model)
+        const ret = this.beforeSubmit(this.model);
         if (ret === false) {
-          return false
+          return false;
         }
       }
       if (this.submitRawForm) {
@@ -275,15 +270,21 @@ export default {
   },
   mounted() {
     this.model = Object.assign({}, this.value);
-    
+
     for (let [k, v] of Object.entries(this.fields)) {
       if (v.type === "object" && !this.model[k]) {
         this.$set(this.model, k, {});
       }
     }
+
+    this.$watch("value", (val) => {
+      this.model = Object.assign({}, val);
+    }, { deep: true });
     // global.console.log(this.fields, this.model)
   },
-  created() {}
+  created() {
+    
+  }
 };
 </script>
 

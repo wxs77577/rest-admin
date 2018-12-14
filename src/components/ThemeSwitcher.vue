@@ -1,10 +1,12 @@
 <template>
-  <div  class="my-2">
+  <div  class="m-4">
     <b-select :options="themeOptions" v-model="theme" placeholder="Choose a Theme"></b-select>
   </div>
 </template>
 
 <script>
+import types from '../store/types.js'
+
 export default {
   data(){
     return {
@@ -18,18 +20,13 @@ export default {
   },
   watch: {
     theme(val){
-      val && this.applyTheme(val)
-    }
-  },
-  methods: {
-    applyTheme(theme){
-      import(`bootswatch/dist/${theme}/bootstrap.min.css`).then(() => {
-        global.console.log('Theme "%s" is applied succeded.', this.theme)
-      })
+      if (val) {
+        this.$store.commit(types.SET_THEME, val)
+      }
     }
   },
   created(){
-    this.theme = 'lumen'
+    this.theme = this.$storage.get('theme') || 'lumen'
   }
 }
 </script>

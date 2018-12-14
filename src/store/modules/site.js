@@ -3,6 +3,7 @@ import menu from '../../menu'
 import _ from 'lodash'
 import http from '../../http'
 import Vue from 'vue'
+import storage from '../../storage';
 
 export default {
   state: {
@@ -13,6 +14,7 @@ export default {
     currentMenu: {},
     languages: false,
     footer: false,
+    theme: '',
     logo: '',
     locale: 'en-US',
     locale_switcher: true,
@@ -44,6 +46,12 @@ export default {
     
     [types.SET_PAGE_HEADER](state, text) {
       state.page_header = text
+    },
+    [types.SET_THEME](state, theme){
+      state.theme = theme
+      const url = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/${state.theme}/bootstrap.min.css`
+      document.getElementById('css-skin').href = url
+      storage.set('theme', state.theme)
     }
   },
   getters: {
@@ -54,7 +62,10 @@ export default {
         data.fetched = true
         commit(types.SET_SITE, data)
         if (!state.page_header) {
-          dispatch(types.FETCH_PAGE_HEADER)
+          // dispatch(types.FETCH_PAGE_HEADER)
+        }
+        if (state.theme) {
+          commit(types.SET_THEME, state.theme)
         }
         if (data.locale) {
           commit(types.SET_LOCALE, data.locale)
@@ -63,6 +74,7 @@ export default {
       })
     },
     [types.FETCH_PAGE_HEADER]({commit, state, rootState}) {
+      return
       let url = rootState.route.path
       let menu = _.find(state.menu, { url }) || {}
       if (!menu.name && url.indexOf('/rest/') > -1) {
@@ -71,5 +83,6 @@ export default {
       }
       commit(types.SET_PAGE_HEADER, menu.name || '')
     },
+    
   }
 }

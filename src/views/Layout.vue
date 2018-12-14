@@ -13,7 +13,7 @@
               <router-link :to="item" v-else>{{ item }}</router-link>
             </li>
           </ol>
-          <div class="page-container pt-4 container-fluid">
+          <div class="page-container pt-3 container-fluid">
             <custom-component :config="$store.state.site.header"></custom-component>
             <div class="card1 ">
               <div

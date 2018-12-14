@@ -1,6 +1,7 @@
 import types from '../types'
 import router from '../../router'
 import site from './site'
+import storage from '../../storage'
 
 export default {
   state: {
@@ -14,14 +15,14 @@ export default {
       }
       state.user = data.user
       state.token = data.token
-      localStorage.setItem('rest_admin_auth', JSON.stringify(data))
+      storage.set('auth', data)
     },
   },
   actions: {
     [types.GET_AUTH]({ commit }) {
       let auth = {}
       try {
-        auth = JSON.parse(localStorage.getItem('rest_admin_auth') || '{}')
+        auth = storage.get('auth')
       } catch (e) {
         auth = {
           token: null,

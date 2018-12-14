@@ -8,6 +8,7 @@ import ResourceShow from '../views/ResourceShow'
 import ResourceStat from '../views/ResourceStat'
 import CustomForm from '../views/CustomForm'
 import CustomPage from '../views/CustomPage'
+import CustomTable from '../views/CustomTable'
 import Login from '../views/Login'
 import Logout from '../views/Logout'
 import Layout from '../views/Layout'
@@ -82,6 +83,11 @@ const router = new Router({
           path: '/form/:uri?',
           name: 'form',
           component: CustomForm
+        },
+        {
+          path: '/table/:uri?',
+          name: 'table',
+          component: CustomTable
         },
         {
           path: '/page/:uri?',

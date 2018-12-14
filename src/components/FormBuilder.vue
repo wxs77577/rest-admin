@@ -12,7 +12,7 @@
       </template>
 
       <slot name="actions">
-        <b-button type="submit" variant="primary" ref="submitButton">{{submitText}}</b-button>
+        <b-button type="submit" variant="primary" ref="submitButton" class="mr-1">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
         <slot name="extra-buttons"></slot>
       </slot>
@@ -59,7 +59,7 @@
       
 
       <slot name="actions" v-if="!subForm">
-        <b-button type="submit" variant="primary" class="mr-2" ref="submitButton">{{submitText}}</b-button>
+        <b-button type="submit" variant="primary" class="mr-1" ref="submitButton">{{submitText}}</b-button>
         <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
     </component>

@@ -15,7 +15,12 @@ const categories = {
     parent_id: { label: 'Parent', ref: 'parent.name', type: 'tree', options: [], cols: 4 },
     slug: { cols: 4, searchable: true },
     name: { cols: 4 },
-    created_at: { label: 'Created At', type: 'datetime' }
+    created_at: { label: 'Created At', type: 'datetime', sortable: true },
+    _actions: {
+      preview: { label: 'View', to: '/rest/categories/<%= item._id %>', variant: 'success' },
+      edit: true,
+      delete: true
+    },
   }
 }
 

@@ -54,7 +54,8 @@ router.get('/site', (req, res) => res.send({
   menu: [ //site menu
     {
       name: 'Home',
-      url: '/',
+      url: '/home',
+      exact: true,
       icon: 'icon-home',
     },
     {
@@ -63,17 +64,17 @@ router.get('/site', (req, res) => res.send({
     },
     {
       name: 'Categories',
-      url: '/rest/categories',
+      url: '/table/categories',
       icon: 'icon-list',
     },
     {
       name: 'Products',
-      url: '/rest/products',
+      url: '/table/products',
       icon: 'icon-list',
     },
     {
       name: 'Users',
-      url: '/rest/users',
+      url: '/table/users',
       icon: 'icon-user',
     },
     {
@@ -238,7 +239,9 @@ router.all('/restore', (req, res) => {
   })
 })
 
-const resourceRouter = express.Router()
+const resourceRouter = express.Router({
+  mergeParams: true
+})
 
 // user list data
 resourceRouter.get('/', ({ resource, query }, res) => {
@@ -250,10 +253,12 @@ resourceRouter.get('/', ({ resource, query }, res) => {
     data = _.orderBy(
       resource.data,
       Object.keys(sort),
-      Object.values(sort).map(v => v == -1 ? 'desc' : 'asc')
+      Object.values(sort).map(v => v === -1 ? 'desc' : 'asc')
     )
   }
+  
   if (where) {
+    
     data = _.filter(data, row => {
       let isMatch = true
       for (let key in where) {
@@ -278,8 +283,10 @@ resourceRouter.get('/', ({ resource, query }, res) => {
 })
 
 // data table config for listing users
-resourceRouter.get('/grid', ({ resource }, res) => {
+resourceRouter.get('/grid', (req, res) => {
+  const { resource, params } = req
   res.send({
+    title: params.resource.replace(/^(\w)/, m => m.toUpperCase()),
     searchModel: {},
     searchFields: _.pickBy(resource.fields, (v, k) => {
       return v.searchable === true

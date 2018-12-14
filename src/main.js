@@ -31,6 +31,9 @@ Vue.use(BootstrapVue)
 
 import './form'
 
+import storage from './storage'
+Vue.prototype.$storage = storage
+
 import VueElementLoading from 'vue-element-loading'
 Vue.component('BLoading', VueElementLoading)
 

@@ -1,5 +1,5 @@
 import types from '../types'
-
+import storage from '../../storage'
 import i18n from '../../i18n'
 
 export default {
@@ -9,7 +9,7 @@ export default {
   mutations: {
     [types.SET_LOCALE](state, locale) {
       state.locale = locale
-      localStorage.setItem('rest_admin_locale', locale)
+      storage.set('locale', locale)
       i18n.locale = locale
     },
   },
@@ -20,7 +20,7 @@ export default {
   },
   actions: {
     [types.FETCH_LOCALE]({commit}){
-      const cachedLocale = localStorage.getItem('rest_admin_locale')
+      const cachedLocale = storage.get('locale')
       if (cachedLocale) {
         
         commit(types.SET_LOCALE, cachedLocale)

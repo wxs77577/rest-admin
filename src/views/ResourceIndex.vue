@@ -1,8 +1,6 @@
 <template>
   <div>
     <b-data-table :resource="resource"></b-data-table>
-      
-    
   </div>
 </template>
 

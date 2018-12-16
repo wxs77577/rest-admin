@@ -22,7 +22,7 @@ export default {
     html: "",
     css: [],
     js: [],
-    skin: "",
+    skin: "cosmo",
     header: null,
     grid_style: 1,
     enable_loading: true,

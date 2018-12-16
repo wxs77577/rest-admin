@@ -35,8 +35,10 @@ router.get("/site", (req, res) =>
     locale: "en-US",
     logo: "http://rest-admin.genyii.com/logo.png",
     locale_switcher: true,
+    theme_switcher: true,
     url: "https://github.com/wxs77577/rest-admin",
     grid_style: 1,
+
     footer1: `
   <span class="ml-auto">
     GitHub <a href="https://github.com/wxs77577/rest-admin">https://github.com/wxs77577/rest-admin</a>
@@ -67,17 +69,17 @@ router.get("/site", (req, res) =>
       },
       {
         name: "Categories",
-        url: "/table/categories",
+        url: "/rest/categories",
         icon: "icon-list"
       },
       {
         name: "Products",
-        url: "/table/products",
+        url: "/rest/products",
         icon: "icon-list"
       },
       {
         name: "Users",
-        url: "/table/users",
+        url: "/rest/users",
         icon: "icon-user"
       },
       {

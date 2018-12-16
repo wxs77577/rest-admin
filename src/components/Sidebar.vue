@@ -14,14 +14,13 @@
         </template>
       </div>
       <div v-else></div>
-      
-      <languages/>
-      <theme-switcher />
+
+      <locale-switcher></locale-switcher>
+      <theme-switcher></theme-switcher>
     </div>
     <nav class="sidebar-nav">
-      <hr class="mx-4">
       <div slot="header"></div>
-      <ul class="nav flex-column">
+      <ul class="nav nav-pills flex-column">
         <template v-for="(item, index) in site.menu">
           <li class="nav-item" v-if="item.title" :key="index">
             <div class="nav-title">{{item.name}}</div>
@@ -60,7 +59,7 @@
           </li>
           <li class="nav-item" v-else :key="index">
             <component
-              :exact="item.exact"
+              :exact="item.exact || item.url === '/'"
               :to="item.url"
               :href="item.url"
               :is="item.external?'a':'router-link'"
@@ -81,7 +80,7 @@
 </template>
 <script>
 import ThemeSwitcher from "./ThemeSwitcher";
-import Languages from "./Languages";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 import { mapState } from "vuex";
 export default {
@@ -90,7 +89,7 @@ export default {
   computed: {
     ...mapState(["auth", "site"])
   },
-  components: { Languages, ThemeSwitcher },
+  components: { LocaleSwitcher, ThemeSwitcher },
   methods: {
     toggle(item) {
       this.$set(item, "open", !item.open);
@@ -107,8 +106,10 @@ export default {
   height: 100vh;
   overflow: auto;
   letter-spacing: 1px;
+  padding: 1rem;
 
-  .site-logo{
+  .site-logo {
+    // border-radius: 1rem;
     // min-height:3em;
   }
 
@@ -116,26 +117,25 @@ export default {
     color: #666;
     display: flex;
     align-items: center;
-    margin: 0.2rem 1rem;
-    border-radius: 2rem;
-    // font-weight: 500;
-    
+    padding: 0.7rem 1rem;
+    // border-radius: 2rem;
+    // font-weight: 400;
+
     &:hover,
     &.active {
-      color: #333;
-      background: #eee;
+      // color: #333;
+      // background: #eee;
     }
     i {
       margin-right: 1rem;
     }
-
   }
   .nav-title {
     font-size: 0.7rem;
     font-weight: bold;
     text-transform: uppercase;
     color: #ced4da;
-    padding: 1rem 2rem 0.5rem 2rem;
+    padding: 1rem 1rem 0.5rem 0;
   }
 }
 </style>

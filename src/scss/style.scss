@@ -13,10 +13,37 @@
 }
 
 .text-white {
-  .progress{
-    background-color:rgba(255, 255, 255, 0.3);
+  .progress {
+    background-color: rgba(255, 255, 255, 0.3);
     .progress-bar {
       background: #fff;
     }
+  }
+}
+.velmld-overlay {
+  // background: rgba(0, 0, 0, 0.5) !important;
+}
+.dropdown-toggle::after {
+  display: none;
+}
+.mx-datepicker {
+  min-width: inherit !important;
+}
+
+.data-table {
+  .table-header {
+    white-space: nowrap;
+  }
+  .data-value > img {
+    max-width: inherit !important;
+    max-height: 60px !important;
+  }
+  thead th,
+  thead td {
+    position: sticky !important;
+    top: -1px;
+    // background: #fff;
+  }
+  .data-table-search {
   }
 }

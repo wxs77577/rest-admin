@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <b-data-form :resource="resource" :id="id" :languages="$store.state.site.languages"></b-data-form>
   </div>
 </template>
@@ -25,8 +25,6 @@ export default {
   watch: {},
   methods: {},
 
-  created() {
-    
-  }
+  created() {}
 };
 </script>

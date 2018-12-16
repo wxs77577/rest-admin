@@ -29,7 +29,7 @@
       </div>
 
       <p class="text-muted m-4 text-center">{{site.login_footer || $t('messages.login_footer')}}</p>
-      <languages class="text-center"/>
+      <locale-switcher class="text-center"></locale-switcher>
     </div>
   </div>
 </template>
@@ -37,11 +37,11 @@
 <script>
 import { types } from "../store";
 import { mapState } from "vuex";
-import Languages from "../components/Languages";
+import LocaleSwitcher from "../components/LocaleSwitcher";
 
 export default {
   name: "Login",
-  components: { Languages },
+  components: { LocaleSwitcher },
   computed: {
     ...mapState(["auth", "site"]),
     fields() {

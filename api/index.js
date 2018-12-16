@@ -36,9 +36,9 @@ router.get("/site", (req, res) =>
     logo: "http://rest-admin.genyii.com/logo.png",
     locale_switcher: true,
     theme_switcher: true,
+    theme: "cosmo",
     url: "https://github.com/wxs77577/rest-admin",
     grid_style: 1,
-
     footer1: `
   <span class="ml-auto">
     GitHub <a href="https://github.com/wxs77577/rest-admin">https://github.com/wxs77577/rest-admin</a>

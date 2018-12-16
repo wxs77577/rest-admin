@@ -10,7 +10,7 @@ import types from "../store/types.js";
 export default {
   data() {
     return {
-      theme: "null",
+      theme: this.$store.state.site.theme,
       themeOptions: `
       cerulean  darkly    litera    materia   sandstone slate     superhero
       cosmo     flatly    lumen     minty     simplex   solar     united

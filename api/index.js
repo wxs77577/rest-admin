@@ -121,7 +121,9 @@ router.get("/site", (req, res) =>
 router.get("/home", (req, res) =>
   res.send({
     title: "Welcome to REST ADMIN",
-    description: "Admin dashboard based on vue 2 and bootstrap 4",
+    description: `<div>Admin dashboard based on vue 2 and bootstrap 4 </div> 
+      <div class="font-weight-bold">Please check the XHR requests of **Network** panel in chrome dev-tool for Server-side APIs.</div>
+      `,
     button: {
       icon: "icon-people",
       variant: "primary",

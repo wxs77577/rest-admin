@@ -57,7 +57,7 @@ Then just copy `/dist/admin` folder to the anywhere.
 
 Example:
 
-```json
+```javascript
 {
   "_id": { "label": "ID" },
   "title": { "label": "Title" },
@@ -147,7 +147,7 @@ Example Base Api Url: http://localhost:8088/admin/api
 Get config data of site
 
 - Returns
-  ```json
+  ```javascript
   {
     "name": "Site Name",
     "logo": "http://.../logo.png",
@@ -192,14 +192,14 @@ Get config data of site
 For admin user login
 
 - POST DATA
-  ```json
+  ```javascript
   {
     "username": "admin",
     "password": "admin"
   }
   ```
 - Returns
-  ```json
+  ```javascript
   {
     "user": {
       "username": "admin",
@@ -210,7 +210,7 @@ For admin user login
   ```
   or with validation errors
   > must response `422` http status.
-  ```json
+  ```javascript
   {
     "name": "HttpException",
     "message": [{ "field": "password", "message": "Incorrect password." }]
@@ -223,7 +223,7 @@ Fetch all records of a resource.
 `:resource` means any resource name. e.g. `/users`, `/posts`...
 
 - Returns **IMPORTANT**
-  ```json
+  ```javascript
   {
     "total": 80,
     "perPage": 10,
@@ -242,7 +242,7 @@ Fetch grid view config of a resource.
 `:resource` means any resource name. e.g. `/users/grid`, `/posts/grid`...
 
 - Returns **IMPORTANT**
-  ```json
+  ```javascript
   {
     "searchModel": {},
     "searchFields": {
@@ -262,7 +262,7 @@ Fetch editing form config of a resource.
 `:resource` means any resource name. e.g. `/users/form`, `/posts/form`...
 
 - Returns **IMPORTANT**
-  ```json
+  ```javascript
   {
     "model": {},
     "fields": {
@@ -277,7 +277,7 @@ Fetch editing form config of a resource.
 create a resource
 
 - POST DATA
-  ```json
+  ```javascript
   {
     "_id": "12341234",
     "title": "The New Title",
@@ -285,7 +285,7 @@ create a resource
   }
   ```
 - Returns
-  ```json
+  ```javascript
   {
     "_id": "12341234",
     "title": "The New Title",
@@ -298,7 +298,7 @@ create a resource
 update a resource
 
 - POST DATA (Request Payload)
-  ```json
+  ```javascript
   {
     "_id": "12341234",
     "title": "The New Title",
@@ -306,7 +306,7 @@ update a resource
   }
   ```
 - Returns
-  ```json
+  ```javascript
   {
     "_id": "12341234",
     "title": "The New Title",
@@ -319,7 +319,7 @@ update a resource
 delete a resource
 
 - Returns
-  ```json
+  ```javascript
   {
     "success": true
   }
@@ -330,7 +330,7 @@ delete a resource
 delete all
 
 - Returns
-  ```json
+  ```javascript
   {
     "success": true
   }
@@ -359,7 +359,7 @@ There are two apis for a custom form:
 
 - POST `/site/settings`
 - Returns
-  ```json
+  ```javascript
   {
     "success": true,
     "message": "Well done!", //[optional] will show after form submited.

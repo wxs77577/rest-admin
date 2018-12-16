@@ -1,34 +1,32 @@
-# REST-ADMIN
+# REST-ADMIN [中文文档](./README-zh.md)
 
-### `Pateron` in china: https://afdian.net/@johnny
+> An Powerful Admin Dashboard based on [Boostrap-Vue](https://github.com/bootstrap-vue/bootstrap-vue/).
 
-### [README - 简体中文](./README-zh.md)
+Demo: http://rest-admin.genyii.com/ `admin admin`
 
-> An Powerful Admin Dashboard based on Vue.js and Boostrap v4.
+Please support me on https://afdian.net/@johnny if you like it.
+如果觉得有用请在爱发电上赞助我：https://afdian.net/@johnny
 
-REST-ADMIN is trying to make it easier to built an admin dashboard for any backend services. All you need to do is just provide a RESTful api for it.
-
-## Online Demo
-#### http://rest-admin.genyii.com/ 
-> username:password `admin:admin`
-
-## Screenshots
-| - | - |
-|--|--|
-|![](./screenshots/1.png) Login Page|![](./screenshots/2.png) Data Table for users|
-|![](./screenshots/3.png) Data Table for posts|![](./screenshots/4.png) Data Form for post|
-|![](./screenshots/tfs-qrcode.png) Wechat Group (Search Wechat `johnny77577` to join in)|![](./screenshots/tfs-logo.png) Free Videos|
 ## Features
-- Based on the latest Bootstrap(v4) and Vue.js, it means you can easily change any skin based on bootstrap css framework.
-- Plain vue.js project, can be used for any backend restful api.
+
+- **Bootswatch Themes**
 - Powerful **Data Table** with sorting, pagination, searching, display images...
-- Powerful **Data Form Builder** can display/edit any value of text, image, boolean...
+- Powerful **Edit Form Builder** can display/edit any value of text, image, boolean...
 - Fully support for Resource-based CRUD option.
 - English based fully i18n support.
 - **Highly Configurable** site info. Such as: site name, logo, **Menu** and footer...
 - Production ready. It has been used in two projects in our company.
 
+## Screenshots
+
+| -                                                                                       | -                                           |
+| --------------------------------------------------------------------------------------- | ------------------------------------------- |
+| ![](./screenshots/1.png) Login Page                                                     | ![](./screenshots/home.png) Home page       |
+| ![](./screenshots/3.png) Data Table for posts                                           | ![](./screenshots/4.png) Data Form for post |
+| ![](./screenshots/tfs-qrcode.png) Wechat Group (Search Wechat `johnny77577` to join in) | ![](./screenshots/tfs-logo.png) Free Videos |
+
 ## Quick Start
+
 ```bash
 git clone git@github.com:wxs77577/rest-admin.git
 cd rest-admin
@@ -43,48 +41,65 @@ npm run serve # start rest admin client
 > The default username and password of test-api is `admin` and `admin`
 
 ### Build
+
 ```bash
 API_URI=http://localhost:5555/admin/api/ npm run build
 ```
+
 Then just copy `/dist/admin` folder to the anywhere.
 
 > There is a built-in restful api based on `express` for test.
 
-
 ## Fields Definition
+
 > Used in listing tables and editing forms
 > Default PRIMARY_KEY field is `_id`, feel free to change it in `/src/config.json`
 
 Example:
+
 ```json
 {
   "_id": { "label": "ID" },
   "title": { "label": "Title" },
-  "type": { "label": "Type", "type": "select", "options": [
-    { "text": "Vue", "value": "vue" },
-    { "text": "React", "value": "react" },
-    { "text": "Angular", "value": "angular" },
-  ]},
+  "type": {
+    "label": "Type",
+    "type": "select",
+    "options": [
+      { "text": "Vue", "value": "vue" },
+      { "text": "React", "value": "react" },
+      { "text": "Angular", "value": "angular" }
+    ]
+  },
   "body": { "type": "html", "group": "Detail" },
-  "steps": { "type": "array", "group": "Steps", "fields": {
-    "name": { "label": "Name" },
-    "date": { "label": "date" } 
-  }},
-  
-  "_actions": { // define table view, it's optional.
-    "buttons": { // define buttons as `false` to hide in actions colum
+  "steps": {
+    "type": "array",
+    "group": "Steps",
+    "fields": {
+      "name": { "label": "Name" },
+      "date": { "label": "date" }
+    }
+  },
+
+  "_actions": {
+    // define table view, it's optional.
+    "buttons": {
+      // define buttons as `false` to hide in actions colum
       "delete": false,
       "edit": false
     },
-    "toolbar": { // define actions in top toolbar table view
-      "extra": [ // add extra buttons
+    "toolbar": {
+      // define actions in top toolbar table view
+      "extra": [
+        // add extra buttons
         { "to": "/form?uri=vouchers/generate", "label": "Generate Vouchers" } //properties of `<b-button>`
       ]
     }
   }
 }
 ```
+
 ### Field properties
+
 - `label` Title for display
 - `cols` column width, total is 12.
 - `input_cols` column width of input control.
@@ -95,9 +110,9 @@ Example:
   - `select2` [vue-select](https://github.com/sagalbot/vue-select), like `select2` in jQuery
     - `options` e.g. `[{ "text": "Label", "value": "1" }]`
   - `tree` [vue-treeselect](https://vue-treeselect.js.org/)
-    - `options` **use `text` and `value` instead `label` and `id`** e.g. `[{ "text": "Label", "value": "1", "children": [ { "text": "Item1", "value": "2" } ] }]`  
+    - `options` **use `text` and `value` instead `label` and `id`** e.g. `[{ "text": "Label", "value": "1", "children": [ { "text": "Item1", "value": "2" } ] }]`
   - `date` [vue2-datepicker](https://github.com/mengxiong10/vue2-datepicker) supports **date range**
-  - `switch` A iOS-liked switch component 
+  - `switch` A iOS-liked switch component
   - `html` An WYSIWYG html editor from [vue-html5-editor](https://github.com/PeakTai/vue-html5-editor)
   - `array` Array values
     - `fields` child fields defination
@@ -122,12 +137,15 @@ Example:
 - Any other properties accepted in https://bootstrap-vue.js.org/docs/components/form-input, please notice that every kind of field component has it's own properties.
 
 ## APIs
+
 > Tips: check `/api/index.js` :p
 
 Example Base Api Url: http://localhost:8088/admin/api
 
 #### GET `/site` (url: http://localhost:8088/admin/api/site)
+
 Get config data of site
+
 - Returns
   ```json
   {
@@ -135,49 +153,51 @@ Get config data of site
     "logo": "http://.../logo.png",
     "locale": "en-US", //or zh-CN
     "locale_switcher": false, //hide locale switcher
-    "menu" : [
+    "menu": [
       {
         "name": "Home",
         "url": "/",
-        "icon": "fa fa-home",
+        "icon": "fa fa-home"
         // for home page
       },
       {
         "name": "Content",
-        "title": true,
+        "title": true
         // display as a delimiter
       },
       {
         "name": "Posts",
         "url": "/rest/posts",
-        "icon": "fa fa-list",
-        // url format of resource list: /rest/:resourceName      
+        "icon": "fa fa-list"
+        // url format of resource list: /rest/:resourceName
       },
       {
         "name": "Config",
         "url": "/form?uri=site/settings",
-        "icon": "fa fa-cogs",
+        "icon": "fa fa-cogs"
         // a custom form.
       },
       {
         "name": "Logout",
         "url": "/login",
-        "icon": "fa fa-lock",
+        "icon": "fa fa-lock"
         // for logout
-      },
-    ],
+      }
+    ]
   }
   ```
 
 #### POST `/login`
+
 For admin user login
+
 - POST DATA
   ```json
   {
     "username": "admin",
     "password": "admin"
   }
-  ````
+  ```
 - Returns
   ```json
   {
@@ -192,14 +212,13 @@ For admin user login
   > must response `422` http status.
   ```json
   {
-    "name":"HttpException",
-    "message":[
-      { "field":"password", "message":"Incorrect password." }
-    ]
+    "name": "HttpException",
+    "message": [{ "field": "password", "message": "Incorrect password." }]
   }
   ```
 
 #### GET `/:resource`
+
 Fetch all records of a resource.
 `:resource` means any resource name. e.g. `/users`, `/posts`...
 
@@ -218,6 +237,7 @@ Fetch all records of a resource.
   ```
 
 #### GET `/:resource/grid`
+
 Fetch grid view config of a resource.
 `:resource` means any resource name. e.g. `/users/grid`, `/posts/grid`...
 
@@ -237,6 +257,7 @@ Fetch grid view config of a resource.
   ```
 
 #### GET `/:resource/form`
+
 Fetch editing form config of a resource.
 `:resource` means any resource name. e.g. `/users/form`, `/posts/form`...
 
@@ -252,7 +273,9 @@ Fetch editing form config of a resource.
   ```
 
 #### POST `/:resource`
+
 create a resource
+
 - POST DATA
   ```json
   {
@@ -271,7 +294,9 @@ create a resource
   ```
 
 #### PUT `/:resource/:id`
+
 update a resource
+
 - POST DATA (Request Payload)
   ```json
   {
@@ -290,7 +315,9 @@ update a resource
   ```
 
 #### DELETE `/:resource/:id`
+
 delete a resource
+
 - Returns
   ```json
   {
@@ -299,7 +326,9 @@ delete a resource
   ```
 
 #### DELETE `/:resource`
+
 delete all
+
 - Returns
   ```json
   {
@@ -308,37 +337,44 @@ delete all
   ```
 
 #### Custom Form ?
+
 > To render a custom form, you need to define a `menu` item in `/site` api, or add an `extra` button of toolbar in `/:resource/grid`.
 
 There are two apis for a custom form:
+
 1. Get form definition
-  - GET `/site/settings`
-  - Returns
-    ```
-    {
-      "title": "Form Title",
-      "fields": {
-        ...see Fields Definition...        
-      }
+
+- GET `/site/settings`
+- Returns
+  ```
+  {
+    "title": "Form Title",
+    "fields": {
+      ...see Fields Definition...
     }
-    ```
+  }
+  ```
+
 2. Handle submission
-  - POST `/site/settings`
-  - Returns
-    ```json
-    {
-      "success": true,
-      "message": "Well done!", //[optional] will show after form submited.
-      "redirect": "/" //[optional] auto redirect after form submited, default is back to the last page.
-    }
-    ```
+
+- POST `/site/settings`
+- Returns
+  ```json
+  {
+    "success": true,
+    "message": "Well done!", //[optional] will show after form submited.
+    "redirect": "/" //[optional] auto redirect after form submited, default is back to the last page.
+  }
+  ```
 
 ## i18n
+
 > Check [vu-i18n](https://github.com/kazupon/vue-i18n/) for detailed documentation.
 
 REST-ADMIN gives built-in support for `en-US` and `zh-CN`, you can change translation files in `/src/i18n/*.json`.
 
 ## Thanks to
+
 - Vue.js and Bootstrap v4 based [bootstrap-vue](https://github.com/bootstrap-vue/bootstrap-vue)
 - Nice UI from [Core UI](https://coreui.io/)
 - i18n component from [vue-i18n](https://github.com/kazupon/vue-i18n/)

@@ -162,7 +162,7 @@
         </b-table>
         <b-draggable v-model="model" v-else>
           <transition-group tag="div" class="row">
-            <b-col v-for="(item, i) in model" :key="i" cols="" :lg="field.item_cols || 6">
+            <b-col v-for="(item, i) in model" :key="`draggable-${name}-${i}`" cols="" :lg="field.item_cols || 6">
               <b-card>
                 <b-row slot="header" class="justify-content-between">
                   <b-col>No. {{i + 1}}</b-col>

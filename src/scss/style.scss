@@ -23,9 +23,16 @@
 .velmld-overlay {
   // background: rgba(0, 0, 0, 0.5) !important;
 }
+.v-select .dropdown-toggle{
+  padding:0 !important;
+  input{
+    margin:0 !important;
+  }
+}
 .dropdown-toggle::after {
   display: none;
 }
+
 .mx-datepicker {
   min-width: inherit !important;
 }

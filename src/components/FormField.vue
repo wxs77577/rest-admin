@@ -163,7 +163,7 @@
         <b-draggable v-model="model" v-else>
           <transition-group tag="div" class="row">
             <b-col v-for="(item, i) in model" :key="`draggable-${name}-${i}`" cols="" :lg="field.item_cols || 6">
-              <b-card>
+              <b-card class="mb-4">
                 <b-row slot="header" class="justify-content-between">
                   <b-col>No. {{i + 1}}</b-col>
                   <b-col right class="text-right">

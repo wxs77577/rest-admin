@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <vue-snotify />
+    <vue-snotify/>
     <iframe :src="$store.state.downloadUrl" style="width:0;height:0;border:none;"></iframe>
     <div v-html="$store.state.site.html"></div>
   </div>
@@ -35,7 +35,7 @@ export default {
       files.map(item => {
         const tag = document.createElement("link");
         tag.setAttribute("href", item);
-        tag.setAttribute("rel", 'stylesheet');
+        tag.setAttribute("rel", "stylesheet");
         document.head.appendChild(tag);
       });
     },
@@ -46,8 +46,8 @@ export default {
         document.body.appendChild(tag);
       });
     },
-    '$route.path'() {
-      this.$store.dispatch(types.FETCH_PAGE_HEADER)
+    "$route.path"() {
+      this.$store.dispatch(types.FETCH_PAGE_HEADER);
     }
   },
   computed: {

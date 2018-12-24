@@ -9,6 +9,9 @@ Vue.component('b-form-field', FormField)
 import DataValue from './components/DataValue.vue'
 Vue.component('b-data-value', DataValue)
 
+import DataTable from './components/BDataTable.vue'
+Vue.component('b-data-table', DataTable)
+
 import FormBuilder from './components/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
 

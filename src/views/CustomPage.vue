@@ -9,8 +9,6 @@
 }
 </style>
 <script>
-
-
 export default {
   props: {},
   data() {
@@ -34,10 +32,10 @@ export default {
       this.fetchPage();
     },
     render() {},
-    async fetchPage() {
+    fetchPage() {
       this.$http.get(this.uri).then(({ data }) => {
         data.name = "server-page-" + new Date().getTime().toString();
-        this.page = Object.assign({}, data)
+        this.page = Object.assign({}, data);
       });
     },
 
@@ -55,9 +53,7 @@ export default {
       }
     }
   },
-  mounted() {
-    
-  },
+  mounted() {},
   created() {
     this.fetchPage();
   }

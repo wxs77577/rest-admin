@@ -58,7 +58,7 @@
           </div>
         </b-form-builder>
       </div>
-      <div class="" v-if="description" v-html="description"></div>
+      <div class v-if="description" v-html="description"></div>
       <b-row>
         <b-col cols="8">
           <b-pagination
@@ -540,20 +540,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.data-table {
-  .data-value > img {
-    max-width: inherit !important;
-    max-height: 60px !important;
-  }
-  thead th,
-  thead td {
-    position: sticky !important;
-    top: 0;
-    background: #fff;
-  }
-  .data-table-search {
-  }
-}
-</style>

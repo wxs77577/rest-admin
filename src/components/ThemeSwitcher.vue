@@ -28,7 +28,7 @@ export default {
     };
   },
   created() {
-    this.theme = this.$storage.get("theme");
+    this.theme = this.$storage.get("theme", 'cosmo');
   }
 };
 </script>

@@ -2,10 +2,10 @@
   <div class="break-all data-value">
     
     <template v-if="['html'].includes(field.type)">
-      <div v-html="value" class="p-2 data-value-html"></div>
+      <div v-html="value" class=" data-value-html"></div>
     </template>
     <template v-else-if="['number'].includes(field.type)">
-      <div class="p-2 text-right">{{value}}</div>
+      <div class=" text-right">{{value}}</div>
     </template>
     <template v-else-if="['image'].includes(field.type)">
       <template v-if="field.multiple">

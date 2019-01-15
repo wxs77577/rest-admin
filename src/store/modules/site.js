@@ -22,6 +22,7 @@ export default {
     html: "",
     css: [],
     js: [],
+    cdn: 'bootcdn', // bootcdn/cdnjs
     header: null,
     grid_style: 1,
     enable_loading: true,
@@ -48,7 +49,11 @@ export default {
     },
     [types.SET_THEME](state, theme) {
       state.theme = theme;
-      const url = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/${
+      const sources = {
+        bootcdn: 'https://cdn.bootcss.com',
+        cdnjs: 'https://cdnjs.cloudflare.com/ajax/libs'
+      }
+      const url = (sources[state.cdn] || state.cdn) + `/bootswatch/4.2.1/${
         state.theme
       }/bootstrap.min.css`;
       document.getElementById("css-skin").href = url;

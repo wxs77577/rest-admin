@@ -162,7 +162,11 @@ export default {
     };
   },
   watch: {
+    "$route.query"(val) {
+      this.applyRouteQuery();
+    },
     "$route.params"(val) {
+      this.applyRouteQuery();
       this.fetch();
     }
     // page(val) {}
@@ -219,6 +223,7 @@ export default {
         where: this.where,
         with: populate
       });
+      console.log(query)
 
       if (!this.init) {
         // this.$router.replace({
@@ -239,6 +244,8 @@ export default {
           const { total, data } = res.data;
           this.total = total;
           return data;
+        }).catch(e => {
+          return []
         });
     },
     fetch() {
@@ -266,7 +273,7 @@ export default {
   },
   mounted() {},
   created() {
-    // this.applyRouteQuery();
+    this.applyRouteQuery();
 
     this.fetch();
     // this.fetchTable();

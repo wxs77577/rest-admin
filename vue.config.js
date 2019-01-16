@@ -1,7 +1,7 @@
 module.exports = {
   runtimeCompiler: true,
   productionSourceMap: false,
-  baseUrl: process.env.PRODUCTION_BASE_URL,
+  publicPath: process.env.PRODUCTION_BASE_URL,
   css: {
     extract: true
   },

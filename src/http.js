@@ -16,9 +16,7 @@ axios.interceptors.response.use(response => {
   store.commit(types.STOP_LOADING)
   global.LOADING_ENABLED = true
   const pageHeader = _.get(response, 'data._meta.page_header')
-  if (pageHeader || pageHeader === false) {
-    store.commit(types.SET_PAGE_HEADER, pageHeader)
-  }
+  store.commit(types.SET_PAGE_HEADER, pageHeader)
   return response;
 }, ({response}) => {
   store.commit(types.STOP_LOADING)

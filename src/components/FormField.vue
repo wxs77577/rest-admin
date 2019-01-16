@@ -144,7 +144,7 @@
             />
           </template>
           <template slot="HEAD__actions" slot-scope="row">
-            <b-btn size="sm" @click="model.push({});">
+            <b-btn size="sm" @click="addRow">
               <i class="icon-plus"></i>
               {{$t('actions.add')}}
             </b-btn>
@@ -433,6 +433,14 @@ export default {
     };
   },
   methods: {
+    addRow() {
+      if (!this.parent[this.name]) {
+        this.$set(this.parent, this.name, [])
+      }
+      this.$nextTick(() => {
+        this.model.push({})
+      })
+    },
     initEditor() {
       const language = "zh-cn";
       window.document.execCommand("defaultParagraphSeparator", false, "p");

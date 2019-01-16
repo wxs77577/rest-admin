@@ -45,7 +45,9 @@ export default {
     },
 
     [types.SET_PAGE_HEADER](state, text) {
-      state.page_header = text;
+      if (text === false || text) {
+        state.page_header = text;
+      }
     },
     [types.SET_THEME](state, theme) {
       state.theme = theme;

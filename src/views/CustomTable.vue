@@ -155,7 +155,7 @@ export default {
       pageLimit: 10, //display how many page buttons
       currentPage: 1,
       sortBy: this.$config.primaryKey,
-      sortDesc: false,
+      sortDesc: true,
       sortDirection: null,
       perPage: 10,
       where: {}
@@ -195,8 +195,11 @@ export default {
         this.$route.query.query || "{}"
       );
       const [sortBy, sortDesc] = Object.entries(sort).pop() || [];
-      this.sortBy = sortBy;
-      this.sortDesc = sortDesc === -1 ? true : false;
+      sortBy && (this.sortBy = sortBy)
+      
+      if (sortDesc) {
+        this.sortDesc = sortDesc === -1 ? true : false;
+      }
       this.total = page * this.perPage;
       this.currentPage = page;
       this.where = where;
@@ -223,7 +226,7 @@ export default {
         where: this.where,
         with: populate
       });
-      console.log(query)
+      // console.log(query)
 
       if (!this.init) {
         // this.$router.replace({

@@ -41,8 +41,6 @@
     "body-parser": "^1.18.3",
     "express": "^5.0.0-alpha.7",
     "faker": "^4.1.0",
-    "inflection": "^1.12.0",
-    "lodash": "^4.17.10",
     "node-sass": "^4.9.0",
     "nodemon": "^1.18.3",
     "sass-loader": "^7.0.1",

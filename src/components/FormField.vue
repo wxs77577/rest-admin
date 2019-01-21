@@ -511,6 +511,7 @@ export default {
           }
         },
         image: {
+          sizeLimit: 10 * 1024 * 1024,
           upload: {
             url: global.API_URI + "upload",
             headers: {

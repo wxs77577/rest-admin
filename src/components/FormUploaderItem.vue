@@ -118,8 +118,8 @@ export default {
         return;
       }
       const fd = new FormData();
-      fd.append("file", this.file);
       fd.append("type", this.name);
+      fd.append("file", this.file);
       this.fileData = this.file;
 
       const src = URL.createObjectURL(this.file);

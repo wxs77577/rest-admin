@@ -50,7 +50,19 @@
           :submit-text="$t('actions.search')"
           :fields="table.searchFields"
           v-model="table.searchModel"
-        ></b-form-builder>
+        >
+        
+        <div slot="extra-buttons" class="ml-2">
+          <b-button
+            type="button"
+            @click="searchAndExport"
+            variant="success"
+            v-if="_.get(actions, 'export')"
+          >{{$t('actions.search_and_export')}}</b-button>
+          <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+        </div>
+        </b-form-builder>
+        
       </div>
       <div class="row align-items-center">
         <div class="col-md-8">
@@ -158,7 +170,8 @@ export default {
       sortDesc: true,
       sortDirection: null,
       perPage: 10,
-      where: {}
+      where: {},
+      iframeSrc: ""
     };
   },
   watch: {
@@ -174,6 +187,14 @@ export default {
   computed: {
     ...mapState(["site", "i18n", "auth"]),
     ...mapGetters(["currentLanguage"]),
+    populate() {
+      return _(this.table.fields || {})
+        .map("ref")
+        .filter()
+        .map(v => v.split(".").shift())
+        .uniq()
+        .toJSON();
+    },
     actions() {
       return _.get(this.table, "fields._actions", {});
     },
@@ -186,17 +207,29 @@ export default {
   },
   methods: {
     doSearch(params) {
-      this.where = params;
+      this.where = _.omitBy(params, v => v === null);
       this.$refs.table.refresh();
       // console.log(params);
+    },
+    searchAndExport() {
+      const query = JSON.stringify({
+        where: _.clone(this.table.searchModel),
+        with: _.clone(this.populate)
+      });
+      this.iframeSrc = "";
+      setTimeout(() => {
+        this.iframeSrc = `${global.API_URI}${
+          this.uri
+        }/export?query=${query}&token=${this.$store.state.auth.token}`;
+      }, 50);
     },
     applyRouteQuery() {
       const { sort = {}, page = 1, where = {} } = JSON.parse(
         this.$route.query.query || "{}"
       );
       const [sortBy, sortDesc] = Object.entries(sort).pop() || [];
-      sortBy && (this.sortBy = sortBy)
-      
+      sortBy && (this.sortBy = sortBy);
+
       if (sortDesc) {
         this.sortDesc = sortDesc === -1 ? true : false;
       }
@@ -214,17 +247,11 @@ export default {
       }
     },
     fetchItems(ctx) {
-      const populate = _(this.table.fields || {})
-        .map("ref")
-        .filter()
-        .map(v => v.split(".").shift())
-        .uniq()
-        .toJSON();
       const query = _.merge({}, _.get(this.table, "query"), {
         page: ctx.currentPage,
         sort: { [ctx.sortBy]: this.sortDesc ? -1 : 1 },
         where: this.where,
-        with: populate
+        with: this.populate
       });
       // console.log(query)
 
@@ -247,8 +274,9 @@ export default {
           const { total, data } = res.data;
           this.total = total;
           return data;
-        }).catch(e => {
-          return []
+        })
+        .catch(e => {
+          return [];
         });
     },
     fetch() {

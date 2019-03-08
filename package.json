@@ -12,9 +12,9 @@
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.38",
     "axios": "^0.18.0",
-    "bootstrap": "^4.1.0",
-    "bootstrap-vue": "^2.0.0-rc.11",
-    "bootswatch": "^4.1.1",
+    "bootstrap": ">=4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.14",
+    "bootswatch": "^4.3.1",
     "clipboard": "^2.0.1",
     "cropperjs": "^1.4.1",
     "dayjs": "^1.6.6",

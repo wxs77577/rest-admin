@@ -125,8 +125,9 @@ export default {
       return this.field.intl || this.field.multilingual
     },
     value() {
-      const path = this.name.replace(/\]/g, '').replace(/\[/g, '.').split('.').pop()
-      let value = _.get(this.model || {}, path);
+      // const path = this.name.replace(/\]/g, '').replace(/\[/g, '.').split('.').pop()
+      // console.log(this.name)
+      let value = _.get(this.model || {}, this.name);
       if (!value) {
         return value
       }

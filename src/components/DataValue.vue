@@ -127,7 +127,7 @@ export default {
     value() {
       // const path = this.name.replace(/\]/g, '').replace(/\[/g, '.').split('.').pop()
       // console.log(this.name)
-      let value = _.get(this.model || {}, this.name);
+      let value = _.get(this.model || {}, this.field.refLabel || this.field.ref || this.name);
       if (!value) {
         return value
       }

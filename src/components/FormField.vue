@@ -9,7 +9,7 @@
         @click="changeLanguage(key, name)"
       >{{lang}}</span>
     </div>
-    <b-form-select
+    <!-- <b-select
       v-if="['select'].includes(field.type)"
       :formatter="getFormatter(field, value)"
       :id="id"
@@ -18,19 +18,24 @@
       :value="selectedValue"
       @input="handleSelect"
       :name="name"
-    ></b-form-select>
-    <div v-else-if="['select2'].includes(field.type)">
+    ></b-select> -->
+    <div v-else-if="['select2', 'select'].includes(field.type)">
       <b-select
         :name="name"
         @search="getAjaxOptions"
         label="text"
         v-bind="field"
-        :options="options"
         :value="selectedValue"
-        @input="handleSelect"
+        @change="handleSelect"
         :placeholder="field.placeholder || ''"
         selectLabel
-      />
+      >
+        <b-option
+          :value="option.value"
+          v-for="option in options"
+          :key="option.value"
+        >{{option.text}}</b-option>
+      </b-select>
     </div>
     <b-tree-select
       :normalizer="treeSelectNormalizer"
@@ -42,36 +47,38 @@
     <!-- <b-select v-if="['select', 'select2'].includes(field.type)" track-by="value" label="text" @input="model = arguments[0]" :id="id" v-bind="field" :title="value" /> -->
 
     <b-date-picker
+      type="daterange"
       v-else-if="['date', 'datetime'].includes(field.type)"
       :name="name"
       v-bind="field"
       v-model="model"
     />
-    <b-form-radio-group
+    <b-radio-group
       v-else-if="['radiolist'].includes(field.type)"
       :name="name"
       v-bind="field"
       v-model="model"
     >
-      <!-- <b-form-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-radio> -->
-    </b-form-radio-group>
-    <b-form-checkbox-group
+      <b-radio :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-radio>
+    </b-radio-group>
+    <b-checkbox-group
       :name="name"
       v-else-if="['checkboxlist'].includes(field.type)"
       v-bind="field"
       v-model="model"
     >
-      <!-- <b-form-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-form-checkbox> -->
-    </b-form-checkbox-group>
+      <b-checkbox :key="choice.value" :value="choice.value" v-for="choice in field.options">{{choice.text}}</b-checkbox>
+    </b-checkbox-group>
     <div v-else-if="['checkboxtable'].includes(field.type)" class="checkboxtable">
       <div v-for="(options, group) in groupedOptions" :key="group" class="mt-1">
         <b-form-checkbox-group :name="name" :options="options" v-bind="field" v-model="model"></b-form-checkbox-group>
       </div>
     </div>
-    <b-form-textarea
+    <b-input
       :name="name"
       v-else-if="['textarea'].includes(field.type)"
       :id="id"
+      type="textarea"
       v-model="model"
       v-bind="field"
       :rows="field.rows || 3"
@@ -81,6 +88,18 @@
     </div>
     <!-- <b-uploader v-else-if="['image', 'file', 'audio'].includes(field.type)" :id="id" v-model="model" v-bind="field" /> -->
 
+    <b-upload
+      v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
+      :field="field"
+      v-model="model"
+      :id="id"
+      :data="{type: name}"
+      :action="API_URI + 'upload'"
+      :headers="ajaxHeaders"
+      list-type="picture-card"
+    >
+      <i class="el-icon-plus"></i>
+    </b-upload>
     <component
       :is="field.autoUpload === false ? 'b-form-file' : 'b-form-uploader'"
       v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
@@ -91,7 +110,16 @@
       :parent="parent"
     />
     <div v-else-if="['switch', 'checkbox'].includes(field.type)">
-      <b-form-checkbox variant="success" v-bind="field" size="lg" pill type="3d" :id="id" v-model="model"/>
+      <b-switch
+        variant="success"
+        v-bind="field"
+        size="lg"
+        pill
+        type="3d"
+        :id="id"
+        
+        v-model="model"
+      ></b-switch>
     </div>
     <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
 
@@ -162,7 +190,12 @@
         </b-table>
         <b-draggable v-model="model" v-else>
           <transition-group tag="div" class="row">
-            <b-col v-for="(item, i) in model" :key="`draggable-${name}-${i}`" cols="" :lg="field.item_cols || 6">
+            <b-col
+              v-for="(item, i) in model"
+              :key="`draggable-${name}-${i}`"
+              cols
+              :lg="field.item_cols || 6"
+            >
               <b-card class="mb-4">
                 <b-row slot="header" class="justify-content-between">
                   <b-col>No. {{i + 1}}</b-col>
@@ -173,7 +206,7 @@
                     </b-btn>
                   </b-col>
                 </b-row>
-                <b-form-group
+                <b-form-item
                   v-for="(child, key) in myFields"
                   :key="key"
                   v-bind="child"
@@ -186,11 +219,11 @@
                     :field="child"
                     :id="`input_${name}_${i}_${key}`"
                   />
-                </b-form-group>
+                </b-form-item>
               </b-card>
             </b-col>
             <b-col
-              cols=""
+              cols
               :lg="field.item_cols || 6"
               :key="-1"
               class="d-flex align-items-center justify-content-center"
@@ -225,7 +258,7 @@
         </b-card>
       </div>
       <div v-else>
-        <b-form-group
+        <b-form-item
           v-for="(child, key) in myFields"
           :key="key"
           v-bind="child"
@@ -238,27 +271,27 @@
             :field="child"
             :id="`input_${name}_${key}`"
           />
-        </b-form-group>
+        </b-form-item>
       </div>
     </div>
-    <b-input-group v-else>
-      <b-input-group-prepend is-text v-if="field.prependIcon || field.prepend">
+    <b-input
+      v-else
+      :state="state"
+      :id="id"
+      :name="name"
+      v-bind="field"
+      v-model="model"
+      :formatter="getFormatter(field, value)"
+    >
+      <template slot="prepend" v-if="field.prependIcon || field.prepend">
         <i :class="field.prependIcon" v-if="field.prependIcon"></i>
         <span v-else v-html="field.prepend"></span>
-      </b-input-group-prepend>
-      <b-form-input
-        :state="state"
-        :id="id"
-        :name="name"
-        v-bind="field"
-        v-model="model"
-        :formatter="getFormatter(field, value)"
-      />
-      <b-input-group-append is-text v-if="field.appendIcon || field.append">
+      </template>
+      <template slot="append" v-if="field.appendIcon || field.append">
         <i :class="field.appendIcon" v-if="field.appendIcon"></i>
         <span v-else v-html="field.append"></span>
-      </b-input-group-append>
-    </b-input-group>
+      </template>
+    </b-input>
   </div>
 </template>
 <style>
@@ -275,14 +308,14 @@
 <script>
 import Vue from "vue";
 import BDraggable from "vuedraggable";
-import BTreeSelect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
+// import BTreeSelect from "@riophae/vue-treeselect";
+// import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
 // import BSelect from "vue-multiselect"
-import BSelect from "vue-select";
+// import BSelect from "vue-select";
 // import "vue-multiselect/dist/vue-multiselect.min.css"
-import BDatePicker from "vue2-datepicker";
+// import BDatePicker from "vue2-datepicker";
 // import BUeditor from "./UEditor"
-import BFormUploader from "./FormUploader";
+// import BFormUploader from "./FormUploader";
 import VueHtml5Editor from "vue-html5-editor";
 // import BJsonEditor  from "./JsonEditor"
 // import BJsonEditor from "vue-jsoneditor"
@@ -294,12 +327,12 @@ import _ from "lodash";
 export default {
   components: {
     // BUeditor,
-    BDatePicker,
-    BSelect,
-    BFormUploader,
+    // BDatePicker,
+    // BSelect,
+    // BFormUploader,
     // BJsonEditor,
-    BDraggable,
-    BTreeSelect
+    BDraggable
+    // BTreeSelect
   },
   props: {
     languages: {},
@@ -313,6 +346,9 @@ export default {
     name: {}
   },
   computed: {
+    ajaxHeaders() {
+      return { Authorization: "Bearer " + this.$store.state.auth.token };
+    },
     cropperOptions() {
       return {
         "upload-url": global.API_URI + "upload",
@@ -435,11 +471,11 @@ export default {
   methods: {
     addRow() {
       if (!this.parent[this.name]) {
-        this.$set(this.parent, this.name, [])
+        this.$set(this.parent, this.name, []);
       }
       this.$nextTick(() => {
-        this.model.push({})
-      })
+        this.model.push({});
+      });
     },
     initEditor() {
       const language = "zh-cn";

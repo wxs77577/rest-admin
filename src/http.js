@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 const API_URI = process.env.VUE_APP_API_URL || '/admin/api/'
 global.API_URI = API_URI
+Vue.prototype.API_URI = API_URI
 axios.defaults.baseURL = API_URI
 global.LOADING_ENABLED = true
 axios.interceptors.request.use(config => {

@@ -8,7 +8,7 @@
           </div>
           <div class="h4 mb-0">{{item.value}}</div>
           <small class="text-uppercase font-weight-bold">{{item.title}}</small>
-          <b-progress class="progress-white progress-xs mt-3" :value="item.progress"/>
+          <b-progress class="progress-white progress-xs mt-3" :percentage="item.progress" text-inside :stroke-width="10" :show-text="false"	/>
         </b-card>
       </div>
       <!--/.col-->

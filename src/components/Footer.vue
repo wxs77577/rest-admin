@@ -1,5 +1,5 @@
 <template>
-  <div class="app-footer">
+  <b-footer class="app-footer">
     <footer class="bg-light" v-html="site.footer" v-if="site.footer"></footer>
     <footer class="bg-light" v-else>
       <span class="ml-auto">
@@ -7,7 +7,7 @@
         <a href="https://github.com/wxs77577/rest-admin">REST-ADMIN</a>
       </span>
     </footer>
-  </div>
+  </b-footer>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -18,7 +18,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.app-footer {
+.app-footer1 {
   position: fixed;
   bottom: 0;
   right: 0;

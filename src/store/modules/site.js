@@ -58,8 +58,8 @@ export default {
       const url = (sources[state.cdn] || state.cdn) + `/bootswatch/4.2.1/${
         state.theme
       }/bootstrap.min.css`;
-      document.getElementById("css-skin").href = url;
-      storage.set("theme", state.theme);
+      // document.getElementById("css-skin").href = url;
+      // storage.set("theme", state.theme);
     }
   },
   getters: {

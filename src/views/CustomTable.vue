@@ -7,8 +7,9 @@
       <div class="col col-md-12">
         <b-btn
           class="mr-2"
-          :to="'/rest/' + uri + '/create'"
-          variant="secondary"
+          @click="$router.push('/rest/' + uri + '/create')"
+          type="secondary"
+          round
           v-if="_.get(actions,'toolbar.create') !== false"
         >
           <i class="icon-plus"></i>
@@ -17,7 +18,8 @@
         <b-btn
           class="mr-2"
           @click="fetch"
-          variant="success"
+          type="success"
+          round
           v-if="_.get(actions, 'toolbar.reload') !== false"
         >
           <i class="icon-reload"></i>
@@ -32,7 +34,7 @@
         <b-btn
           @click="removeAll"
           class="pull-right"
-          variant="second"
+          type="second"
           v-if="_.get(actions, 'toolbar.delete_all') === true"
         >
           <i class="icon-trash"></i>
@@ -51,101 +53,94 @@
           :fields="table.searchFields"
           v-model="table.searchModel"
         >
-        
-        <div slot="extra-buttons" class="ml-2">
-          <b-button
-            type="button"
-            @click="searchAndExport"
-            variant="success"
-            v-if="_.get(actions, 'export')"
-          >{{$t('actions.search_and_export')}}</b-button>
-          <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
-        </div>
+          <div slot="extra-buttons" class="ml-2">
+            <b-button
+              @click="searchAndExport"
+              type="success"
+              v-if="_.get(actions, 'export')"
+            >{{$t('actions.search_and_export')}}</b-button>
+            <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+          </div>
         </b-form-builder>
-        
       </div>
-      <div class="row align-items-center">
-        <div class="col-md-8">
-          <b-pagination
-            :limit="pageLimit"
-            v-model="currentPage"
-            :total-rows="total"
-            :per-page="perPage"
-          ></b-pagination>
-        </div>
-        <div class="col-md-4 form-inline justify-content-end">Page
-          <b-select v-model="currentPage" class="mx-2">
-            <option v-for="n in Math.ceil(total/perPage)" :key="n" :value="n">{{n}}</option>
-          </b-select>
+      <b-pagination
+        :limit="pageLimit"
+        background
+        :current-page.sync="currentPage"
+        :total="total"
+        :page-size="perPage"
+        :page-sizes="[10, 20]"
+      ></b-pagination>
 
-          <span>{{$t('messages.paginate', {total: total})}}</span>
-        </div>
-      </div>
       <b-table
         class="data-table"
         v-if="table.fields"
         ref="table"
-        :items="fetchItems"
-        :fields="table.fields"
+        :data="items"
         :current-page="currentPage"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :sort-direction="sortDirection"
       >
-        <template v-for="(field, key) in table.fields" :slot="`HEAD_${key}`" slot-scope="data">
-          <div
-            :key="key"
-            class="table-header"
-            :class="{'text-right': ['number'].includes(field.type)}"
-          >{{field.label || key}}</div>
-        </template>
-        <template v-for="(field, key) in table.fields" :slot="key" slot-scope="row">
-          <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id/>
-        </template>
-
-        <template slot="_actions" slot-scope="row">
-          <b-button
-            v-for="(field, key) in actions"
-            :key="key"
-            :to="_.template(field.to)(row)"
-            class="mr-1"
-            size="sm"
-            v-bind="field"
-            v-if="field.label"
-          >{{field.label}}</b-button>
-          <b-btn
-            v-if="actions.edit !== false"
-            variant="success"
-            size="sm"
-            :to="`/rest/${uri}/${row.item[$config.primaryKey]}`"
-            class="mr-1"
-          >{{$t('actions.view')}}</b-btn>
-          <b-btn
-            v-if="actions.edit !== false"
-            variant="primary"
-            size="sm"
-            :to="`/rest/${uri}/${row.item[$config.primaryKey]}/edit`"
-            class="mr-1"
-          >{{$t('actions.edit')}}</b-btn>
-          <b-btn
-            v-if="actions.delete !== false"
-            size="sm"
-            @click.stop="remove(row.item[$config.primaryKey])"
-          >{{$t('actions.delete')}}</b-btn>
-        </template>
+        <b-table-column
+          v-for="(field, key) in table.fields"
+          :key="key"
+          :prop="key"
+          :label="field.label || key"
+          
+        >
+          <template slot-scope="scope">
+            <div v-if="key === '_actions'">
+              <b-button
+                v-for="(field, name) in actions"
+                :key="name"
+                :to="_.template(field.to)({item: scope.row})"
+                class="mr-1"
+                size="sm"
+                v-bind="field"
+                v-if="field.label"
+              >{{field.label}}</b-button>
+              <b-btn
+                v-if="actions.edit !== false"
+                type="success"
+                size="mini"
+                @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}`)"
+                class="mr-1"
+              >{{$t('actions.view')}}</b-btn>
+              <b-btn
+                v-if="actions.edit !== false"
+                type="primary"
+                size="mini"
+                @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}/edit`)"
+                class="mr-1"
+              >{{$t('actions.edit')}}</b-btn>
+              <b-btn
+                v-if="actions.delete !== false"
+                size="mini"
+                @click.stop="remove(scope.row[$config.primaryKey])"
+              >{{$t('actions.delete')}}</b-btn>
+            </div>
+            <b-data-value
+              v-else
+              slot-scope="scope"
+              :field="field"
+              :key="key"
+              :name="key"
+              :model="scope.row"
+              short-id
+            ></b-data-value>
+          </template>
+        </b-table-column>
       </b-table>
 
-      <div class="row align-items-center">
-        <div class="col-md-10">
-          <b-pagination
-            :limit="pageLimit"
-            v-model="currentPage"
-            :total-rows="total"
-            :per-page="perPage"
-          ></b-pagination>
-        </div>
-        <div class="col-md-2 text-right">{{$t('messages.paginate', {total: total})}}</div>
-      </div>
+      <b-pagination
+        :limit="pageLimit"
+        background
+        :current-page.sync="currentPage"
+        :total="total"
+        :page-size="perPage"
+        :page-sizes="[10, 20]"
+      ></b-pagination>
     </div>
   </div>
 </template>
@@ -164,6 +159,7 @@ export default {
       loaded: false,
       table: {},
       total: 0, //total rows
+      items: [],
       pageLimit: 10, //display how many page buttons
       currentPage: 1,
       sortBy: this.$config.primaryKey,
@@ -181,7 +177,10 @@ export default {
     "$route.params"(val) {
       this.applyRouteQuery();
       this.fetch();
-    }
+    },
+    currentPage(){
+      this.fetchItems()
+    },
     // page(val) {}
   },
   computed: {
@@ -246,24 +245,14 @@ export default {
         });
       }
     },
-    fetchItems(ctx) {
+    fetchItems() {
       const query = _.merge({}, _.get(this.table, "query"), {
-        page: ctx.currentPage,
-        sort: { [ctx.sortBy]: this.sortDesc ? -1 : 1 },
+        page: this.currentPage,
+        sort: { [this.sortBy]: this.sortDesc ? -1 : 1 },
         where: this.where,
         with: this.populate
       });
-      // console.log(query)
 
-      if (!this.init) {
-        // this.$router.replace({
-        //   query: { query: JSON.stringify(query) }
-        // });
-        return [];
-      }
-      // this.$router.push({
-      //   query: { query: JSON.stringify(query) }
-      // });
       return this.$http
         .get(this.uri, {
           params: {
@@ -273,6 +262,7 @@ export default {
         .then(res => {
           const { total, data } = res.data;
           this.total = total;
+          this.items = data;
           return data;
         })
         .catch(e => {
@@ -296,9 +286,7 @@ export default {
           );
         }
         this.init = true;
-        if (this.$refs.table) {
-          this.$refs.table.refresh();
-        }
+        this.fetchItems();
       });
     }
   },

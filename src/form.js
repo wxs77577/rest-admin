@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import Switch from './components/Switch.vue'
-Vue.component('b-switch', Switch)
+// import Switch from './components/Switch.vue'
+// Vue.component('b-switch', Switch)
 
 import FormField from './components/FormField.vue'
 Vue.component('b-form-field', FormField)

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <vue-snotify/>
+    <!-- <vue-snotify/> -->
     <iframe :src="$store.state.downloadUrl" style="width:0;height:0;border:none;"></iframe>
     <div v-html="$store.state.site.html"></div>
   </div>
@@ -10,7 +10,6 @@
 <script>
 import { mapState } from "vuex";
 import { types } from "./store";
-
 export default {
   name: "app",
   components: {},
@@ -26,10 +25,10 @@ export default {
     },
     "site.skin"(name) {
       const tag = document.getElementById("css-skin");
-      tag.setAttribute(
-        "href",
-        `https://cdn.bootcss.com/bootswatch/4.1.1/${name}/bootstrap.min.css`
-      );
+      // tag.setAttribute(
+      //   "href",
+      //   `https://cdn.bootcss.com/bootswatch/4.1.1/${name}/bootstrap.min.css`
+      // );
     },
     "site.css"(files) {
       files.map(item => {

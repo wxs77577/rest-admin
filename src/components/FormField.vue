@@ -20,17 +20,7 @@
       :name="name"
     ></b-form-select>
     <div v-else-if="['select2'].includes(field.type)">
-      <b-select
-        :name="name"
-        @search="getAjaxOptions"
-        label="text"
-        v-bind="field"
-        :options="options"
-        :value="selectedValue"
-        @input="handleSelect"
-        :placeholder="field.placeholder || ''"
-        selectLabel
-      />
+      <b-select v-model="model" v-bind="field"></b-select>
     </div>
     <b-tree-select
       :normalizer="treeSelectNormalizer"
@@ -291,7 +281,8 @@ import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
 // import BSelect from "vue-multiselect"
-import BSelect from "vue-select";
+import BSelect from "./FormSelect2";
+// import BSelect from "@alfsnd/vue-bootstrap-select";
 // import "vue-multiselect/dist/vue-multiselect.min.css"
 import BDatePicker from "vue2-datepicker";
 // import BUeditor from "./UEditor"
@@ -406,7 +397,7 @@ export default {
     isIntl() {
       return this.field.intl || this.field.multilingual;
     },
-    selectedValue() {
+    selectedValue1() {
       let value = this.initSelectedValue
       if (this.isArrayValue) {
         value = _.filter(
@@ -454,7 +445,8 @@ export default {
     return {
       currentLanguage: this.field.currentLanguage || "en",
       options: this.field.options || [],
-      initSelectedValue: isArray && !this.value ? [] : this.value
+      initSelectedValue: isArray && !this.value ? [] : this.value,
+      selectedValue: isArray && !this.value ? [] : this.value,
     };
   },
   methods: {
@@ -589,6 +581,9 @@ export default {
       };
     },
     handleSelect(val) {
+      console.log(val)
+      return 
+
       if (this.isSelect2) {
         if (this.isArrayValue) {
           val = _.uniq(_.map(val, "value"));
@@ -596,7 +591,7 @@ export default {
           val = val ? val.value : null;
         }
       }
-      this.$emit("input", val, this.currentLanguage);
+      // this.$emit("input", val, this.currentLanguage);
     },
     getFormatter(field) {
       if (field.format) {
@@ -605,58 +600,7 @@ export default {
       return v => v;
     },
 
-    getAjaxOptions(q) {
-      if (!this.field.ajaxOptions) {
-        return;
-      }
-
-      const options = this.field.ajaxOptions;
-      if (options.url) {
-        const url = _.template(options.url)({ item: parent });
-        const fetchOptions = (params = {}) => {
-          this.$http
-            .get(url, {
-              params: params
-            })
-            .then(res => {
-              this.options = res.data;
-            })
-            .catch(console.log);
-        };
-        if (options.depends) {
-          // this.$watch(
-          //   `parent.${options.depends}`,
-          //   val => {
-          //     fetchOptions({ [options.depends]: val });
-          //   },
-          //   {
-          //     // deep: true,
-          //     immediate: true
-          //   }
-          // );
-        } else {
-          fetchOptions();
-        }
-        return;
-      }
-      if (!options.where) {
-        options.where = {};
-      }
-      options.where[options.text] = q;
-      this.$http
-        .get(options.resource + "/options", {
-          params: options
-        })
-        .then(({ data }) => {
-          this.options = data;
-        });
-    },
-    initOptionsForSelect2() {
-      const parentOptions = this.parent[this.name + "_data"];
-      if (parentOptions) {
-        this.options = this.options.concat(parentOptions);
-      }
-    }
+    
   },
   mounted() {
     if (this.field.type == "html") {
@@ -675,11 +619,11 @@ export default {
     if (this.field.type == "html") {
       this.initEditor();
     }
-    if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
-      this.getAjaxOptions();
-    }
+    // if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
+    //   this.getAjaxOptions();
+    // }
     if (this.isSelect2) {
-      this.initOptionsForSelect2();
+      // this.initOptionsForSelect2();
 
       // this.$watch("options", () => {
 

@@ -10,6 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@alfsnd/vue-bootstrap-select": "^0.4.1",
     "@riophae/vue-treeselect": "0.0.38",
     "axios": "^0.18.0",
     "bootstrap": ">=4.3.1",
@@ -25,26 +26,26 @@
     "vue": "^2",
     "vue-element-loading": "^1.0.4",
     "vue-html5-editor": "^1.1.1",
-    "vue-i18n": "^7.6.0",
+    "vue-i18n": "^8.10.0",
     "vue-router": "^3.0.1",
     "vue-select": "^2.3.0",
     "vue-snotify": "^3.1.0",
-    "vue2-datepicker": "^1.6.0",
+    "vue2-datepicker": "^2.11.0",
     "vuedraggable": "^2.15.0",
     "vuex": "^3",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3",
-    "@vue/cli-plugin-eslint": "^3",
-    "@vue/cli-service": "^3",
+    "@vue/cli-plugin-babel": "^3.5.5",
+    "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-service": "^3.5.3",
     "body-parser": "^1.18.3",
     "express": "^5.0.0-alpha.7",
     "faker": "^4.1.0",
     "node-sass": "^4.11.0",
-    "nodemon": "^1.18.3",
+    "nodemon": "^1.18.11",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
     "root": true,

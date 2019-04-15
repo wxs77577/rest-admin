@@ -20,7 +20,7 @@
       :name="name"
     ></b-form-select>
     <div v-else-if="['select2'].includes(field.type)">
-      <b-select v-model="model" v-bind="field"></b-select>
+      <b-select v-model="model" v-bind="field" :parent="parent"></b-select>
     </div>
     <b-tree-select
       :normalizer="treeSelectNormalizer"

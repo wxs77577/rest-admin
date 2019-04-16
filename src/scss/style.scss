@@ -7,7 +7,9 @@
 // Custom styles
 // @import "custom";
 // @import "skin";
-
+*{
+  outline: none;
+}
 .card {
   // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -23,18 +25,14 @@
 .velmld-overlay {
   // background: rgba(0, 0, 0, 0.5) !important;
 }
-.v-select .dropdown-toggle{
-  padding:0 !important;
-  input{
-    margin:0 !important;
-  }
-}
-.dropdown-toggle::after {
+// 3rd-party form controls 
+.v-select .dropdown-toggle:after{
   display: none;
 }
-
-.mx-datepicker {
-  min-width: inherit !important;
+.v-select .dropdown-toggle,
+.mx-input{
+  min-height: 2.3rem;
+  
 }
 
 .data-table {

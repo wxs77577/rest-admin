@@ -1,7 +1,7 @@
 module.exports = {
   runtimeCompiler: true,
   productionSourceMap: false,
-  publicPath: process.env.PRODUCTION_BASE_URL || '/admin/',
+  publicPath: process.env.BASE_URL || '/admin/',
   css: {
     extract: true
   },

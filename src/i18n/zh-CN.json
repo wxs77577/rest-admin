@@ -51,7 +51,8 @@
     "deleted_all": "全部删除成功",
     "confirm_delete": "确定要删除吗？",
     "image_size": "尺寸要求：{width}x{height}",
-    "confirm_delete_all": "此次操作不可恢复，确定要全部删除吗？"
+    "confirm_delete_all": "此次操作不可恢复，确定要全部删除吗？",
+    "no_options_text": "暂无可选项"
   },
   "errors": {
     "too_large": "请上传小于{limit}KB的文件",

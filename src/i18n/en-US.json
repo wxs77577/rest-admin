@@ -9,7 +9,8 @@
     "deleted_all": "All deleted",
     "confirm_delete": "Are you sure you want to delete?",
     "image_size": "Size limit: {width}x{height}",
-    "confirm_delete_all": "Are you sure you want to delete all data?"    
+    "confirm_delete_all": "Are you sure you want to delete all data?",
+    "no_options_text": "No Options Here!"
   },
   "errors": {
 

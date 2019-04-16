@@ -5,7 +5,9 @@
     label="text"
     :options="newOptions"
     :multiple="multiple"
-  ></v-select>
+  >
+  <div slot="no-options">{{noOptionsText}}</div>
+  </v-select>
 </template>
 
 <script>
@@ -33,15 +35,21 @@ export default {
     multiple: {},
     field: {},
     parent: {},
-    ajaxOptions: {}
+    ajaxOptions: {},
+    noOptionsText: {
+      default(){
+        return this.$t('messages.no_options_text')
+      }
+    },
+    q: ''
   },
   computed: {
     model: {
       get() {
         if (this.multiple) {
-          return this.options.filter(v => this.value.includes(v.value));
+          return this.newOptions.filter(v => this.value.includes(v.value));
         } else {
-          return this.options.find(v => this.value === v.value);
+          return this.newOptions.find(v => this.value === v.value);
         }
       },
       set(val) {
@@ -60,51 +68,8 @@ export default {
   },
   methods: {
     getAjaxOptions(q) {
-      if (!this.ajaxOptions) {
-        return;
-      }
-
-      const options = this.ajaxOptions;
-      if (options.url) {
-        const url = _.template(options.url)({ item: parent });
-        const fetchOptions = (params = {}) => {
-          console.log(params);
-          this.$http
-            .get(url, {
-              params: params
-            })
-            .then(res => {
-              this.newOptions = res.data;
-            })
-            .catch(console.log);
-        };
-        if (options.depends) {
-          this.$watch(
-            `parent.${options.depends}`,
-            val => {
-              fetchOptions({ [options.depends]: val });
-            },
-            {
-              // deep: true,
-              immediate: true
-            }
-          );
-        } else {
-          fetchOptions();
-        }
-        return;
-      }
-      if (!options.where) {
-        options.where = {};
-      }
-      options.where[options.text] = q;
-      this.$http
-        .get(options.resource + "/options", {
-          params: options
-        })
-        .then(({ data }) => {
-          this.newOptions = data;
-        });
+      this.q = q
+      this.fetchOptions()
     },
     initOptionsForSelect2() {
       const parentOptions = this.parent[this.name + "_data"];
@@ -112,37 +77,41 @@ export default {
         this.newOptions = this.options.concat(parentOptions);
       }
     },
-    fetchOptions(query) {
+    fetchOptions(query = {}) {
       const params = this.ajaxOptions;
       const { url, resource, where = {}, text, depends } = params;
-      if (!params.where) {
-        params.where = {};
+      params.where = Object.assign({}, where, query);
+      if (text) {
+        options.where[text] = this.q;
       }
-      // if (text) {
-      //   options.where[text] = q;
-      // }
       const apiUrl = url
         ? _.template(url)({ item: this.parent })
         : resource + "/options";
       this.$http.get(apiUrl, { params }).then(({ data }) => {
+        this.model = { value: null };
         this.newOptions = data;
       });
     }
   },
   mounted() {
     if (this.ajaxOptions) {
-      this.fetchOptions();
+      
       const { url, resource, where, depends } = this.ajaxOptions;
-      this.$watch(
-        `parent.${depends}`,
-        val => {
-          this.fetchOptions({ [depends]: val });
-        },
-        {
-          // deep: true,
-          immediate: true
-        }
-      );
+      if (depends) {
+        this.$watch(
+          `parent.${depends}`,
+          val => {
+            console.log(val)
+            this.fetchOptions({ [depends]: val });
+          },
+          {
+            // deep: true,
+            immediate: true
+          }
+        );
+      } else {
+        this.fetchOptions();
+      }
     }
   }
 };

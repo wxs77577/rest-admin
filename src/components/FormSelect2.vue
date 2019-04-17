@@ -53,6 +53,9 @@ export default {
         }
       },
       set(val) {
+        if (val === null) {
+          return this.$emit('input', null)
+        }
         let ret;
         if (this.multiple) {
           const isChanged = JSON.stringify(val) !== JSON.stringify(this.value);
@@ -62,7 +65,9 @@ export default {
         } else {
           ret = val.value;
         }
-        ret && this.$emit("input", ret);
+        if (ret !== null) {
+          this.$emit("input", ret);
+        }
       }
     }
   },

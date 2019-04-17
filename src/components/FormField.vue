@@ -15,8 +15,8 @@
       :id="id"
       :options="options"
       v-bind="field"
-      :value="selectedValue"
-      @input="handleSelect"
+      v-model="model"
+      
       :name="name"
     ></b-form-select>
     <div v-else-if="['select2'].includes(field.type)">
@@ -579,19 +579,6 @@ export default {
         id: row.value,
         label: row.text
       };
-    },
-    handleSelect(val) {
-      console.log(val)
-      return 
-
-      if (this.isSelect2) {
-        if (this.isArrayValue) {
-          val = _.uniq(_.map(val, "value"));
-        } else {
-          val = val ? val.value : null;
-        }
-      }
-      // this.$emit("input", val, this.currentLanguage);
     },
     getFormatter(field) {
       if (field.format) {

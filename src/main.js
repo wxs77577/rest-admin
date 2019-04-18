@@ -34,9 +34,9 @@ import './form'
 import storage from './storage'
 Vue.prototype.$storage = storage
 
-import VueElementLoading from 'vue-element-loading'
+// import VueElementLoading from 'vue-element-loading'
 import './plugins/element.js'
-Vue.component('BLoading', VueElementLoading)
+// Vue.component('BLoading', VueElementLoading)
 
 Vue.prototype._ = _
 sync(store, router)

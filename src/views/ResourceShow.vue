@@ -1,12 +1,6 @@
 <template>
   <div >
-    <b-row>
-      <b-col cols="12" xl="12">
-       
-          <b-data-view :resource="resource" :id="id"></b-data-view>
-        
-      </b-col>
-    </b-row>
+    <b-data-view :resource="resource" :id="id"></b-data-view>
   </div>
 </template>
 

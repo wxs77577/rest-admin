@@ -21,6 +21,7 @@ import { sync } from 'vuex-router-sync'
 import 'font-awesome/css/font-awesome.min.css'
 import 'simple-line-icons/css/simple-line-icons.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import './scss/style.scss'
 
 // import "vue-snotify/styles/material.css"

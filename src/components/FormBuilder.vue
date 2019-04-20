@@ -6,7 +6,8 @@
       :action="actionUrl"
       :method="method"
       :inline="inline"
-      label-position="top"
+      :label-position="inline ? 'left' : 'top'"
+      label-width="50"
       @submit.native.prevent="handleSubmit"
       enctype="multipart/form-data"
       :model="value"
@@ -25,29 +26,30 @@
           <b-row class="row form-cols">
             <b-col :span="_.get(layout, `tabs.${tabName}.cols`, 12) * 2">
               <b-row :gutter="20">
-                <b-col :span="getSpan(field)" v-for="(field, name) in subFields" :key="id + '_' +name">
-                  <b-form-item
-                  
-                  v-if="isShowField(field) && model"
-                  :state="!hasError(name)"
-                  
-                  
-                  v-bind="field"
-                  :label-for="'input_' + name"
-                  :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
+                <b-col
+                  :span="getSpan(field)"
+                  v-for="(field, name) in subFields"
+                  :key="id + '_' +name"
                 >
-                  <b-form-field
-                    :languages="languages"
-                    :class="getInputClass(field)"
-                    :parent="model"
-                    @input="setValue(name, arguments[0], arguments[1])"
-                    :value="model[name]"
-                    :name="name"
-                    :field="field"
+                  <b-form-item
+                    v-if="isShowField(field) && model"
                     :state="!hasError(name)"
-                    :id="'input_' + name"
-                  />
-                </b-form-item>
+                    v-bind="field"
+                    :label-for="'input_' + name"
+                    :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
+                  >
+                    <b-form-field
+                      :languages="languages"
+                      :class="getInputClass(field)"
+                      :parent="model"
+                      @input="setValue(name, arguments[0], arguments[1])"
+                      :value="model[name]"
+                      :name="name"
+                      :field="field"
+                      :state="!hasError(name)"
+                      :id="'input_' + name"
+                    />
+                  </b-form-item>
                 </b-col>
               </b-row>
             </b-col>
@@ -61,18 +63,16 @@
         </b-tab-pane>
       </b-tabs>
       <div class="row" v-else>
-        <b-form-item
-          :span="getSpan(field)"
-          
-          v-if="isShowField(field) && model"
-          :state="!hasError(name)"
-          v-for="(field, name) in fields"
-          :key="[id,subForm,name].join()"
-          v-bind="field"
-          :label-for="getFieldId(name)"
-          :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
-        >
-          <div class>
+        <template v-for="(field, name) in fields">
+          <b-form-item
+            :span="getSpan(field)"
+            v-if="isShowField(field) && model"
+            :state="!hasError(name)"
+            :key="[id,subForm,name].join()"
+            v-bind="field"
+            :label-for="getFieldId(name)"
+            :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
+          >
             <b-form-field
               :languages="languages"
               :class="getInputClass(field)"
@@ -83,17 +83,14 @@
               :field="field"
               :state="!hasError(name)"
               :id="getFieldId(name)"
-            />
-          </div>
-        </b-form-item>
+            ></b-form-field>
+          </b-form-item>
+        </template>
       </div>
 
       <slot name="actions" v-if="!subForm">
         <b-button native-type="submit" type="primary" class="mr-1" ref="submitButton">{{submitText}}</b-button>
-        <b-button
-          @click="$router.go(-1)"
-          v-if="backText"
-        >{{backText}}</b-button>
+        <b-button @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
       </slot>
     </component>
   </div>
@@ -271,7 +268,7 @@ export default {
       return _.find(this.errors, v => v.field == name);
     },
     submitForm() {
-      this.handleSubmit()
+      this.handleSubmit();
       // this.$refs.submitButton.click();
     },
     handleSubmit() {
@@ -298,7 +295,7 @@ export default {
       this.$http[methodName](this.action, formData)
         .then(({ data }) => {
           if (this.successMessage) {
-            this.$message({type: 'success', message: this.successMessage});
+            this.$message({ type: "success", message: this.successMessage });
           }
           this.errors = [];
           this.$emit("success", data);

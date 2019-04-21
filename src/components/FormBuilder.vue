@@ -6,8 +6,8 @@
       :action="actionUrl"
       :method="method"
       :inline="inline"
-      :label-position="inline ? 'left' : 'top'"
-      label-width="50"
+      :label-position="inline ? 'left' : 'right'"
+      label-width="150px"
       @submit.native.prevent="handleSubmit"
       enctype="multipart/form-data"
       :model="value"
@@ -15,6 +15,8 @@
       <input type="hidden" name="token" :value="auth.token">
       <b-tabs
         class="my-3"
+        tab-position="top"
+        
         v-if="groupBy"
         :class="{'hide-group-name': _.get(layout, 'hideGroupName')}"
       >
@@ -24,10 +26,10 @@
           :key="tabName"
         >
           <b-row class="row form-cols">
-            <b-col :span="_.get(layout, `tabs.${tabName}.cols`, 12) * 2">
+            <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12) * 2">
               <b-row :gutter="20">
                 <b-col
-                  :span="getSpan(field)"
+                  :md1="getSpan(field)"
                   v-for="(field, name) in subFields"
                   :key="id + '_' +name"
                 >
@@ -89,8 +91,10 @@
       </div>
 
       <slot name="actions" v-if="!subForm">
-        <b-button native-type="submit" type="primary" class="mr-1" ref="submitButton">{{submitText}}</b-button>
-        <b-button @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        <div class="text-center">
+          <b-button native-type="submit" type="primary" class="mr-1" ref="submitButton">{{submitText}}</b-button>
+          <b-button @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        </div>
       </slot>
     </component>
   </div>

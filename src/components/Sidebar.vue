@@ -16,7 +16,7 @@
       <!-- <locale-switcher></locale-switcher> -->
       <!-- <theme-switcher></theme-switcher> -->
     </div>
-    <el-menu router class="border-right-0">
+    <el-menu router class="border-right-0" :default-openeds="opened">
       <template v-for="(item, index) in menu">
         <el-submenu :index="item.name" :key="index" v-if="item.children">
           <template slot="title">
@@ -41,33 +41,34 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import LocaleSwitcher from "./LocaleSwitcher";
 
 import { mapState } from "vuex";
+import { get } from "lodash";
 export default {
   name: "sidebar",
 
   computed: {
     ...mapState(["auth", "site"]),
+    opened() {
+      return [get(this.menu.find(v => v.children), "name")];
+    },
     menu() {
       let i = 0;
-      const ret = this.site.menu.reduce(
-        (arr, v) => {
-          if (v.title) {
-            i++;
-            arr[i] = {
-              name: v.name
-            };
-            return arr;
-          } else {
-            if (!arr[i] || !arr[i].name) {
-              arr.push(v)
-              return arr
-            }
-          }
-          !arr[i].children && (arr[i].children = []);
-          arr[i].children.push(v);
+      const ret = this.site.menu.reduce((arr, v) => {
+        if (v.title) {
+          i++;
+          arr[i] = {
+            name: v.name
+          };
           return arr;
-        },
-        []
-      );
+        } else {
+          if (!arr[i] || !arr[i].name) {
+            arr.push(v);
+            return arr;
+          }
+        }
+        !arr[i].children && (arr[i].children = []);
+        arr[i].children.push(v);
+        return arr;
+      }, []);
       return ret;
     }
   },

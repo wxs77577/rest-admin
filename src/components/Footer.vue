@@ -18,16 +18,4 @@ export default {
 };
 </script>
 <style lang="scss">
-.app-footer1 {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  z-index: 9;
-  letter-spacing: 1px;
-
-  & > footer {
-    text-align: right;
-  }
-}
 </style>

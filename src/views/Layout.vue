@@ -6,12 +6,6 @@
     </b-aside>
 
     <b-main class="main">
-      <ol class="breadcrumb" v-if="false">
-        <li class="breadcrumb-item" :key="index" v-for="(item, index) in path">
-          <span class="active" v-if="isLast(index)">{{ item }}</span>
-          <router-link :to="item" v-else>{{ item }}</router-link>
-        </li>
-      </ol>
       <div class="page-container container-fluid">
         <custom-component :config="$store.state.site.header"></custom-component>
         <h2
@@ -19,9 +13,7 @@
           v-if="$store.state.site.page_header"
           v-html="$store.state.site.page_header"
         ></h2>
-        <div class="page-body">
-          <router-view class="animated fadeIn"/>
-        </div>
+        <router-view class="animated fadeIn"/>
       </div>
 
       <el-footer class="">

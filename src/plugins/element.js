@@ -10,3 +10,8 @@ for (let name in Element) {
 }
 Vue.component('BBtn', Element.Button)
 Vue.use(Element)
+
+import ElField from '../components/fields/Field'
+import ElFields from '../components/fields/Fields'
+Vue.component('el-field', ElField)
+Vue.component('el-fields', ElFields)

@@ -39,13 +39,14 @@
     "password": "密码"
   },
   "messages": {
+    "default": "默认",
     "paginate": "共{total}条数据",
     "login_please": "请先登录",
     "login_footer": "REST ADMIN - Awesome Admin Dashboard for RESTFul API",
     "login_description": "管理后台",
     "dashboard": "控制台",
     "go_home": "返回首页",
-    "succeed": "操作成功",
+    "success": "操作成功",
     "uploaded": "上传成功",
     "deleted": "删除成功",
     "deleted_all": "全部删除成功",

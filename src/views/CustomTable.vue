@@ -6,7 +6,7 @@
       </div>
       <div class="col col-md-12">
         <b-btn
-          class="mr-2"
+          class="mr-1"
           @click="$router.push('/rest/' + uri + '/create')"
           type="secondary"
           size="small"
@@ -16,7 +16,7 @@
           {{$t('actions.create')}}
         </b-btn>
         <b-btn
-          class="mr-2"
+          class="mr-1"
           @click="fetch"
           type="success"
           size="small"
@@ -26,7 +26,7 @@
           {{$t('actions.reload')}}
         </b-btn>
         <b-btn
-          class="mr-2"
+          class="mr-1"
           v-for="button in _.get(actions, 'toolbar.extra', [])"
           :key="button.label"
           v-bind="button"
@@ -45,26 +45,23 @@
       </div>
     </div>
     <div class>
-      <div class="my-2">
-        <b-form-builder
-          :onSubmit="doSearch"
-          back-text
-          inline
-          v-if="_.keys(table.searchFields).length > 0"
-          :submit-text="$t('actions.search')"
-          :fields="table.searchFields"
-          v-model="table.searchModel"
-        >
-          <div slot="extra-buttons" class="ml-2">
-            <b-button
-              @click="searchAndExport"
-              type="success"
-              v-if="_.get(actions, 'export')"
-            >{{$t('actions.search_and_export')}}</b-button>
-            <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
-          </div>
-        </b-form-builder>
-      </div>
+      <el-form class="py-3" inline @submit.native.prevent="doSearch" v-if="!_.isEmpty(table.searchModel)">
+        <el-fields v-model="table.searchModel" :fields="table.searchFields">
+          <el-form-item>
+            <el-button native-type="submit">{{$t('actions.search')}}</el-button>
+          </el-form-item>
+        </el-fields>
+
+        <div slot="extra-buttons" class="ml-2">
+          <b-button
+            @click="searchAndExport"
+            type="success"
+            v-if="_.get(actions, 'export')"
+          >{{$t('actions.search_and_export')}}</b-button>
+          <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
+        </div>
+      </el-form>
+
       <b-pagination
         class="pt-3"
         :limit="pageLimit"
@@ -204,10 +201,9 @@ export default {
     }
   },
   methods: {
-    doSearch(params) {
-      this.where = _.omitBy(params, v => v === null);
-      this.$refs.table.refresh();
-      // console.log(params);
+    doSearch() {
+      this.where = _.omitBy(this.table.searchModel, v => [null, ''].includes(v));
+      this.fetchItems()
     },
     searchAndExport() {
       const query = JSON.stringify({

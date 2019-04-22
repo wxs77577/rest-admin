@@ -1,6 +1,6 @@
 <template>
   <b-select :value="value" @input="$emit('input', arguments[0])" 
-  :style="{width: field.width || 'auto'}">
+  :style="{width: field.width || 'auto'}" v-bind="field">
     <b-option
       v-for="item in field.options"
       :key="item.value"

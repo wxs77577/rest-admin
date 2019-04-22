@@ -217,6 +217,7 @@
             v-model="model"
             :languages="languages"
             :fields="myFields"
+            :parent="parent"
             ref="subForm"
           ></b-form-builder>
           <!-- <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">

@@ -6,7 +6,7 @@
 
       <template v-for="(field, name) in fields">
         <label :for="'input_' + name" class="m-1" :key="name" v-if="field.label !== false">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :languages="languages" :parent="model" class="m-1 mr-4" 
+        <b-form-field :languages="languages" :parent="parent || model" class="m-1 mr-4" 
         @input="setValue(name, arguments[0], arguments[1])" :value="model[name]" :id="getFieldId(name)" 
         :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
       </template>
@@ -32,7 +32,7 @@
             v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
             :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
               <div class="">
-                <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
+                <b-form-field :languages="languages" :class="getInputClass(field)" :parent="parent || model" 
                 @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
                 :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
               </div>
@@ -50,7 +50,7 @@
         v-for="(field, name) in fields" :key="[id,subForm,name].join()" v-bind="field" :label-for="getFieldId(name)"
         :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
           <div class="">
-            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="model" 
+            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="parent || model" 
             @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
             :name="getFieldName(name)" :field="field" :state="!hasError(name)" :id="getFieldId(name)" />
           </div>
@@ -73,6 +73,7 @@ export default {
   name: "b-form-builder",
   components: {},
   props: {
+    parent: {},
     subForm: {
       type: String,
       default: ""

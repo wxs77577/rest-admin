@@ -73,7 +73,7 @@
             :per-page="perPage"
           ></b-pagination>
         </div>
-        <div class="col-md-4 form-inline justify-content-end">Page
+        <div class="col-md-4 form-inline justify-content-end">
           <b-select v-model="currentPage" class="mx-2">
             <option v-for="n in Math.ceil(total/perPage)" :key="n" :value="n">{{n}}</option>
           </b-select>

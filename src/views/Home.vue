@@ -1,23 +1,23 @@
 <template>
   <div class>
-    <div class="row">
-      <div class="col-sm-6 col-md-3" v-for="(item, index) in data.statics" :key="index">
+    <b-row :gutter="20">
+      <b-col :span="6" v-for="(item, index) in data.statics" :key="index">
         <b-card class="text-white" :class="[`bg-${item.bg}`]">
           <div class="h1 text-right mb-4">
             <i :class="[item.icon]"></i>
           </div>
           <div class="h4 mb-0">{{item.value}}</div>
           <small class="text-uppercase font-weight-bold">{{item.title}}</small>
-          <b-progress class="progress-white progress-xs mt-3" :percentage="item.progress" text-inside :stroke-width="10" :show-text="false"	/>
+          <!-- <b-progress class=" mt-3" :percentage="item.progress" text-inside :stroke-width="10" :show-text="false"	/> -->
         </b-card>
-      </div>
+      </b-col>
       <!--/.col-->
-    </div>
+    </b-row>
     <!--/.row-->
-    <div class="jumbotron mt-3">
-      <h1 class="display-4" v-html="data.title"></h1>
-      <div class="lead" v-html="data.description"></div>
-      <b-button v-bind="data.button" v-if="data.button">
+    <div class="mt-3">
+      <div class="display-4" style="font-size:3rem;" v-html="data.title"></div>
+      <div class="py-4" v-html="data.description"></div>
+      <b-button v-bind="data.button" v-if="data.button" @click="$router.push(data.button.to)">
         <i :class="[data.button.icon]" v-if="data.button.icon"></i>
         {{data.button.text}}
       </b-button>

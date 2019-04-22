@@ -76,8 +76,8 @@
 
     <template v-else>{{value}}</template>
 
-    <b-dialog :title="field.label" :visible.sync="showModal">
-      <img :src="preview(previewValue)" class="my-2 img-fluid">
+    <b-dialog :title="field.label" :visible.sync="showModal" class="text-center">
+      <img :src="preview(previewValue)" class="mw-100 border">
     </b-dialog>
   </div>
 </template>

@@ -9,7 +9,7 @@
           class="mr-2"
           @click="$router.push('/rest/' + uri + '/create')"
           type="secondary"
-          round
+          size="small"
           v-if="_.get(actions,'toolbar.create') !== false"
         >
           <i class="icon-plus"></i>
@@ -19,7 +19,7 @@
           class="mr-2"
           @click="fetch"
           type="success"
-          round
+          size="small"
           v-if="_.get(actions, 'toolbar.reload') !== false"
         >
           <i class="icon-reload"></i>
@@ -30,11 +30,13 @@
           v-for="button in _.get(actions, 'toolbar.extra', [])"
           :key="button.label"
           v-bind="button"
+          size="small"
         >{{button.label}}</b-btn>
         <b-btn
           @click="removeAll"
           class="pull-right"
           type="second"
+          size="small"
           v-if="_.get(actions, 'toolbar.delete_all') === true"
         >
           <i class="icon-trash"></i>
@@ -64,8 +66,8 @@
         </b-form-builder>
       </div>
       <b-pagination
+        class="pt-3"
         :limit="pageLimit"
-        background
         :current-page.sync="currentPage"
         :total="total"
         :page-size="perPage"
@@ -83,59 +85,51 @@
         :sort-direction="sortDirection"
       >
         <b-table-column
-          v-for="(field, key) in table.fields"
+          v-for="(field, key) in fields"
           :key="key"
           :prop="key"
           :label="field.label || key"
-          
         >
           <template slot-scope="scope">
-            <div v-if="key === '_actions'">
+            <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id></b-data-value>
+          </template>
+        </b-table-column>
+        <b-table-column :label="$t('actions.actions')" width="210">
+          <template slot-scope="scope">
+            <template v-for="(field, name) in actions">
               <b-button
-                v-for="(field, name) in actions"
                 :key="name"
                 :to="_.template(field.to)({item: scope.row})"
-                class="mr-1"
                 size="sm"
                 v-bind="field"
                 v-if="field.label"
               >{{field.label}}</b-button>
-              <b-btn
-                v-if="actions.edit !== false"
-                type="success"
-                size="mini"
-                @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}`)"
-                class="mr-1"
-              >{{$t('actions.view')}}</b-btn>
-              <b-btn
-                v-if="actions.edit !== false"
-                type="primary"
-                size="mini"
-                @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}/edit`)"
-                class="mr-1"
-              >{{$t('actions.edit')}}</b-btn>
-              <b-btn
-                v-if="actions.delete !== false"
-                size="mini"
-                @click.stop="remove(scope.row[$config.primaryKey])"
-              >{{$t('actions.delete')}}</b-btn>
-            </div>
-            <b-data-value
-              v-else
-              slot-scope="scope"
-              :field="field"
-              :key="key"
-              :name="key"
-              :model="scope.row"
-              short-id
-            ></b-data-value>
+            </template>
+
+            <b-btn
+              v-if="actions.edit !== false"
+              type="success"
+              size="mini"
+              @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}`)"
+            >{{$t('actions.view')}}</b-btn>
+            <b-btn
+              v-if="actions.edit !== false"
+              type="primary"
+              size="mini"
+              @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}/edit`)"
+            >{{$t('actions.edit')}}</b-btn>
+            <b-btn
+              v-if="actions.delete !== false"
+              size="mini"
+              @click.stop="remove(scope.row[$config.primaryKey])"
+            >{{$t('actions.delete')}}</b-btn>
           </template>
         </b-table-column>
       </b-table>
 
       <b-pagination
+        class="py-3"
         :limit="pageLimit"
-        background
         :current-page.sync="currentPage"
         :total="total"
         :page-size="perPage"
@@ -178,9 +172,9 @@ export default {
       this.applyRouteQuery();
       this.fetch();
     },
-    currentPage(){
-      this.fetchItems()
-    },
+    currentPage() {
+      this.fetchItems();
+    }
     // page(val) {}
   },
   computed: {
@@ -202,6 +196,11 @@ export default {
     },
     uri() {
       return this.resource.replace(/\./g, "/");
+    },
+    fields() {
+      const ret = Object.assign({}, this.table.fields);
+      delete ret._actions;
+      return ret;
     }
   },
   methods: {

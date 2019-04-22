@@ -21,6 +21,7 @@ import { sync } from 'vuex-router-sync'
 import 'font-awesome/css/font-awesome.min.css'
 import 'simple-line-icons/css/simple-line-icons.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import './scss/style.scss'
 
 // import "vue-snotify/styles/material.css"
@@ -34,9 +35,9 @@ import './form'
 import storage from './storage'
 Vue.prototype.$storage = storage
 
-import VueElementLoading from 'vue-element-loading'
+// import VueElementLoading from 'vue-element-loading'
 import './plugins/element.js'
-Vue.component('BLoading', VueElementLoading)
+// Vue.component('BLoading', VueElementLoading)
 
 Vue.prototype._ = _
 sync(store, router)

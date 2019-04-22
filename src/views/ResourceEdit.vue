@@ -11,21 +11,21 @@
         <b-btn type="primary" @click="$refs.form.handleSubmit()">{{$t('actions.save')}}</b-btn>
       </div>
     </div>
-    <b-form>
-      <b-form-fields :value="model" @update="$set(model, ...arguments)" :fields="fields"></b-form-fields>
+    <b-form label-width="120px">
+      <el-form-fields v-model="model" :fields="fields"></el-form-fields>
     </b-form>
   </div>
   <!-- </component> -->
 </template>
 
 <script>
-import BFormFields from '../components/FormFields'
+import ElFormFields from '../components/FormFields'
 import { mapState, mapGetters } from "vuex";
 import _ from "lodash";
 
 export default {
   components: {
-    BFormFields
+    ElFormFields
   },
   props: {
     formPath: {
@@ -143,6 +143,10 @@ export default {
       } else {
         this.$router.go(this.redirect);
       }
+    },
+    input(name, value){
+      console.log({name, value})
+      this.$set(this.model, name, value)
     }
   },
   mounted() {

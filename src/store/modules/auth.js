@@ -8,6 +8,11 @@ export default {
     user: null,
     token: null
   },
+  getters: {
+    authHeaders(state) {
+      return { Authorization: "Bearer " + state.token };
+    },
+  },
   mutations: {
     [types.SET_AUTH](state, data) {
       if (!data) {

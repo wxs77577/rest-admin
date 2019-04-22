@@ -1,5 +1,6 @@
 <template>
-  <b-select :value="value" @input="$emit('input', arguments[0])">
+  <b-select :value="value" @input="$emit('input', arguments[0])" 
+  :style="{width: field.width || 'auto'}">
     <b-option
       v-for="item in field.options"
       :key="item.value"
@@ -12,8 +13,8 @@
 <script>
 export default {
   props: {
+    field: {},
     value: {},
-    options: {},
   }
 };
 </script>

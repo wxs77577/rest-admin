@@ -66,11 +66,11 @@
     </template>
     <template v-else-if="['date', 'datetime'].includes(field.type)">
       <b-tooltip :content="String(value)">
-        <template v-if="_.isString(value)">{{$d(new Date(value), timeFormat)}}</template>
-        <template v-else-if="_.isArray(value)">
+        <span v-if="_.isString(value)">{{$d(new Date(value), timeFormat)}}</span>
+        <span v-else-if="_.isArray(value)">
           {{$d(new Date(value[0]), timeFormat)}} -
           {{$d(new Date(value[1]), timeFormat)}}
-        </template>
+        </span>
       </b-tooltip>
     </template>
 

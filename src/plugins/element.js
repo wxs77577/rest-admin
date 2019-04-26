@@ -15,3 +15,6 @@ import ElField from '../components/fields/Field'
 import ElFields from '../components/fields/Fields'
 Vue.component('el-field', ElField)
 Vue.component('el-fields', ElFields)
+// 兼容之前的bootstrap-vue
+Vue.component('b-form-group', Element.FormItem)
+

@@ -30,6 +30,7 @@
           v-for="button in _.get(actions, 'toolbar.extra', [])"
           :key="button.label"
           v-bind="button"
+          @click="$router.push(button.to)"
           size="small"
         >{{button.label}}</b-btn>
         <b-btn
@@ -86,6 +87,7 @@
           :key="key"
           :prop="key"
           :label="field.label || key"
+          v-bind="field"
         >
           <template slot-scope="scope">
             <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id :lang="currentLanguage"></b-data-value>

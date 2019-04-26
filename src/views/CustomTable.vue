@@ -86,6 +86,7 @@
           :key="key"
           :prop="key"
           :label="field.label || key"
+          v-bind="field"
         >
           <template slot-scope="scope">
             <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id :lang="currentLanguage"></b-data-value>

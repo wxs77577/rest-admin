@@ -1,5 +1,5 @@
 <template>
-  <component :is="com" :content="value" @change="$emit('input', arguments[0])"></component>
+  <component :is="com" :content="String(value || '')" @change="$emit('input', arguments[0])"></component>
 </template>
 
 <script>
@@ -10,7 +10,10 @@ export default {
     VueHtml5Editor: {}
   },
   props: {
-    value: {}
+    value: {
+      type: String,
+      default: ''
+    }
   },
   data(){
     return {

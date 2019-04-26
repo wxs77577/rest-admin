@@ -101,7 +101,7 @@
 import ElSelectField from "./SelectField";
 import ElHtmlField from "./HtmlField";
 import { mapGetters } from "vuex";
-import { get, set, isObject } from "lodash";
+import { get, set, isObject, cloneDeep } from "lodash";
 export default {
   name: "el-field",
   components: {
@@ -114,13 +114,31 @@ export default {
     field: {}
   },
   computed: {
-    ...mapGetters(["authHeaders"]),
+    ...mapGetters(["authHeaders", "currentLanguage"]),
+    isIntlInput() {
+      if (['select', 'select2'].includes(this.field.type)) {
+        return false
+      }
+      return this.field.intl || this.field.multilingual;
+    },
     model: {
       get() {
+        if (this.isIntlInput) {
+          return get(this.value, this.currentLanguage, "");
+        }
         return this.value;
       },
       set(val) {
-        this.$emit("input", val);
+        let value = cloneDeep(this.value)
+        if (this.isIntlInput) {
+          if (!value) {
+            value = {}
+          }
+          value[this.currentLanguage] = val
+        } else {
+          value = val
+        }
+        this.$emit("input", value);
       }
     }
   },
@@ -135,7 +153,7 @@ export default {
     update(key, val) {
       const value = this.getValue();
       set(value, key, val);
-      this.$emit("input", value);
+      this.$emit("input", value, this.currentLanguage);
     },
     removeItem(index) {
       const value = this.getValue();

@@ -88,7 +88,7 @@
           :label="field.label || key"
         >
           <template slot-scope="scope">
-            <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id></b-data-value>
+            <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id :lang="currentLanguage"></b-data-value>
           </template>
         </b-table-column>
         <b-table-column :label="$t('actions.actions')" width="210">

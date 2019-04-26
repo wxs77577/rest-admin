@@ -55,7 +55,7 @@ export default {
         bootcdn: 'https://cdn.bootcss.com',
         cdnjs: 'https://cdnjs.cloudflare.com/ajax/libs'
       }
-      const url = (sources[state.cdn] || state.cdn) + `/bootswatch/4.2.1/${
+      const url = (sources[state.cdn] || state.cdn) + `/bootswatch/4.3.1/${
         state.theme
       }/bootstrap.min.css`;
       // document.getElementById("css-skin").href = url;

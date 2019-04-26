@@ -13,7 +13,7 @@
       </div>
       <div v-else></div>
 
-      <!-- <locale-switcher></locale-switcher> -->
+      <locale-switcher></locale-switcher>
       <!-- <theme-switcher></theme-switcher> -->
     </div>
     <el-menu router class="border-right-0" :default-openeds="opened">

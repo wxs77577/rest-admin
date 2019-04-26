@@ -1,11 +1,8 @@
 <template>
-  <div class="py-2" v-if="site.locale_switcher">
-    
-    <el-radio-group v-model="model" size="mini">
-      <el-radio-button :label="lang" :key="lang"
-      v-for="lang in Object.keys($i18n.messages)"></el-radio-button>
-    </el-radio-group>
-  </div>
+  <el-radio-group v-model="model" size="mini">
+    <el-radio-button class="mb-0" :label="lang" :key="lang"
+    v-for="lang in Object.keys($i18n.messages)"></el-radio-button>
+  </el-radio-group>
 </template>
 
 <script>
@@ -13,10 +10,10 @@ import types from "../store/types";
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["site"]),
+    ...mapState(["i18n"]),
     model: {
       get(){
-        return this.site.locale
+        return this.i18n.locale
       },
       set(val){
         this.$store.commit(types.SET_LOCALE, val);

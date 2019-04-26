@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="text-center">
+  <div class="sidebar h-100" :class="{dark}">
+    <div class="text-center" v-if="!collapse">
       <a class="p-3 d-block" :href="site.url" target="_blank" v-if="site.logo">
         <img class="site-logo w-100" :src="site.logo">
       </a>
@@ -12,39 +12,48 @@
         </template>
       </div>
       <div v-else></div>
-
-      <locale-switcher></locale-switcher>
-      <!-- <theme-switcher></theme-switcher> -->
     </div>
-    <el-menu router class="border-right-0" :default-openeds="opened">
+    <el-menu
+      :collapse="collapse"
+      :collapse-transition="false"
+      router
+      :show-timeout="100"
+      class="border-right-0"
+      :default-openeds="opened"
+      :background-color="dark ? '#29363d' : '#fff'"
+      :text-color="dark ? '#ddd' : '#000'"
+      :active-text-color="dark ? '#20a8d8' : '#20a8d8'"
+    >
       <template v-for="(item, index) in menu">
         <el-submenu :index="item.name" :key="index" v-if="item.children">
           <template slot="title">
-            <i :class="item.icon"></i>
+            <i :class="item.icon" class="mr-2" v-if="item.icon"></i>
             <span>{{item.name}}</span>
           </template>
           <el-menu-item :index="child.url" :key="i" v-for="(child, i) in item.children">
-            <i :class="child.icon"></i>
-            <span class="ml-2">{{child.name}}</span>
+            <i class="mr-2" :class="child.icon" v-if="child.icon"></i>
+            <span>{{child.name}}</span>
           </el-menu-item>
         </el-submenu>
         <el-menu-item :index="item.url" :key="index" v-else>
-          <i :class="item.icon"></i>
-          <span class="ml-2">{{item.name}}</span>
+          <i class="mr-2" :class="item.icon" v-if="item.icon"></i>
+          <span>{{item.name}}</span>
         </el-menu-item>
       </template>
     </el-menu>
   </div>
 </template>
 <script>
-import ThemeSwitcher from "./ThemeSwitcher";
-import LocaleSwitcher from "./LocaleSwitcher";
+
 
 import { mapState } from "vuex";
 import { get } from "lodash";
 export default {
   name: "sidebar",
-
+  props: {
+    dark: {},
+    collapse: {}
+  },
   computed: {
     ...mapState(["auth", "site"]),
     opened() {
@@ -56,7 +65,8 @@ export default {
         if (v.title) {
           i++;
           arr[i] = {
-            name: v.name
+            name: v.name,
+            icon: v.icon
           };
           return arr;
         } else {
@@ -72,7 +82,7 @@ export default {
       return ret;
     }
   },
-  components: { LocaleSwitcher, ThemeSwitcher },
+  
   methods: {
     toggle(item) {
       this.$set(item, "open", !item.open);
@@ -82,6 +92,16 @@ export default {
 </script>
 
 <style lang="scss">
+.sidebar {
+  transition: background-color 0.3s;
+  &.dark {
+    background-color: var(--dark-bg);
+    color: #f7f7f7;
+  }
+  .site-logo {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+  }
+}
 // .sidebar {
 //   z-index: 999;
 //   box-shadow: 1px 0 20px rgba(0, 0, 0, 0.1);
@@ -90,11 +110,6 @@ export default {
 //   overflow: auto;
 //   letter-spacing: 1px;
 //   padding: 1rem;
-
-//   .site-logo {
-//     // border-radius: 1rem;
-//     // min-height:3em;
-//   }
 
 //   .nav-link {
 //     color: #666;

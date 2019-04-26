@@ -81,12 +81,14 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :sort-direction="sortDirection"
+        @sort-change="changeSort"
       >
         <b-table-column
           v-for="(field, key) in fields"
           :key="key"
           :prop="key"
           :label="field.label || key"
+          :sortable="field.sortable ? 'custom' : false"
           v-bind="field"
         >
           <template slot-scope="scope">
@@ -203,6 +205,11 @@ export default {
     }
   },
   methods: {
+    changeSort({prop, order}){
+      this.sortBy = prop
+      this.sortDesc = order === 'descending'
+      this.fetch()
+    },
     doSearch() {
       this.where = _.omitBy(this.table.searchModel, v => [null, ''].includes(v));
       this.fetchItems()

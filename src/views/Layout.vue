@@ -1,7 +1,7 @@
 <template>
   <el-container class="app" style="height:100vh;">
     <!-- <el-header></el-header> -->
-    <el-aside :style="{width: collapse ? '3.5rem' : '12rem'}">
+    <el-aside class="scroller" :style="{width: collapse ? '3.5rem' : '12rem'}">
       <app-sidebar :dark="dark" :collapse="collapse"/>
     </el-aside>
 
@@ -18,9 +18,8 @@
             <locale-switcher v-if="site.locale_switcher || 1"></locale-switcher>
           </el-col>
         </el-row>
-        
       </el-header>
-      <el-main class="pt-2">
+      <el-main class="pt-2 scroller">
         <div class="page-container container-fluid">
           <custom-component :config="$store.state.site.header"></custom-component>
           <h2
@@ -76,6 +75,9 @@ export default {
 </script>
 
 <style lang="scss">
+body{
+  overflow: hidden;
+}
 .app {
   overflow: hidden;
 }
@@ -91,5 +93,22 @@ export default {
 .el-aside {
   overflow-x: hidden;
   overflow-y: scroll;
+}
+
+.scroller {
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    background-color: #aaa;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #666;
+  }
 }
 </style>

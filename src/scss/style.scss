@@ -30,21 +30,7 @@
 
 
   
-*::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  
-}
 
-*::-webkit-scrollbar {
-  width: 4px;
-  background-color: #aaa;
-}
-
-*::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #666;
-}
 
 .el-form-item .el-form-item {
   margin-bottom: 22px;

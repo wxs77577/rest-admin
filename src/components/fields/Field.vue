@@ -89,8 +89,10 @@
         :fields="field.fields"
       ></el-fields>
     </el-col>
-    <el-col :md="field.item_cols * 2">
-      <i class="el-icon-plus" @click="addItem(index)"></i>
+    <el-col :md="field.item_cols * 2" class=" text-center">
+      <div class="el-upload--picture-card m-auto" @click="addItem(value.length - 1)">
+        <i class="el-icon-plus" ></i>
+      </div>
     </el-col>
   </el-row>
 

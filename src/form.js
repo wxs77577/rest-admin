@@ -13,8 +13,11 @@ Vue.component('avatar-cropper', AvatarCropper)
 import CustomComponet from './components/CustomComponent.vue'
 Vue.component('custom-component', CustomComponet)
 
-import FormSelect from './components/fields/FormSelect'
+import FormSelect from './components/form/FormSelect.vue'
 Vue.component('b-form-select', FormSelect)
+
+import FormBuilder from './components/form/FormBuilder.vue'
+Vue.component('b-form-builder', FormBuilder)
 
 export default {
   

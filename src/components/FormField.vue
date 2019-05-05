@@ -578,7 +578,7 @@ export default {
     },
     cropperUploadComplete(data) {
       if (data.message) {
-        this.$snotify.error(data.message);
+        this.$notify.error(data.message);
       }
     },
     changeLanguage(lang) {

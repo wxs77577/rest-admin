@@ -6,13 +6,13 @@
     </el-aside>
 
     <el-container>
-      <el-header class="main-header py-3 px-3" :class="{dark}">
+      <el-header class="main-header py-2 px-3" height="auto" :class="{dark}">
         <el-row>
-          <el-col :md="16">
+          <el-col :md="12">
             <span>&nbsp;</span>
             <!-- <h3 class="mr-2 mb-0">{{site.name}}</h3> -->
           </el-col>
-          <el-col :md="8" class="text-right">
+          <el-col :md="12" class="text-right">
             <el-checkbox v-model="dark" label="夜间模式"></el-checkbox>
             <el-checkbox v-model="collapse" label="折叠"></el-checkbox>
             <locale-switcher v-if="site.locale_switcher || 1"></locale-switcher>

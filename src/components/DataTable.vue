@@ -379,7 +379,7 @@ export default {
     goPage() {
       const totalPages = Math.ceil(this.totalRows / this.limitPages);
       if (this.inputPage <= 0 || this.inputPage > totalPages) {
-        this.$snotify.warning("请输入正确页码");
+        this.$notify.warning("请输入正确页码");
         this.inputPage = 1;
         this.page = 1;
         return;
@@ -392,7 +392,7 @@ export default {
         this.inputPage--;
         this.page = this.inputPage;
       } else {
-        this.$snotify.warning("已是第一页");
+        this.$notify.warning("已是第一页");
         this.inputPage = 1;
         this.page = 1;
       }
@@ -403,7 +403,7 @@ export default {
         this.inputPage++;
         this.page = this.inputPage;
       } else {
-        this.$snotify.warning("后面没有了");
+        this.$notify.warning("后面没有了");
         this.inputPage = 1;
         this.page = 1;
       }
@@ -510,7 +510,7 @@ export default {
         this.$http
           .delete(this.resourceUri + "/" + item[this.$config.primaryKey])
           .then(() => {
-            this.$snotify.success(this.$t("messages.deleted"));
+            this.$notify.success(this.$t("messages.deleted"));
             this.fetch();
           });
       }
@@ -518,7 +518,7 @@ export default {
     removeAll() {
       if (window.confirm(this.$t("messages.confirm_delete_all"))) {
         this.$http.delete(this.resourceUri).then(() => {
-          this.$snotify.success(this.$t("messages.deleted_all"));
+          this.$notify.success(this.$t("messages.deleted_all"));
           this.fetch();
         });
       }

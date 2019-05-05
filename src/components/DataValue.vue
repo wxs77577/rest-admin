@@ -45,7 +45,7 @@
     </template>
 
     <template v-else-if="['switch', 'boolean', 'checkbox'].includes(field.type)">
-      <b-badge :variant="value ? 'success' : 'danger'">{{value ? 'Yes' : 'No'}}</b-badge>
+      <el-tag :type="value ? 'success' : 'danger'">{{value ? 'YES' : 'NO'}}</el-tag>
     </template>
 
     <template v-else-if="field.refLabel">
@@ -60,25 +60,25 @@
     </template>
 
     <template v-else-if="name === $config.primaryKey">
-      <b-tooltip :content="value">
+      <el-tooltip :content="value">
         <span>{{String(shortId ? String(value).substr(-4) : value).toUpperCase()}}</span>
-      </b-tooltip>
+      </el-tooltip>
     </template>
-    <template v-else-if="['date', 'datetime'].includes(field.type)">
-      <b-tooltip :content="String(value)">
+    <template v-else-if="['date', 'datetime', 'daterange', 'datetimerange', 'timerange'].includes(field.type)">
+      <el-tooltip :content="String(value)">
         <span v-if="_.isString(value)">{{$d(new Date(value), timeFormat)}}</span>
-        <span v-else-if="_.isArray(value)">
+        <span v-else-if="_.isArray(value) && !_.isEmpty(value)">
           {{$d(new Date(value[0]), timeFormat)}} -
           {{$d(new Date(value[1]), timeFormat)}}
         </span>
-      </b-tooltip>
+      </el-tooltip>
     </template>
 
     <template v-else>{{value}}</template>
 
-    <b-dialog :title="field.label" :visible.sync="showModal" class="text-center">
+    <el-dialog :title="field.label" :visible.sync="showModal" class="text-center">
       <img :src="preview(previewValue)" class="mw-100 border">
-    </b-dialog>
+    </el-dialog>
   </div>
 </template>
 
@@ -187,7 +187,7 @@ export default {
 .data-value {
   .type-image {
     max-width: 100%;
-    max-height: 200px;
+    max-height: 5rem;
   }
 }
 </style>

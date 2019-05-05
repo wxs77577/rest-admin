@@ -12,6 +12,6 @@ module.exports = {
         chunks: 'all'
       }
     }
-  },
+  }
   
 }

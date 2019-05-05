@@ -14,28 +14,38 @@
   <el-upload
     v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
     :field="field"
+    class="single-uploader"
     v-model="model"
     :data="{type: name}"
     :action="API_URI + 'upload'"
     :headers="authHeaders"
-    :limit="field.multiple ? 10 : 1"
-    list-type="picture-card"
+    :show-file-list="false"
+    :on-success="res => $emit('input', res.url)"
   >
-    <i class="el-icon-plus"></i>
+    <template v-if="model">
+      <img v-if="field.type === 'image'" :src="model" class="img-preview" />
+      <audio v-else-if="field.type === 'audio'" :src="model" controls></audio>
+    </template>
+    <i v-else class="el-icon-plus single-uploader-icon"></i>
   </el-upload>
-  
+
   <el-switch
     v-else-if="['switch'].includes(field.type)"
     :title="JSON.stringify(value)"
     v-model="model"
   ></el-switch>
 
+  <el-checkbox
+    v-else-if="['checkbox'].includes(field.type)"
+    :title="JSON.stringify(value)"
+    v-model="model"
+  ></el-checkbox>
+
   <el-html-field v-else-if="['html'].includes(field.type)" v-model="model"></el-html-field>
 
   <el-date-picker
-    :style="{width: field.width || '12rem'}"
-    type="daterange"
-    v-else-if="['date', 'datetime'].includes(field.type)"
+    :type="type"
+    v-else-if="['date', 'datetime', 'daterange', 'datetimerange', 'time', 'timerange'].includes(type)"
     v-bind="field"
     v-model="model"
   ></el-date-picker>
@@ -81,7 +91,7 @@
     </el-table-column>
     <el-table-column prop="_actions"></el-table-column>
   </el-table>
-  <el-row v-else-if="['array'].includes(field.type)" class="border rounded py-3">
+  <el-row type="flex" v-else-if="['array'].includes(field.type)" class="flex-wrap">
     <el-col :md="field.item_cols * 2" v-for="(item, index) in value" :key="`${name}-${index}`">
       <el-fields
         :value="get(value, index, {})"
@@ -89,14 +99,16 @@
         :fields="field.fields"
       ></el-fields>
     </el-col>
-    <el-col :md="field.item_cols * 2" class=" text-center">
+    <el-col :md="field.item_cols * 2" class="text-center">
       <div class="el-upload--picture-card m-auto" @click="addItem(value.length - 1)">
-        <i class="el-icon-plus" ></i>
+        <i class="el-icon-plus"></i>
       </div>
     </el-col>
   </el-row>
 
-  <el-input v-else v-model="model"></el-input>
+  <el-input-number v-else-if="['number'].includes(field.type)" v-model="model" v-bind="field"></el-input-number>
+  
+  <el-input v-else v-model="model" :type="field.type"></el-input>
 </template>
 
 <script>
@@ -117,9 +129,12 @@ export default {
   },
   computed: {
     ...mapGetters(["authHeaders", "currentLanguage"]),
+    type() {
+      return this.field.range ? this.field.type + "range" : this.field.type;
+    },
     isIntlInput() {
-      if (['select', 'select2'].includes(this.field.type)) {
-        return false
+      if (["select", "select2"].includes(this.field.type)) {
+        return false;
       }
       return this.field.intl || this.field.multilingual;
     },
@@ -131,14 +146,14 @@ export default {
         return this.value;
       },
       set(val) {
-        let value = cloneDeep(this.value)
+        let value = cloneDeep(this.value);
         if (this.isIntlInput) {
           if (!value) {
-            value = {}
+            value = {};
           }
-          value[this.currentLanguage] = val
+          value[this.currentLanguage] = val;
         } else {
-          value = val
+          value = val;
         }
         this.$emit("input", value);
       }
@@ -170,4 +185,3 @@ export default {
   }
 };
 </script>
-

@@ -46,7 +46,12 @@
       </div>
     </div>
     <div class>
-      <el-form class="py-3" inline @submit.native.prevent="doSearch" v-if="!_.isEmpty(table.searchModel)">
+      <el-form
+        class="py-3"
+        inline
+        @submit.native.prevent="doSearch"
+        v-if="!_.isEmpty(table.searchModel)"
+      >
         <el-fields v-model="table.searchModel" :fields="table.searchFields">
           <el-form-item>
             <el-button native-type="submit">{{$t('actions.search')}}</el-button>
@@ -72,30 +77,29 @@
         :page-sizes="[10, 20]"
       ></b-pagination>
 
-      <b-table
-        class="data-table"
-        v-if="table.fields"
-        ref="table"
-        :data="items"
-        :current-page="currentPage"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :sort-direction="sortDirection"
-        @sort-change="changeSort"
-      >
+      <b-table ref="table" :data="items" @sort-change="changeSort" @filter-change="changeFilter">
         <b-table-column
           v-for="(field, key) in fields"
           :key="key"
           :prop="key"
           :label="field.label || key"
           :sortable="field.sortable ? 'custom' : false"
-          v-bind="field"
+          :width="field.width"
+          :column-key="key"
+          :filters="field.filterable ? field.options : null"
         >
           <template slot-scope="scope">
-            <b-data-value :field="field" :key="key" :name="key" :model="scope.row" short-id :lang="currentLanguage"></b-data-value>
+            <b-data-value
+              :field="field"
+              :key="key"
+              :name="key"
+              :model="scope.row"
+              short-id
+              :lang="currentLanguage"
+            ></b-data-value>
           </template>
         </b-table-column>
-        <b-table-column :label="$t('actions.actions')" width="210">
+        <b-table-column :label="$t('actions.actions')" width="220" fixed="right">
           <template slot-scope="scope">
             <template v-for="(field, name) in actions">
               <b-button
@@ -205,14 +209,21 @@ export default {
     }
   },
   methods: {
-    changeSort({prop, order}){
-      this.sortBy = prop
-      this.sortDesc = order === 'descending'
-      this.fetch()
+    changeFilter(filters) {
+      this.where = _.pickBy(_.merge({}, filters), 'length')
+      console.log(this.where)
+      this.fetchItems()
+    },
+    changeSort({ prop, order }) {
+      this.sortBy = prop;
+      this.sortDesc = order === "descending";
+      this.fetchItems();
     },
     doSearch() {
-      this.where = _.omitBy(this.table.searchModel, v => [null, ''].includes(v));
-      this.fetchItems()
+      this.where = _.omitBy(this.table.searchModel, v =>
+        [null, ""].includes(v)
+      );
+      this.fetchItems();
     },
     searchAndExport() {
       const query = JSON.stringify({
@@ -244,7 +255,7 @@ export default {
     remove(id) {
       if (window.confirm("是否删除?")) {
         this.$http.delete(`${this.uri}/${id}`).then(res => {
-          this.$snotify.success("删除成功");
+          this.$notify.success("删除成功");
           this.$refs.table.refresh();
         });
       }

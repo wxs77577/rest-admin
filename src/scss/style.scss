@@ -30,11 +30,44 @@
 
 
   
-
-
+.el-input, .el-select,.el-textarea{
+  width: 100%;
+  max-width: 25rem;
+}
 .el-form-item .el-form-item {
   margin-bottom: 22px;
 }
 .el-form--inline .el-form-item {
   margin-bottom: 0.5rem;
+}
+
+
+.el-upload-list--picture-card .el-upload-list__item{
+  vertical-align: middle;
+}
+.el-upload-list--picture-card .el-upload-list__item-thumbnail{
+  height: auto;
+}
+
+.single-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+  position: relative;  
+  padding: 0.5rem;
+  // overflow: hidden;
+}
+.single-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.single-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 10rem;
+  height: 10rem;
+  line-height: 10rem;
+  text-align: center;
+}
+.single-uploader .img-preview {
+  max-height: 10rem;
+  max-width: 100%;
 }

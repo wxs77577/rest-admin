@@ -1,5 +1,5 @@
 <template>
-  <component :is="com" :content="String(value || '')" @change="$emit('input', arguments[0])"></component>
+  <component class="html-editor" :is="com" :content="String(value || '')" @change="$emit('input', arguments[0])"></component>
 </template>
 
 <script>
@@ -28,5 +28,7 @@ export default {
 </script>
 
 <style>
-
+.html-editor img{
+  max-width: 100%;
+}
 </style>

@@ -61,7 +61,7 @@ export default {
     onSuccess(data) {
       const {message, then, redirect} = data
       if (message) {
-        this.$snotify.success(message);
+        this.$notify.success(message);
       }
       if (then) {
         eval(then)

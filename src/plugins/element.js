@@ -11,10 +11,15 @@ for (let name in Element) {
 Vue.component('BBtn', Element.Button)
 Vue.use(Element)
 
-import ElField from '../components/fields/Field'
-import ElFields from '../components/fields/Fields'
+import ElField from '../components/form/Field'
+import ElFields from '../components/form/Fields'
 Vue.component('el-field', ElField)
 Vue.component('el-fields', ElFields)
 // 兼容之前的bootstrap-vue
 Vue.component('b-form-group', Element.FormItem)
 
+const $message = {}
+'success error info warning'.split(' ').map(type => {
+  $message[type] = (message, title) => Vue.prototype.$message({type, title, message})
+})
+Vue.prototype.$notify = $message

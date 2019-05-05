@@ -37,14 +37,12 @@
 </template>
 
 <script>
-import ElFields from "../components/fields/Fields";
 import { mapState, mapGetters } from "vuex";
-import { get, map, filter, groupBy } from "lodash";
+import _ from "lodash";
+import { get, map, filter, groupBy, pickBy } from "lodash";
 
 export default {
-  components: {
-    ElFields
-  },
+  components: {},
   props: {
     formPath: {
       type: String,
@@ -148,7 +146,13 @@ export default {
             this.tag = data.tag;
           }
           this.fetch();
+          this.watchDeps()
+
         });
+    },
+    watchDeps(){
+      // _(this.fields).pickBy('ajaxOptions.depends').mapValues()
+      
     },
 
     handleSubmit() {

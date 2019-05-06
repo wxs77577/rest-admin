@@ -1,8 +1,8 @@
 <template>
   <div class="login-container" :style="site.login_style">
-    <el-row class="w-50 m-auto pt-5">
-      <el-col :md="12">
-        <h1>{{$t('actions.login')}}</h1>
+    <el-row class="w-50 bg-white login-box" type="flex">
+      <el-col :md="12" class="p-4 text-center">
+        <!-- <h1>{{$t('actions.login')}}</h1> -->
         <img :src="site.login_logo" style="margin-bottom:20px">
         <p class="text-muted">{{$t('messages.login_please')}}</p>
         <b-form-builder
@@ -14,23 +14,26 @@
           backText
         ></b-form-builder>
       </el-col>
-      <el-col :md="12" class=" bg-primary">
+      <el-col :md="12" class="bg-primary d-flex justify-content-center align-items-center">
         <div class="card text-white py-5 d-md-down-none" :style="site.desbg_style">
           <div class="card-body text-center align-items-center d-flex">
             <div class style="width: 100%">
-              <h2>{{site.name || 'REST ADMIN'}} - {{$t('messages.dashboard')}}</h2>
+              <h2>{{site.name || 'REST ADMIN'}}</h2>
               <p>{{site.description || $t('messages.login_description')}}</p>
               <!-- <button type="button" class="btn btn-primary active mt-3">{{$t('messages.go_home')}}</button> -->
+
+              <div>
+                <locale-switcher class="text-center"></locale-switcher>
+                
+              </div>
+              
             </div>
           </div>
         </div>
       </el-col>
     </el-row>
-    <div>
-      <p class="text-muted m-4 text-center">{{site.login_footer || $t('messages.login_footer')}}</p>
-      <locale-switcher class="text-center"></locale-switcher>
-    </div>
-    
+    <div class="mt-5 fs-sm text-muted" v-html="site.footer"></div>
+
   </div>
 </template>
 
@@ -83,13 +86,15 @@ export default {
 </script>
 
 <style lang="scss">
-.login-container{
+.login-container {
   display: flex;
   width: 100vw;
-  height:100vh;
+  height: 100vh;
   flex-direction: column;
   justify-content: center;
-  align-items: cneter;
-  background: var(--dark-bg);
+  align-items: center;
+}
+.login-box {
+  box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
 }
 </style>

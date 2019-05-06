@@ -98,7 +98,7 @@ export default {
         url = url.match(/(\/rest\/\w+)/).pop();
         menu = _.find(state.menu, { url }) || {};
       }
-      commit(types.SET_PAGE_HEADER, menu.name || "");
+      commit(types.SET_PAGE_HEADER, menu.name || false);
     }
   }
 };

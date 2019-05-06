@@ -14,10 +14,10 @@
       <!--/.col-->
     </b-row>
     <!--/.row-->
-    <div class="mt-3">
+    <div class="mt-5 text-center">
       <div class="display-4" style="font-size:3rem;" v-html="data.title"></div>
       <div class="py-4" v-html="data.description"></div>
-      <b-button v-bind="data.button" v-if="data.button" @click="$router.push(data.button.to)">
+      <b-button type="primary" v-bind="data.button" v-if="data.button" @click="$router.push(data.button.to)">
         <i :class="[data.button.icon]" v-if="data.button.icon"></i>
         {{data.button.text}}
       </b-button>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { types } from '../store';
 export default {
   data() {
     return {

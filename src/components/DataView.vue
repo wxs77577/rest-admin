@@ -2,11 +2,11 @@
   <div class="page-view">
     <div class="data-view">
       <legend v-if="model[$config.primaryKey]">{{$t('actions.view')}}: {{model[$config.primaryKey]}}</legend>
-      <table class="table ">
+      <table class="el-table ">
         <tbody>
           <tr v-for="(field, key) in fields" :key="key">
             <th style="min-width:120px">{{field.label || key}}</th>
-            <td>
+            <td style="width: 100%">
               <div v-if="['array'].includes(field.type)">
                 <b-table :items="model[key]" :fields="field.fields">
                   <template v-for="(child, k) in field.fields" :slot="k" slot-scope="row">
@@ -22,7 +22,7 @@
         </tbody>
       </table>
     </div>
-    <div slot="footer">
+    <div slot="footer" class="mt-3 text-center">
       <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
     </div>
   </div>

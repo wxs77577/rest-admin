@@ -1,6 +1,5 @@
 <template>
   <div class="data-form">
-
     <el-row class="row">
       <el-col :md="12">
         <legend
@@ -8,11 +7,17 @@
         >{{$t('actions.edit')}} id: {{model[$config.primaryKey]}}</legend>
       </el-col>
       <el-col :md="12" class="text-right hidden-sm-down">
-        <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
-        <b-btn type="primary" @click="handleSubmit">{{$t('actions.save')}}</b-btn>
+        <el-button @click="$router.go(-1)">{{$t('actions.back')}}</el-button>
+        <el-button type="primary" @click="handleSubmit">{{$t('actions.save')}}</el-button>
       </el-col>
     </el-row>
-    <b-form label-width="120px" @submit.native.prevent="handleSubmit">
+    <el-form
+      ref="form"
+      :model="model"
+      :rules="rules"
+      label-width="120px"
+      @submit.native.prevent="handleSubmit"
+    >
       <el-tabs value>
         <el-tab-pane
           v-for="(subFields, name) in groupBy(fields, v => v.group || '')"
@@ -22,16 +27,20 @@
         >
           <el-fields
             v-model="model"
+            :parent="model"
             :fields="_.pickBy(fields, v => String(v.group || '') === name)"
           ></el-fields>
         </el-tab-pane>
       </el-tabs>
 
       <el-form-item>
-        <el-button type="primary" native-type="submit">{{$t(`actions.${isNew ? 'create' : 'save'}`)}}</el-button>
+        <el-button
+          type="primary"
+          native-type="submit"
+        >{{$t(`actions.${isNew ? 'create' : 'save'}`)}}</el-button>
         <el-button @click="$router.go(-1)">取消</el-button>
       </el-form-item>
-    </b-form>
+    </el-form>
   </div>
   <!-- </component> -->
 </template>
@@ -57,8 +66,8 @@ export default {
       choices: {},
       fields: {},
       model: {},
-      errors: [],
-      tag: "b-card",
+      errors: {},
+      tag: "el-card",
       header: `
         ${get(this.currentMenu, "name", "") || ""}
         <small> ${String(this.resource || "").toUpperCase()} </small>
@@ -106,6 +115,12 @@ export default {
     with() {
       return filter(map(this.fields, v => v.ref && v.ref.split(".").shift()));
     },
+    rules() {
+      return _(this.fields)
+        .pickBy("rules")
+        .mapValues("rules")
+        .toJSON();
+    },
     ...mapState(["nav", "auth", "site"]),
     ...mapGetters(["currentMenu"])
   },
@@ -146,16 +161,15 @@ export default {
             this.tag = data.tag;
           }
           this.fetch();
-          this.watchDeps()
-
         });
     },
-    watchDeps(){
-      // _(this.fields).pickBy('ajaxOptions.depends').mapValues()
-      
-    },
 
-    handleSubmit() {
+    async handleSubmit() {
+      try {
+        await this.$refs.form.validate();
+      } catch (e) {
+        return this.$notify.warning("输入有误");
+      }
       const methodName = String(this.method).toLowerCase();
       let formData = this.model;
       this.$http[methodName](this.resourceUri, formData)
@@ -168,12 +182,12 @@ export default {
               message: this.$t("messages.success")
             });
           }
-          this.errors = [];
+          this.errors = {};
           this.$router.push(`/rest/${this.resource}`);
         })
         .catch(({ data, status }) => {
           if (status == 422) {
-            this.errors = data.message;
+            this.errors = data.errors;
           }
         });
     },

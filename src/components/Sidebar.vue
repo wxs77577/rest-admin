@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar h-100" :class="{dark}">
     <div class="text-center" v-if="!collapse">
-      <a class="p-3 d-block" :href="site.url" target="_blank" v-if="site.logo">
+      <a class="p-3 d-block" :href="site.url" v-if="site.logo">
         <img class="site-logo w-100" :src="site.logo">
       </a>
       <div class="py-3" v-if="site.sidebar_userinfo !== false">
@@ -23,6 +23,7 @@
       :background-color="dark ? '#29363d' : '#fff'"
       :text-color="dark ? '#ddd' : '#000'"
       :active-text-color="dark ? '#20a8d8' : '#20a8d8'"
+      unique-opened
     >
       <template v-for="(item, index) in menu">
         <el-submenu :index="item.name" :key="index" v-if="item.children">

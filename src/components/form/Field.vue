@@ -1,5 +1,5 @@
 <template>
-  <el-select-field v-if="['select', 'select2'].includes(field.type)" :field="field" v-model="model"></el-select-field>
+  <el-select-field :parent="parent" v-if="['select', 'select2'].includes(field.type)" :field="field" v-model="model"></el-select-field>
 
   <el-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
     <el-radio
@@ -9,7 +9,7 @@
     >{{option.text}}</el-radio>
   </el-radio-group>
 
-  <el-input v-else-if="['textarea'].includes(field.type)" type="textarea" v-model="model"></el-input>
+  <el-input v-else-if="['textarea'].includes(field.type)" type="textarea" v-model="model" rows="5"></el-input>
 
   <el-upload
     v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
@@ -25,6 +25,10 @@
     <template v-if="model">
       <img v-if="field.type === 'image'" :src="model" class="img-preview" />
       <audio v-else-if="field.type === 'audio'" :src="model" controls></audio>
+      <video v-else-if="field.type === 'video'" :src="model" controls></video>
+      <a v-else-if="field.type === 'file'" :href="model" controls>
+        {{model}}
+      </a>
     </template>
     <i v-else class="el-icon-plus single-uploader-icon"></i>
   </el-upload>
@@ -125,6 +129,7 @@ export default {
   props: {
     name: {},
     value: {},
+    parent: {},
     field: {}
   },
   computed: {

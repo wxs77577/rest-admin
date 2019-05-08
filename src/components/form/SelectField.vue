@@ -3,6 +3,7 @@
     :value="value"
     @input="$emit('input', arguments[0])"
     v-bind="field"
+    clearable
     :remote="!!field.ajaxOptions"
     :remote-method="field.ajaxOptions ? fetchOptions : null"
   >
@@ -21,7 +22,8 @@ export default {
   },
   data() {
     return {
-      options: (this.field.options || []).slice(0)
+      options: (this.field.options || []).slice(0),
+      where: {},
     };
   },
   methods: {
@@ -34,6 +36,7 @@ export default {
         where,
         value
       } = this.field.ajaxOptions;
+      where = _.merge({}, where, this.where)
       url = url || `${resource}/options`;
 
       const res = await this.$http.get(url, {
@@ -47,9 +50,23 @@ export default {
         }
       });
       this.options = res.data;
+    },
+    watchDeps() {
+      let { depends } = this.field.ajaxOptions || {};      
+      if (!depends) {
+        return
+      }
+      this.$watch(`parent.${depends}`, val => {
+        this.$emit('input', this.value)
+        this.where = {[depends]: val}
+        this.fetchOptions()
+      }, {
+        immediate: true
+      })
     }
   },
   mounted() {
+    this.watchDeps();
     this.field.ajaxOptions && this.fetchOptions();
   }
 };

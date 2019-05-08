@@ -187,7 +187,7 @@ export default {
 .data-value {
   .type-image {
     max-width: 100%;
-    max-height: 5rem;
+    max-height: 4rem;
   }
 }
 </style>

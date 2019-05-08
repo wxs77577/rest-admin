@@ -1,9 +1,10 @@
 <template>
   <div>
-    <el-form-item v-for="(field, name) in fields" :label="field.label || name" :key="name">
+    <el-form-item :prop="name" :error="get(errors, [name, 'message'], null)" v-for="(field, name) in fields" :label="field.label || name" :key="name">
       <el-field
         :name="name"
         :field="field"
+        :parent="parent"
         :value="get(value, name)"
         @input="update(name, arguments[0])"
       ></el-field>
@@ -20,7 +21,9 @@ export default {
   components: {},
   props: {
     value: {},
-    fields: {}
+    fields: {},
+    parent: {},
+    errors: {},
   },
   computed: {
     ...mapState(['site']),

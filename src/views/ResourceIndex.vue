@@ -256,7 +256,7 @@ export default {
       if (window.confirm("是否删除?")) {
         this.$http.delete(`${this.uri}/${id}`).then(res => {
           this.$notify.success("删除成功");
-          this.$refs.table.refresh();
+          this.fetch();
         });
       }
     },

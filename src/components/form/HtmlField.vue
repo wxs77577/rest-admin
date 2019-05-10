@@ -1,34 +1,85 @@
 <template>
-  <component class="html-editor" :is="com" :content="String(value || '')" @change="$emit('input', arguments[0])"></component>
+  <quill-editor class="html-editor" v-model="model" :options="editorOptions"></quill-editor>
 </template>
 
 <script>
-import VueHtml5EditorClass from "vue-html5-editor";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+import { quillEditor, Quill } from "vue-quill-editor";
+import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
+import { mapGetters } from 'vuex';
+
+Quill.register("modules/ImageExtend", ImageExtend);
 
 export default {
   components: {
-    VueHtml5Editor: {}
+    quillEditor
   },
   props: {
     value: {
       type: String,
-      default: ''
+      default: ""
+    },
+    options: {
+      default() {
+        return {};
+      }
     }
   },
-  data(){
-    return {
-      com: 'span'
+  computed: {
+    ...mapGetters(['authHeaders']),
+    model: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit("input", val);
+      }
+    },
+    editorOptions() {
+      return Object.assign(
+        {
+          modules: {
+            ImageExtend: {
+              loading: true,
+              name: "file",
+              action: this.$http.defaults.baseURL + 'upload',
+              headers: xhr => {
+                xhr.setRequestHeader('authorization', this.authHeaders.Authorization)
+              },
+              response: res => res.url,
+              success: () => this.$notify.success(this.$t('message.upload_success')),
+              error: () => this.$notify.error(this.$t('message.upload_error')),
+            },
+            toolbar: {
+              container: container,
+              handlers: {
+                image: function() {
+                  QuillWatch.emit(this.quill.id);
+                }
+              }
+            }
+          }
+        },
+        this.options
+      );
     }
   },
-  created(){
-    const VueHtml5Editor = new VueHtml5EditorClass(this.options)
-    this.com = VueHtml5Editor
-  }
-}
+  data() {
+    return {};
+  },
+  created() {}
+};
 </script>
 
-<style>
-.html-editor img{
-  max-width: 100%;
+<style lang="scss">
+.html-editor{
+  .ql-toolbar {
+    line-height: 1em;
+  }
+  img{
+    max-width: 100%;
+  }
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <el-container class="app" style="height:100vh;">
+  <el-container class="app" style="height:100vh;" :class="{dark}">
     <!-- <el-header></el-header> -->
-    <el-aside class="scroller" :style="{width: collapse ? '3.5rem' : '12rem'}">
+    <el-aside class="scroller" :class="{dark}" :style="{width: collapse ? '3.5rem' : '12rem'}">
       <app-sidebar :dark="dark" :collapse="collapse"/>
     </el-aside>
 
-    <el-container>
+    <el-container class="layout-main">
       <el-header class="main-header py-2 px-3" height="auto" :class="{dark}">
         <el-row>
           <el-col :md="12">
@@ -65,17 +65,28 @@ export default {
     return {
       path: [],
       header: "",
-      dark: false,
+      dark: true,
       collapse: false
     };
   },
-  watch: {},
-  created() {}
+  methods: {
+    bindStorage() {
+      this.dark = this.$storage.get("dark", false);
+      this.$watch("dark", val => this.$storage.set("dark", val));
+
+      this.collapse = this.$storage.get("collapse", false);
+      this.$watch("collapse", val => this.$storage.set("collapse", val));
+    }
+  },
+
+  created() {
+    this.bindStorage()
+  }
 };
 </script>
 
 <style lang="scss">
-body{
+body {
   overflow: hidden;
 }
 .app {
@@ -87,7 +98,7 @@ body{
 .main-header {
   background: #f0f3f5;
   &.dark {
-    background-color: var(--dark-bg);
+    background-color: var(--dark);
   }
 }
 .el-aside {
@@ -103,12 +114,20 @@ body{
 
   &::-webkit-scrollbar {
     width: 4px;
-    background-color: #aaa;
+    background-color: #eee;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: #666;
+    background-color: #aaa;
+  }
+  &.dark::-webkit-scrollbar {
+    background-color: #555;
+  }
+
+  &.dark::-webkit-scrollbar-thumb {
+    background-color: #000;
   }
 }
+
 </style>

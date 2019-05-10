@@ -44,54 +44,59 @@ const router = new Router({
       children: [
         {
           path: "/",
-          redirect: "/home"
-        },
-        {
-          path: "/home",
+          alias: '/home',
           name: "home",
           component: Home
         },
         {
           path: "/rest/:resource/stat/:type?",
           name: "stat",
-          component: ResourceStat
+          component: ResourceStat,
+          props: true,
         },
         {
           path: "/rest/:resource",
           name: "index",
-          component: ResourceIndex
+          component: ResourceIndex,
+          props: true,
         },
         {
           path: "/rest/:resource/create/:group?",
           name: "create",
-          component: ResourceEdit
+          component: ResourceEdit,
+          props: true,
         },
         {
           path: "/rest/:resource/:id/edit/:group?",
           name: "edit",
-          component: ResourceEdit
+          component: ResourceEdit,
+          props: true,
         },
 
         {
           path: "/rest/:resource/:id/:group?",
           name: "show",
-          component: ResourceShow
+          component: ResourceShow,
+          props: true,
         },
 
         {
           path: "/form/:uri?",
           name: "form",
-          component: CustomForm
+          component: CustomForm,
+          props: true,
         },
         {
           path: "/table/:uri?",
           name: "table",
-          component: CustomTable
+          component: CustomTable,
+          props: true,
         },
         {
           path: "/page/:uri?",
           name: "page",
-          component: CustomPage
+          component: CustomPage,
+          props: true,
         }
       ]
     }

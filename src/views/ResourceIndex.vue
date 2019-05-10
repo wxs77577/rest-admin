@@ -5,35 +5,33 @@
         <!-- <legend v-html="table.title || header"></legend> -->
       </div>
       <div class="col col-md-12">
-        <b-btn
+        <el-button
           class="mr-1"
           @click="$router.push('/rest/' + uri + '/create')"
-          type="secondary"
           size="small"
           v-if="_.get(actions,'toolbar.create') !== false"
         >
           <i class="icon-plus"></i>
           {{$t('actions.create')}}
-        </b-btn>
-        <b-btn
+        </el-button>
+        <el-button
           class="mr-1"
           @click="fetch"
-          type="success"
           size="small"
           v-if="_.get(actions, 'toolbar.reload') !== false"
         >
           <i class="icon-reload"></i>
           {{$t('actions.reload')}}
-        </b-btn>
-        <b-btn
+        </el-button>
+        <el-button
           class="mr-1"
           v-for="button in _.get(actions, 'toolbar.extra', [])"
           :key="button.label"
           v-bind="button"
           @click="$router.push(button.to)"
           size="small"
-        >{{button.label}}</b-btn>
-        <b-btn
+        >{{button.label}}</el-button>
+        <el-button
           @click="removeAll"
           class="pull-right"
           type="second"
@@ -42,7 +40,7 @@
         >
           <i class="icon-trash"></i>
           {{$t('actions.delete_all')}}
-        </b-btn>
+        </el-button>
       </div>
     </div>
     <div class>
@@ -50,7 +48,7 @@
         class="py-3"
         inline
         @submit.native.prevent="doSearch"
-        v-if="!_.isEmpty(table.searchModel)"
+        v-if="!_.isEmpty(table.searchFields)"
       >
         <el-fields v-model="table.searchModel" :fields="table.searchFields">
           <el-form-item>
@@ -111,23 +109,23 @@
               >{{field.label}}</b-button>
             </template>
 
-            <b-btn
+            <el-button
               v-if="actions.edit !== false"
               type="success"
               size="mini"
               @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}`)"
-            >{{$t('actions.view')}}</b-btn>
-            <b-btn
+            >{{$t('actions.view')}}</el-button>
+            <el-button
               v-if="actions.edit !== false"
               type="primary"
               size="mini"
               @click="$router.push(`/rest/${uri}/${scope.row[$config.primaryKey]}/edit`)"
-            >{{$t('actions.edit')}}</b-btn>
-            <b-btn
+            >{{$t('actions.edit')}}</el-button>
+            <el-button
               v-if="actions.delete !== false"
               size="mini"
               @click.stop="remove(scope.row[$config.primaryKey])"
-            >{{$t('actions.delete')}}</b-btn>
+            >{{$t('actions.delete')}}</el-button>
           </template>
         </b-table-column>
       </b-table>
@@ -151,7 +149,9 @@ import _ from "lodash";
 
 export default {
   components: {},
-  props: {},
+  props: {
+    resource: {}
+  },
   data() {
     return {
       init: false,
@@ -170,13 +170,6 @@ export default {
     };
   },
   watch: {
-    "$route.query"(val) {
-      this.applyRouteQuery();
-    },
-    "$route.params"(val) {
-      this.applyRouteQuery();
-      this.fetch();
-    },
     currentPage() {
       this.fetchItems();
     }
@@ -196,9 +189,6 @@ export default {
     actions() {
       return _.get(this.table, "fields._actions", {});
     },
-    resource() {
-      return this.$route.params.resource;
-    },
     uri() {
       return this.resource.replace(/\./g, "/");
     },
@@ -210,9 +200,9 @@ export default {
   },
   methods: {
     changeFilter(filters) {
-      this.where = _.pickBy(_.merge({}, filters), 'length')
-      console.log(this.where)
-      this.fetchItems()
+      this.where = _.pickBy(_.merge({}, filters), "length");
+      console.log(this.where);
+      this.fetchItems();
     },
     changeSort({ prop, order }) {
       this.sortBy = prop;
@@ -307,10 +297,20 @@ export default {
   },
   mounted() {},
   created() {
-    this.applyRouteQuery();
-
-    this.fetch();
+    // this.applyRouteQuery();
+    // this.fetch();
     // this.fetchTable();
+    this.$watch('resource', () => {
+      this.fetch()
+    }, {
+      immediate: true
+    })
+    this.$watch('$route.query', () => {
+      this.applyRouteQuery()
+      this.fetchItems()
+    }, {
+      deep: true,
+    })
   }
 };
 </script>

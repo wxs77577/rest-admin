@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar h-100" :class="{dark}">
+  <div class="sidebar h-100 d-flex flex-column" :class="{dark}">
     <div class="text-center" v-if="!collapse">
       <a class="p-3 d-block" :href="site.url" v-if="site.logo">
         <img class="site-logo w-100" :src="site.logo">
@@ -18,7 +18,8 @@
       :collapse-transition="false"
       router
       :show-timeout="100"
-      class="border-right-0"
+      class="border-right-0 flex-grow-1"
+      :default-active="decodeURIComponent($route.fullPath)"
       :default-openeds="opened"
       :background-color="dark ? '#29363d' : '#fff'"
       :text-color="dark ? '#ddd' : '#000'"
@@ -45,8 +46,6 @@
   </div>
 </template>
 <script>
-
-
 import { mapState } from "vuex";
 import { get } from "lodash";
 export default {
@@ -83,7 +82,7 @@ export default {
       return ret;
     }
   },
-  
+
   methods: {
     toggle(item) {
       this.$set(item, "open", !item.open);
@@ -96,7 +95,7 @@ export default {
 .sidebar {
   transition: background-color 0.3s;
   &.dark {
-    background-color: var(--dark-bg);
+    background-color: var(--dark);
     color: #f7f7f7;
   }
   .site-logo {

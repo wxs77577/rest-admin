@@ -27,11 +27,10 @@ axios.interceptors.response.use(response => {
 
       break;
     case 401:
-      // vm.$notify.error('请先登录')
       store.dispatch(types.GO_LOGIN)
       break
     case 404:
-      Vue.prototype.$notify.error(String(statusText))
+      Vue.prototype.$messager.error(String(statusText))
       break;
   }
   let msg = _.get(data, 'message', _.get(data, 'error.message', _.get(data, '0.message')))
@@ -40,7 +39,7 @@ axios.interceptors.response.use(response => {
   }
   
   if (msg) {
-    Vue.prototype.$notify.error(String(msg))
+    Vue.prototype.$messager.error(String(msg))
   } else {
     // console.error(data)
   }

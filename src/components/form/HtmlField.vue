@@ -8,9 +8,11 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import { quillEditor, Quill } from "vue-quill-editor";
 import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 Quill.register("modules/ImageExtend", ImageExtend);
+
+import _ from "lodash";
 
 export default {
   components: {
@@ -28,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authHeaders']),
+    ...mapGetters(["authHeaders"]),
     model: {
       get() {
         return this.value;
@@ -38,19 +40,24 @@ export default {
       }
     },
     editorOptions() {
-      return Object.assign(
+      return _.merge(
         {
+          height: 300,
           modules: {
             ImageExtend: {
               loading: true,
               name: "file",
-              action: this.$http.defaults.baseURL + 'upload',
+              action: this.$http.defaults.baseURL + "upload",
               headers: xhr => {
-                xhr.setRequestHeader('authorization', this.authHeaders.Authorization)
+                xhr.setRequestHeader(
+                  "authorization",
+                  this.authHeaders.Authorization
+                );
               },
               response: res => res.url,
-              success: () => this.$notify.success(this.$t('message.upload_success')),
-              error: () => this.$notify.error(this.$t('message.upload_error')),
+              success: () =>
+                this.$messager.success(this.$t("message.upload_success")),
+              error: () => this.$messager.error(this.$t("message.upload_error"))
             },
             toolbar: {
               container: container,
@@ -74,11 +81,22 @@ export default {
 </script>
 
 <style lang="scss">
-.html-editor{
+.html-editor {
   .ql-toolbar {
     line-height: 1em;
+    border-top-left-radius: var(--rounded);
+    border-top-right-radius: var(--rounded);
   }
-  img{
+  .ql-container {
+    border-bottom-left-radius: var(--rounded);
+    border-bottom-right-radius: var(--rounded);
+    .ql-editor {
+      min-height: 15rem;
+      max-height: 25rem;
+    }
+  }
+
+  img {
     max-width: 100%;
   }
 }

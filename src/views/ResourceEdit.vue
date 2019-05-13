@@ -1,21 +1,23 @@
 <template>
   <div class="data-form">
-    <el-row class="row">
-      <el-col :md="12">
+    <el-row type="flex" class="row">
+      <el-col :md="16">
         <legend
           v-if="model[$config.primaryKey]"
         >{{$t('actions.edit')}} id: {{model[$config.primaryKey]}}</legend>
       </el-col>
-      <el-col :md="12" class="text-right hidden-sm-down">
-        <el-button @click="$router.go(-1)">{{$t('actions.back')}}</el-button>
-        <el-button type="primary" @click="handleSubmit">{{$t('actions.save')}}</el-button>
+      <el-col :md="8" class="text-right">
+        <el-button size="small" onclick="window.history.go(-1)">
+          <i class="el-icon-back"></i> 返回
+        </el-button>
       </el-col>
     </el-row>
     <el-form
       ref="form"
       :model="model"
       :rules="rules"
-      label-width="120px"
+      label-position="right"
+      label-width="7em"
       @submit.native.prevent="handleSubmit"
     >
       <el-tabs value>
@@ -53,6 +55,8 @@ import { get, map, filter, groupBy, pickBy } from "lodash";
 export default {
   components: {},
   props: {
+    id: {},
+    resource: {},
     formPath: {
       type: String,
       default: "form",
@@ -83,17 +87,11 @@ export default {
     }
   },
   computed: {
-    id() {
-      return this.$route.params.id;
-    },
-    resource() {
-      return this.$route.params.resource;
-    },
     resourceUri() {
       let url = [this.site.resource_prefix, this.resource, this.id]
         .filter(v => v)
         .join("/");
-      let group = this.$route.params.group;
+      let group = this.group;
       if (group) {
         url += "?group=" + group;
       }
@@ -126,70 +124,65 @@ export default {
   },
   methods: {
     groupBy: groupBy,
-    fetch() {
+    async fetch() {
       if (this.isNew) {
         this.model = {};
         this.loaded = true;
         return;
       }
-      this.$http
-        .get(this.resourceUri, {
-          params: {
-            query: {
-              with: this.with
-            }
+      const { data } = await this.$http.get(this.resourceUri, {
+        params: {
+          query: {
+            with: this.with
           }
-        })
-        .then(({ data }) => {
-          this.loaded = true;
-          this.model = data;
-        });
+        }
+      });
+      this.loaded = true;
+      this.model = data;
     },
-    fetchForm() {
-      this.$http
-        .get(this.formUri, {
-          params: this.$route.params
-        })
-        .then(({ data }) => {
-          this.fields = data.fields;
-          this.layout = data.layout;
-          this.redirect = data.redirect;
-          if (data.header) {
-            this.header = data.header;
-          }
-          if (data.tag) {
-            this.tag = data.tag;
-          }
-          this.fetch();
-        });
+    async fetchForm() {
+      const { data } = await this.$http.get(this.formUri, {
+        params: this.$route.params
+      });
+
+      this.fields = data.fields;
+      this.layout = data.layout;
+      this.redirect = data.redirect;
+      if (data.header) {
+        this.header = data.header;
+      }
+      if (data.tag) {
+        this.tag = data.tag;
+      }
+      this.fetch();
     },
 
     async handleSubmit() {
       try {
         await this.$refs.form.validate();
       } catch (e) {
-        return this.$notify.warning("输入有误");
+        return this.$messager.warning("输入有误");
       }
       const methodName = String(this.method).toLowerCase();
       let formData = this.model;
-      this.$http[methodName](this.resourceUri, formData)
-        .then(({ data }) => {
-          if (this.successMessage) {
-            this.$message({ type: "success", message: this.successMessage });
-          } else {
-            this.$message({
-              type: "success",
-              message: this.$t("messages.success")
-            });
-          }
-          this.errors = {};
-          this.$router.push(`/rest/${this.resource}`);
-        })
-        .catch(({ data, status }) => {
-          if (status == 422) {
-            this.errors = data.errors;
-          }
-        });
+      try {
+        const { data } = await this.$http[methodName](
+          this.resourceUri,
+          formData
+        );
+
+        this.$messager.success(
+          this.successMessage || this.$t("messages.success")
+        );
+
+        this.errors = {};
+        this.$router.push(`/rest/${this.resource}`);
+      } catch (e) {
+        const { data, status } = e;
+        if (status == 422) {
+          this.errors = data.errors;
+        }
+      }
     },
 
     onSuccess() {

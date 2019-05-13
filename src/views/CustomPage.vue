@@ -42,7 +42,7 @@ export default {
     onSuccess(data) {
       const { message, then, redirect } = data;
       if (message) {
-        this.$notify.success(message);
+        this.$messager.success(message);
       }
       if (then) {
         eval(then);

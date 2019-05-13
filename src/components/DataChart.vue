@@ -11,8 +11,7 @@ export default {
     group: {
       type: String,
       required: true
-    },
-    
+    }
   },
   data() {
     return {
@@ -25,18 +24,17 @@ export default {
     }
   },
   methods: {
-    fetch() {
-      this.$http.get(this.resourceUri, {
-        params: {group: this.group}
-      }).then(({ data }) => {
-        this.options = data;
-        this.renderChart(this.options)
+    async fetch() {
+      const { data } = await this.$http.get(this.resourceUri, {
+        params: { group: this.group }
       });
-    },
+      this.options = data;
+      this.renderChart(this.options);
+    }
   },
   mounted() {
     // Overwriting base render method with actual data.
-    this.fetch()
+    this.fetch();
   }
 };
 </script>

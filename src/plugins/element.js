@@ -17,10 +17,10 @@ Vue.component('el-field', ElField)
 Vue.component('el-fields', ElFields)
 // 兼容之前的bootstrap-vue
 Vue.component('b-form-group', Element.FormItem)
-Vue.component('b-form-group', Element.FormItem)
+Vue.component('el-form-group', Element.FormItem)
 
-const $message = {}
+const $messager = {}
 'success error info warning'.split(' ').map(type => {
-  $message[type] = (message, title) => Vue.prototype.$message({type, title, message})
+  $messager[type] = (message, title) => Vue.prototype.$message({type, title, message})
 })
-Vue.prototype.$notify = $message
+Vue.prototype.$messager = $messager

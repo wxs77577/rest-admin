@@ -555,7 +555,7 @@ export default {
             try {
               data = JSON.parse(res);
             } catch (e) {
-              this.$notify.error("上传失败");
+              this.$messager.error("上传失败");
             }
             return data.url;
           }
@@ -568,7 +568,7 @@ export default {
     },
     cropperUploadComplete(data) {
       if (data.message) {
-        this.$notify.error(data.message);
+        this.$messager.error(data.message);
       }
     },
     changeLanguage(lang) {

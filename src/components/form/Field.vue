@@ -1,5 +1,10 @@
 <template>
-  <el-select-field :parent="parent" v-if="['select', 'select2'].includes(field.type)" :field="field" v-model="model"></el-select-field>
+  <el-select-field
+    :parent="parent"
+    v-if="['select', 'select2'].includes(field.type)"
+    :field="field"
+    v-model="model"
+  ></el-select-field>
 
   <el-radio-group v-else-if="['radiolist'].includes(field.type)" v-model="model">
     <el-radio
@@ -12,7 +17,7 @@
   <el-input v-else-if="['textarea'].includes(field.type)" type="textarea" v-model="model" rows="5"></el-input>
 
   <el-upload
-    v-else-if="['image', 'file', 'audio', 'video'].includes(field.type)"
+    v-else-if="['image', 'audio', 'video'].includes(field.type)"
     :field="field"
     class="single-uploader"
     v-model="model"
@@ -20,18 +25,18 @@
     :action="API_URI + 'upload'"
     :headers="authHeaders"
     :show-file-list="false"
+    :auto-upload="field.autoUpload !== false"
     :on-success="res => $emit('input', res.url)"
   >
     <template v-if="model">
-      <img v-if="field.type === 'image'" :src="model" class="img-preview" />
+      <img v-if="field.type === 'image'" :src="model" class="img-preview">
       <audio v-else-if="field.type === 'audio'" :src="model" controls></audio>
       <video v-else-if="field.type === 'video'" :src="model" controls></video>
-      <a v-else-if="field.type === 'file'" :href="model" controls>
-        {{model}}
-      </a>
+      <a v-else-if="field.type === 'file'" :href="model" controls>{{model}}</a>
     </template>
     <i v-else class="el-icon-plus single-uploader-icon"></i>
   </el-upload>
+  <el-input v-else-if="['file'].includes(field.type)" v-model="model" type="file"></el-input>
 
   <el-switch
     v-else-if="['switch'].includes(field.type)"
@@ -54,7 +59,7 @@
     v-model="model"
   ></el-date-picker>
 
-  <div v-else-if="['object'].includes(field.type)" class="border rounded py-3">
+  <div v-else-if="['object'].includes(field.type)" class="border rounded p-3">
     <el-fields v-model="model" :fields="field.fields"></el-fields>
   </div>
 
@@ -95,9 +100,10 @@
     </el-table-column>
     <el-table-column prop="_actions"></el-table-column>
   </el-table>
-  <el-row type="flex" v-else-if="['array'].includes(field.type)" class="flex-wrap">
+  <el-row type="flex" v-else-if="['array'].includes(field.type)" class="flex-wrap array-field">
     <el-col :md="field.item_cols * 2" v-for="(item, index) in value" :key="`${name}-${index}`">
       <el-fields
+        class="m-2 p-3 border rounded"
         :value="get(value, index, {})"
         @input="update(index, arguments[0])"
         :fields="field.fields"
@@ -111,7 +117,7 @@
   </el-row>
 
   <el-input-number v-else-if="['number'].includes(field.type)" v-model="model" v-bind="field"></el-input-number>
-  
+
   <el-input v-else v-model="model" :type="field.type"></el-input>
 </template>
 
@@ -190,3 +196,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.array-field {
+}
+</style>
+

@@ -28,10 +28,9 @@ export default {
     "site.fetched": "fetch"
   },
   methods: {
-    fetch() {
-      this.$http.get(this.fileUrl).then(({ data }) => {
-        this.items = data.data;
-      });
+    async fetch() {
+      const { data } = await this.$http.get(this.fileUrl);
+      this.items = data.data;
     }
   },
   created() {

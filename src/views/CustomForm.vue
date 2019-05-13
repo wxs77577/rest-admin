@@ -1,16 +1,7 @@
 <template>
   <b-card :header="form.header">
     <div class="custom-form">
-      <div class="row">
-        <div class="col col-md-8">
-          <legend>{{form.title}}</legend>
-        </div>
-        <div class="col col-md-4 text-right hidden-sm-down">
-          <b-btn @click="$router.go(-1)">{{$t('actions.back')}}</b-btn>
-          <b-btn type="primary" @click="$refs.form.handleSubmit()">{{form.submitText || $t('actions.save')}}</b-btn>
-        </div>
-      </div>
-      <b-form-builder v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" :auth="auth" />
+      <b-form-builder v-model="value" v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" :auth="auth" />
     </div>
   </b-card>
 </template>
@@ -27,7 +18,8 @@ export default {
   data() {
     return {
       loaded: false,
-      form: {}
+      form: {},
+      value: {},
     };
   },
   watch: {
@@ -61,7 +53,7 @@ export default {
     onSuccess(data) {
       const {message, then, redirect} = data
       if (message) {
-        this.$notify.success(message);
+        this.$messager.success(message);
       }
       if (then) {
         eval(then)

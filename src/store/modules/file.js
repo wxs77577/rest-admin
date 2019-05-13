@@ -11,10 +11,8 @@ export default {
     },
   },
   actions: {
-    [types.FETCH_ONLINE_FILES]({ commit }) {
-      http.get('files', { params: params }).then(({ data }) => {
-
-      })
+    async [types.FETCH_ONLINE_FILES]({ commit }) {
+      const { data } = await http.get('files', { params: params })
     }
   }
 }

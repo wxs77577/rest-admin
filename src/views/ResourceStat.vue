@@ -27,12 +27,6 @@ export default {
     };
   },
   computed: {
-    id() {
-      return this.$route.params.id
-    },
-    resource() {
-      return this.$route.params.resource
-    },
     group() {
       return this.$route.query.group || 'status'
     }

@@ -15,6 +15,7 @@ Vue.component('custom-component', CustomComponet)
 
 import FormSelect from './components/form/FormSelect.vue'
 Vue.component('b-form-select', FormSelect)
+Vue.component('el-form-select', FormSelect)
 
 import FormBuilder from './components/form/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)

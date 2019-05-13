@@ -59,13 +59,9 @@ export default {
 </script>
 
 <style>
-body {
-  /* background: darkgrey !important; */
+html,body{
+  margin: 0;
+  padding:0 !important;
 }
-#app {
-  /* background:#fff; */
-  /* width:1200px; */
-  /* margin:0 auto; */
-  /* box-shadow:0 0 30px #333; */
-}
+
 </style>

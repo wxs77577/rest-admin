@@ -15,13 +15,12 @@ export default {
 
     };
   },
+  props: {
+    id: {},
+    resource: {},
+  },
   computed: {
-    id() {
-      return this.$route.params.id
-    },
-    resource() {
-      return this.$route.params.resource
-    }
+
   },
   methods: {
     

@@ -19,9 +19,11 @@
 .card {
   // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
+:root{
+  --rounded: 0.25rem;
+}
 .rounded{
-  border-radius: 4px;
+  border-radius: var(--rounded);
 }
 
 
@@ -47,6 +49,7 @@
 
 .single-uploader .el-upload {
   border: 1px dashed #d9d9d9;
+  border-radius: var(--rounded);
   cursor: pointer;
   position: relative;  
   padding: 0.5rem;

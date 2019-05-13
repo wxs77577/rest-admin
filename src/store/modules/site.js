@@ -57,7 +57,7 @@ export default {
       }
       const url = (sources[state.cdn] || state.cdn) + `/bootswatch/4.3.1/${
         state.theme
-      }/bootstrap.min.css`;
+        }/bootstrap.min.css`;
       // document.getElementById("css-skin").href = url;
       // storage.set("theme", state.theme);
     }
@@ -74,21 +74,20 @@ export default {
     }
   },
   actions: {
-    [types.FETCH_SITE]({ commit, dispatch, state }) {
-      http.get("site").then(({ data }) => {
-        data.fetched = true;
-        commit(types.SET_SITE, data);
-        dispatch(types.FETCH_PAGE_HEADER);
-        if (!state.page_header) {
-          // dispatch(types.FETCH_PAGE_HEADER)
-        }
-        if (state.theme) {
-          commit(types.SET_THEME, state.theme);
-        }
-        if (data.locale) {
-          commit(types.SET_LOCALE, data.locale);
-        }
-      });
+    async [types.FETCH_SITE]({ commit, dispatch, state }) {
+      const { data } = await http.get("site")
+      data.fetched = true;
+      commit(types.SET_SITE, data);
+      dispatch(types.FETCH_PAGE_HEADER);
+      if (!state.page_header) {
+        // dispatch(types.FETCH_PAGE_HEADER)
+      }
+      if (state.theme) {
+        commit(types.SET_THEME, state.theme);
+      }
+      if (data.locale) {
+        commit(types.SET_LOCALE, data.locale);
+      }
     },
     [types.FETCH_PAGE_HEADER]({ commit, state, rootState }) {
       // return;

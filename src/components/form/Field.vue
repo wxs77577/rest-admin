@@ -1,5 +1,6 @@
 <template>
   <el-select-field
+    :name="name"
     :parent="parent"
     v-if="['select', 'select2'].includes(field.type)"
     :field="field"
@@ -17,7 +18,7 @@
   <el-input v-else-if="['textarea'].includes(field.type)" type="textarea" v-model="model" rows="5"></el-input>
 
   <el-upload
-    v-else-if="['image', 'audio', 'video'].includes(field.type)"
+    v-else-if="['image', 'audio', 'video', 'file'].includes(field.type)"
     :field="field"
     class="single-uploader"
     v-model="model"
@@ -36,7 +37,10 @@
     </template>
     <i v-else class="el-icon-plus single-uploader-icon"></i>
   </el-upload>
-  <el-input v-else-if="['file'].includes(field.type)" v-model="model" type="file"></el-input>
+  <div class="el-input" v-else-if="['file-raw'].includes(field.type)">
+    <input class="el-input__inner" @input="selectFile" type="file" :name="name" />
+  </div>
+  
 
   <el-switch
     v-else-if="['switch'].includes(field.type)"
@@ -171,6 +175,9 @@ export default {
     }
   },
   methods: {
+    selectFile(e){
+      this.model = e.target.files[0]
+    },
     get: get,
     getValue() {
       if (this.field.type === "array") {

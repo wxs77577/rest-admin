@@ -1,9 +1,9 @@
 <template>
-  <b-card :header="form.header">
+  <el-card :header="form.header">
     <div class="custom-form">
-      <b-form-builder v-model="value" v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" :auth="auth" />
+      <el-form-builder v-model="value" v-if="form.fields" ref="form" v-bind="form" @success="onSuccess" :auth="auth" />
     </div>
-  </b-card>
+  </el-card>
 </template>
 
 <script>

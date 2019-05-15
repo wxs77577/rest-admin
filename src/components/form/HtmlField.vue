@@ -1,22 +1,23 @@
 <template>
-  <quill-editor class="html-editor" v-model="model" :options="editorOptions"></quill-editor>
+  <vue-editor
+    class="html-editor"
+    v-model="model"
+    :options="editorOptions"
+    useCustomImageHandler
+    @imageAdded="handleImageAdded"
+  ></vue-editor>
 </template>
 
 <script>
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
-import { quillEditor, Quill } from "vue-quill-editor";
-import { container, ImageExtend, QuillWatch } from "quill-image-extend-module";
-import { mapGetters } from "vuex";
 
-Quill.register("modules/ImageExtend", ImageExtend);
+import { VueEditor, Quill } from "vue2-editor";
+import { mapGetters } from "vuex";
 
 import _ from "lodash";
 
 export default {
   components: {
-    quillEditor
+    VueEditor
   },
   props: {
     value: {
@@ -44,29 +45,7 @@ export default {
         {
           height: 300,
           modules: {
-            ImageExtend: {
-              loading: true,
-              name: "file",
-              action: this.$http.defaults.baseURL + "upload",
-              headers: xhr => {
-                xhr.setRequestHeader(
-                  "authorization",
-                  this.authHeaders.Authorization
-                );
-              },
-              response: res => res.url,
-              success: () =>
-                this.$messager.success(this.$t("message.upload_success")),
-              error: () => this.$messager.error(this.$t("message.upload_error"))
-            },
-            toolbar: {
-              container: container,
-              handlers: {
-                image: function() {
-                  QuillWatch.emit(this.quill.id);
-                }
-              }
-            }
+            
           }
         },
         this.options
@@ -75,6 +54,15 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await this.$http.post("upload", formData);
+      Editor.insertEmbed(cursorLocation, "image", res.data.url);
+      resetUploader();
+    }
   },
   created() {}
 };

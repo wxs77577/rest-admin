@@ -8,6 +8,7 @@
     :remote-method="field.ajaxOptions ? fetchOptions : null"
   >
     <el-option v-for="item in options" :key="item.value" :label="item.text" :value="item.value"></el-option>
+    <input type="hidden" :name="name" :value="value">
   </el-select>
 </template>
 
@@ -16,6 +17,7 @@ import _ from "lodash";
 
 export default {
   props: {
+    name: {},
     field: {},
     value: {},
     parent: {}

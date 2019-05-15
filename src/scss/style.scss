@@ -26,7 +26,13 @@
   border-radius: var(--rounded);
 }
 
-
+.el-input [type=file]::-webkit-file-upload-button{
+  -webkit-appearance: none;
+  background: none;
+  border: none !important;
+  outline: none;
+  cursor: pointer;
+}
   
 .el-input, .el-select,.el-textarea{
   width: 100%;

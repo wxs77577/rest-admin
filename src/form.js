@@ -19,6 +19,7 @@ Vue.component('el-form-select', FormSelect)
 
 import FormBuilder from './components/form/FormBuilder.vue'
 Vue.component('b-form-builder', FormBuilder)
+Vue.component('el-form-builder', FormBuilder)
 
 export default {
   

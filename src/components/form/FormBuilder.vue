@@ -1,5 +1,10 @@
 <template>
-  <el-form v-bind="$props" ref="form" @submit.native.prevent="submit">
+  <!-- <el-form v-if="useFormData" v-bind="$props" ref="form" >
+    <el-fields :fields="fields" :value="value" @input="$emit('input', arguments[0])"></el-fields>
+    <el-button native-type="submit" type="primary">{{submitText}}</el-button>
+    <el-button v-if="backText">{{backText}}</el-button>
+  </el-form>-->
+  <el-form v-bind="$props" :model="value" ref="form" @submit.native.prevent="submit">
     <el-fields :fields="fields" :value="value" @input="$emit('input', arguments[0])"></el-fields>
     <el-button native-type="submit" type="primary">{{submitText}}</el-button>
     <el-button v-if="backText">{{backText}}</el-button>
@@ -16,19 +21,24 @@ export default {
     },
     value: {},
     submitText: {},
-    useFormData: {},
+    useFormData: {
+      type: Boolean
+    },
     backText: {}
   },
   methods: {
     async submit() {
+      let value = {};
       if (this.useFormData) {
-        return this.$refs.form.submit()
+        const fd = new FormData();
+        for (let k in this.value) {
+          fd.append(k, this.value[k])
+        }
+        value = fd;
       }
-      const { data } = await this.$http[String(this.method).toLowerCase()](
-        this.action,
-        this.value
-      );
-      this.$emit('success', data)
+      const method = String(this.method).toLowerCase();
+      const { data } = await this.$http[method](this.action, value);
+      this.$emit("success", data);
     }
   }
 };

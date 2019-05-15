@@ -1,19 +1,6 @@
 <template>
   <div class="login-container" :style="site.login_style">
-    <el-row class="w-50 bg-white login-box" type="flex">
-      <el-col :md="12" class="p-4 text-center">
-        <!-- <h1>{{$t('actions.login')}}</h1> -->
-        <img :src="site.login_logo" style="margin-bottom:20px">
-        <p class="text-muted">{{$t('messages.login_please')}}</p>
-        <b-form-builder
-          action="login"
-          :fields="fields"
-          v-model="model"
-          @success="onSuccess"
-          :submitText="$t('actions.login')"
-          backText
-        ></b-form-builder>
-      </el-col>
+    <el-row class="bg-white login-box flex-wrap" type="flex">
       <el-col :md="12" class="bg-primary d-flex justify-content-center align-items-center">
         <div class="card text-white py-5 d-md-down-none" :style="site.desbg_style">
           <div class="card-body text-center align-items-center d-flex">
@@ -31,6 +18,20 @@
           </div>
         </div>
       </el-col>
+      <el-col :md="12" class="p-4 text-center">
+        <!-- <h1>{{$t('actions.login')}}</h1> -->
+        <img :src="site.login_logo" style="margin-bottom:20px">
+        <p class="text-muted">{{$t('messages.login_please')}}</p>
+        <b-form-builder
+          action="login"
+          :fields="fields"
+          v-model="model"
+          @success="onSuccess"
+          :submitText="$t('actions.login')"
+          backText
+        ></b-form-builder>
+      </el-col>
+      
     </el-row>
     <div class="mt-5 fs-sm text-muted" v-html="site.footer"></div>
 
@@ -81,7 +82,9 @@ export default {
       });
     }
   },
-  mounted() {}
+  mounted() {
+    this.$store.commit(types.SET_AUTH, {})
+  }
 };
 </script>
 
@@ -96,5 +99,7 @@ export default {
 }
 .login-box {
   box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
+  width: 40rem;
+  max-width: 80vw;
 }
 </style>

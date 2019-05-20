@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     timeFormat() {
-      return this.field.format || "short";
+      return "short";
     },
     isIntl() {
       return this.field.intl || this.field.multilingual;

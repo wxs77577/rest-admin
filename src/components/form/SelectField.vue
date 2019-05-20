@@ -4,6 +4,7 @@
     @input="$emit('input', arguments[0])"
     v-bind="field"
     clearable
+    filterable
     :remote="!!field.ajaxOptions"
     :remote-method="field.ajaxOptions ? fetchOptions : null"
   >

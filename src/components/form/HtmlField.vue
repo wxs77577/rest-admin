@@ -69,6 +69,10 @@ export default {
 </script>
 
 <style lang="scss">
+.ql-snow .ql-toolbar button svg, .quillWrapper .ql-snow.ql-toolbar button svg{
+  width: 18px !important;
+  height: 18px !important;
+}
 .html-editor {
   .ql-toolbar {
     line-height: 1em;

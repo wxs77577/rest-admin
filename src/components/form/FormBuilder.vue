@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     async submit() {
-      let value = {};
+      let value = this.value;
       if (this.useFormData) {
         const fd = new FormData();
         for (let k in this.value) {

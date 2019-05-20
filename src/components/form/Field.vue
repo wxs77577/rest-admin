@@ -145,7 +145,7 @@ export default {
   computed: {
     ...mapGetters(["authHeaders", "currentLanguage"]),
     type() {
-      return this.field.range ? this.field.type + "range" : this.field.type;
+      return this.field.range ? this.field.type.replace(/(range)?$/, 'range') : this.field.type;
     },
     isIntlInput() {
       if (["select", "select2"].includes(this.field.type)) {

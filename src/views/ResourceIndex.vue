@@ -4,6 +4,7 @@
       <el-button
         @click="$router.push('/rest/' + uri + '/create')"
         size="small"
+        type="primary"
         v-if="_.get(actions,'toolbar.create') !== false"
       >
         <i class="icon-plus"></i>
@@ -44,27 +45,28 @@
       </el-fields>
 
       <div slot="extra-buttons" class="ml-2">
-        <b-button
+        <el-button
           @click="searchAndExport"
           type="success"
           v-if="_.get(actions, 'export')"
-        >{{$t('actions.search_and_export')}}</b-button>
+        >{{$t('actions.search_and_export')}}</el-button>
         <iframe :src="iframeSrc" style="width:0;height:0;border:none;"></iframe>
       </div>
     </el-form>
 
-    <b-pagination
+    <el-pagination
       class="py-3"
       :limit="pageLimit"
       :current-page.sync="currentPage"
       :page-size.sync="perPage"
       :total="total"
+      
       :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper"
-    ></b-pagination>
+    ></el-pagination>
 
-    <b-table ref="table" :data="items" @sort-change="changeSort" @filter-change="changeFilter">
-      <b-table-column
+    <el-table ref="table" row-key="_id" :data="items" @sort-change="changeSort" @filter-change="changeFilter">
+      <el-table-column
         v-for="(field, key) in fields"
         :key="key"
         :prop="key"
@@ -75,26 +77,26 @@
         :filters="field.filterable ? field.options : null"
       >
         <template slot-scope="scope">
-          <b-data-value
+          <el-data-value
             :field="field"
             :key="key"
             :name="key"
             :model="scope.row"
             short-id
             :lang="currentLanguage"
-          ></b-data-value>
+          ></el-data-value>
         </template>
-      </b-table-column>
-      <b-table-column :label="$t('actions.actions')" width="220" fixed="right">
+      </el-table-column>
+      <el-table-column :label="$t('actions.actions')" width="220" fixed="right">
         <template slot-scope="scope">
           <template v-for="(field, name) in actions">
-            <b-button
+            <el-button
               :key="name"
               :to="_.template(field.to)({item: scope.row})"
               size="sm"
               v-bind="field"
               v-if="field.label"
-            >{{field.label}}</b-button>
+            >{{field.label}}</el-button>
           </template>
 
           <el-button
@@ -115,10 +117,10 @@
             @click.stop="remove(scope.row[$config.primaryKey])"
           >{{$t('actions.delete')}}</el-button>
         </template>
-      </b-table-column>
-    </b-table>
+      </el-table-column>
+    </el-table>
 
-    <b-pagination
+    <el-pagination
       class="py-3"
       :limit="pageLimit"
       :current-page.sync="currentPage"
@@ -126,13 +128,12 @@
       :total="total"
       :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper"
-    ></b-pagination>
+    ></el-pagination>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import types from "../store/types";
 import _ from "lodash";
 
 export default {
@@ -240,7 +241,7 @@ export default {
     },
     async remove(id) {
       if (window.confirm("是否删除?")) {
-        const res = await this.$http.delete(`${this.uri}/${id}`);
+        await this.$http.delete(`${this.uri}/${id}`);
         this.$messager.success("删除成功");
         this.fetch();
       }

@@ -1,7 +1,6 @@
 {
   "name": "vue-latest",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.9.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,11 +9,8 @@
     "test-api": "node ./api"
   },
   "dependencies": {
-    "@riophae/vue-treeselect": "0.0.38",
     "axios": "^0.18.0",
     "bootstrap": ">=4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.14",
-    "bootswatch": "^4.3.1",
     "clipboard": "^2.0.1",
     "cropperjs": "^1.4.1",
     "dayjs": "^1.6.6",
@@ -25,16 +21,9 @@
     "lodash": "^4.17.4",
     "pell": "^1.0.6",
     "quill-image-extend-module": "^1.1.2",
-    "simple-line-icons": "^2.4.1",
     "vue": "^2",
-    "vue-element-loading": "^1.0.4",
-    "vue-html5-editor": "^1.1.1",
     "vue-i18n": "^7.6.0",
-    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
-    "vue-select": "^2.3.0",
-    "vue-snotify": "^3.1.0",
-    "vue2-datepicker": "^1.6.0",
     "vue2-editor": "^2.6.6",
     "vuedraggable": "^2.15.0",
     "vuex": "^3",
@@ -47,8 +36,8 @@
     "body-parser": "^1.18.3",
     "express": "^5.0.0-alpha.7",
     "faker": "^4.1.0",
-    "node-sass": "^4.11.0",
     "nodemon": "^1.18.3",
+    "sass": "^1.20.1",
     "sass-loader": "^7.0.1",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.5.16"

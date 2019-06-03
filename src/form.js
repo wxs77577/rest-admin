@@ -4,7 +4,7 @@ import Vue from 'vue'
 // Vue.component('b-switch', Switch)
 
 import DataValue from './components/DataValue.vue'
-Vue.component('b-data-value', DataValue)
+Vue.component('el-data-value', DataValue)
 
 
 import AvatarCropper from "./components/AvatarCropper.vue"

@@ -46,7 +46,7 @@ export default {
       if (this.multiple) {
         let values = this.model.slice(0);
         const i = values.findIndex(val);
-        console.log(i);
+        // console.log(i);
         if (i) {
           values.splice(i, 1);
         } else {

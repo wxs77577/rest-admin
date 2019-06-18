@@ -427,7 +427,7 @@ export default {
           }
         }
         if (this.isIntl) {
-          console.log(this.name, ret, this.currentLanguage);
+          // console.log(this.name, ret, this.currentLanguage);
           return _.get(ret, this.currentLanguage, "");
         }
         return ret;
@@ -588,7 +588,20 @@ export default {
       return v => v;
     },
 
-    
+    fetchAjaxOptions(query = {}) {
+      const params = this.field.ajaxOptions;
+      const { url, resource, where = {}, text, depends } = params;
+      params.where = Object.assign({}, where, query);
+      if (this.q) {
+        params.q = this.q;
+      }
+      const apiUrl = url
+        ? _.template(url)({ item: this.parent })
+        : resource + "/options";
+      this.$http.get(apiUrl, { params }).then(({ data }) => {
+        this.options = data;
+      });
+    }
   },
   mounted() {
     if (this.field.type == "html") {
@@ -607,9 +620,9 @@ export default {
     if (this.field.type == "html") {
       this.initEditor();
     }
-    // if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
-    //   this.getAjaxOptions();
-    // }
+    if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
+      this.fetchAjaxOptions();
+    }
     if (this.isSelect2) {
       // this.initOptionsForSelect2();
 

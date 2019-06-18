@@ -32,7 +32,7 @@ export default {
       commit(types.SET_AUTH, auth)
     },
     [types.GO_LOGIN](){
-      global.console.log(site.state)
+      // global.console.log(site.state)
       if (!site.state.login_url) {
         return router.push({name: 'login'})
       } else {

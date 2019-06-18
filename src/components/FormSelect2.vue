@@ -6,7 +6,7 @@
     :options="newOptions"
     :multiple="multiple"
   >
-  <div slot="no-options">{{noOptionsText}}</div>
+    <div slot="no-options">{{noOptionsText}}</div>
   </v-select>
 </template>
 
@@ -19,7 +19,8 @@ export default {
   },
   data() {
     return {
-      newOptions: this.options.slice(0)
+      newOptions: this.options.slice(0),
+      q: ""
     };
   },
   props: {
@@ -37,11 +38,10 @@ export default {
     parent: {},
     ajaxOptions: {},
     noOptionsText: {
-      default(){
-        return this.$t('messages.no_options_text')
+      default() {
+        return this.$t("messages.no_options_text");
       }
-    },
-    q: ''
+    }
   },
   computed: {
     model: {
@@ -53,8 +53,8 @@ export default {
         }
       },
       set(val) {
-        if (val === null) {
-          return this.$emit('input', null)
+        if (val === null || val.value === null) {
+          return this.$emit("input", null);
         }
         let ret;
         if (this.multiple) {
@@ -73,8 +73,8 @@ export default {
   },
   methods: {
     getAjaxOptions(q) {
-      this.q = q
-      this.fetchOptions()
+      this.q = q;
+      this.fetchOptions();
     },
     initOptionsForSelect2() {
       const parentOptions = this.parent[this.name + "_data"];
@@ -86,8 +86,8 @@ export default {
       const params = this.ajaxOptions;
       const { url, resource, where = {}, text, depends } = params;
       params.where = Object.assign({}, where, query);
-      if (text) {
-        options.where[text] = this.q;
+      if (this.q) {
+        params.q = this.q;
       }
       const apiUrl = url
         ? _.template(url)({ item: this.parent })
@@ -100,13 +100,12 @@ export default {
   },
   mounted() {
     if (this.ajaxOptions) {
-      
       const { url, resource, where, depends } = this.ajaxOptions;
       if (depends) {
         this.$watch(
           `parent.${depends}`,
           val => {
-            console.log(val)
+            // console.log(val);
             this.fetchOptions({ [depends]: val });
           },
           {

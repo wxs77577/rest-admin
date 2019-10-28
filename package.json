@@ -42,7 +42,6 @@
     "body-parser": "^1.18.3",
     "express": "^5.0.0-alpha.7",
     "faker": "^4.1.0",
-    "node-sass": "^4.11.0",
     "nodemon": "^1.18.11",
     "sass": "^1.21.0",
     "sass-loader": "^7.0.1",

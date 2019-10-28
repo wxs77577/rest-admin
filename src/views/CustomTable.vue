@@ -86,13 +86,13 @@
         v-if="table.fields"
         ref="table"
         :items="fetchItems"
-        :fields="table.fields"
+        :fields="columns"
         :current-page="currentPage"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :sort-direction="sortDirection"
       >
-        <template v-for="(field, key) in table.fields" :slot="`HEAD_${key}`" slot-scope="data">
+        <template v-for="(field, key) in table.fields" :slot="`HEAD_${key}`">
           <div
             :key="key"
             class="table-header"
@@ -103,7 +103,7 @@
           <b-data-value :field="field" :key="key" :name="key" :model="row.item" short-id/>
         </template>
 
-        <template slot="_actions" slot-scope="row">
+        <template v-slot:cell(_actions)="row">
           <b-button
             v-for="(field, key) in actions"
             :key="key"
@@ -111,7 +111,7 @@
             class="mr-1"
             size="sm"
             v-bind="field"
-            v-if="field.label"
+            v-show="field.label"
           >{{field.label}}</b-button>
           <b-btn
             v-if="actions.edit !== false"
@@ -187,6 +187,14 @@ export default {
   computed: {
     ...mapState(["site", "i18n", "auth"]),
     ...mapGetters(["currentLanguage"]),
+    columns(){
+      return Object.entries(this.table.fields).map(([name, field]) => {
+        return {
+          key:name,
+          ...field,
+        }
+      })
+    },
     populate() {
       return _(this.table.fields || {})
         .map("ref")

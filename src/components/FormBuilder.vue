@@ -1,66 +1,146 @@
 <template>
   <div v-if="model">
-    <component :is="tag" ref="form" :action="actionUrl" :method="method" 
-    class="form form-inline" @submit.prevent="handleSubmit" v-if="inline" enctype="multipart/form-data">
-      <input type="hidden" name="token" :value="auth.token">
+    <component
+      :is="tag"
+      ref="form"
+      :action="actionUrl"
+      :method="method"
+      class="form form-inline"
+      @submit.prevent="handleSubmit"
+      v-if="inline"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="token" :value="auth.token" />
 
       <template v-for="(field, name) in fields">
-        <label :for="'input_' + name" class="m-1" :key="name" v-if="field.label !== false">{{field.label || $inflection.titleize(name)}}</label>
-        <b-form-field :languages="languages" :parent="parent || model" class="m-1 mr-4" 
-        @input="setValue(name, arguments[0], arguments[1])" :value="model[name]" :id="getFieldId(name)" 
-        :name="name" :field="field" :state="!hasError(name)" :key="id + '_' +name" />
+        <label
+          :for="'input_' + name"
+          class="m-1"
+          :key="name"
+          v-if="field.label !== false"
+        >{{field.label || $inflection.titleize(name)}}</label>
+        <b-form-field
+          :languages="languages"
+          :parent="parent || model"
+          class="m-1 mr-4"
+          @input="setValue(name, arguments[0], arguments[1])"
+          :value="model[name]"
+          :id="getFieldId(name)"
+          :name="name"
+          :field="field"
+          :state="!hasError(name)"
+          :key="id + '_' +name"
+        />
       </template>
 
       <slot name="actions">
         <b-button type="submit" variant="primary" ref="submitButton" class="mr-1">{{submitText}}</b-button>
-        <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        <b-button
+          type="button"
+          variant="secondary"
+          @click="$router.go(-1)"
+          v-if="backText"
+        >{{backText}}</b-button>
         <slot name="extra-buttons"></slot>
       </slot>
     </component>
 
-    
-
-    <component :is="tag" ref="form" :action="actionUrl" :method="method"  class="form" 
-    @submit.prevent="handleSubmit" enctype="multipart/form-data" v-else>
-      <input type="hidden" name="token" :value="auth.token">
-      <b-tabs class="my-3" v-if="groupBy" :class="{'hide-group-name': _.get(layout, 'hideGroupName')}">
-        <b-tab v-for="(subFields, tabName) in groupedFields" :title="_.get(layout, `tabs.${tabName}.name`) || tabName || $t('messages.default')" :key="tabName">
+    <component
+      :is="tag"
+      ref="form"
+      :action="actionUrl"
+      :method="method"
+      class="form"
+      @submit.prevent="handleSubmit"
+      enctype="multipart/form-data"
+      v-else
+    >
+      <input type="hidden" name="token" :value="auth.token" />
+      <b-tabs
+        class="my-3"
+        v-if="groupBy"
+        :class="{'hide-group-name': _.get(layout, 'hideGroupName')}"
+      >
+        <b-tab
+          v-for="(subFields, tabName) in groupedFields"
+          :title="_.get(layout, `tabs.${tabName}.name`) || tabName || $t('messages.default')"
+          :key="tabName"
+        >
           <div class="row form-cols">
             <b-col :md="_.get(layout, `tabs.${tabName}.cols`, 12)">
               <b-row class="mt-4">
-                <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
-            v-for="(field, name) in subFields" :key="id + '_' +name" v-bind="field" :label-for="'input_' + name"
-            :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
-              <div class="">
-                <b-form-field :languages="languages" :class="getInputClass(field)" :parent="parent || model" 
-                @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
-                :name="name" :field="field" :state="!hasError(name)" :id="'input_' + name" />
-              </div>
-            </b-form-group>
+                <template v-for="(field, name) in subFields">
+                  <b-form-group
+                    :class="getClass(field)"
+                    v-if="isShowField(field) && model"
+                    :state="!hasError(name)"
+                    :key="id + '_' +name"
+                    v-bind="field"
+                    :label-for="'input_' + name"
+                    :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
+                  >
+                    <div class>
+                      <b-form-field
+                        :languages="languages"
+                        :class="getInputClass(field)"
+                        :parent="parent || model"
+                        @input="setValue(name, arguments[0], arguments[1])"
+                        :value="model[name]"
+                        :name="name"
+                        :field="field"
+                        :state="!hasError(name)"
+                        :id="'input_' + name"
+                      />
+                    </div>
+                  </b-form-group>
+                </template>
               </b-row>
             </b-col>
-            <b-col :md="12 - _.get(layout, `tabs.${tabName}.cols`, 0)" v-if="!!_.get(layout, `tabs.${tabName}.right`)">
+            <b-col
+              :md="12 - _.get(layout, `tabs.${tabName}.cols`, 0)"
+              v-if="!!_.get(layout, `tabs.${tabName}.right`)"
+            >
               <div v-html="_.get(layout, `tabs.${tabName}.right`)"></div>
             </b-col>
           </div>
         </b-tab>
       </b-tabs>
       <div class="row" v-else>
-        <b-form-group :class="getClass(field)"  v-if="isShowField(field) && model" :state="!hasError(name)" 
-        v-for="(field, name) in fields" :key="[id,subForm,name].join()" v-bind="field" :label-for="getFieldId(name)"
-        :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''">
-          <div class="">
-            <b-form-field :languages="languages" :class="getInputClass(field)" :parent="parent || model" 
-            @input="setValue(name, arguments[0], arguments[1])" :value="model[name]"
-            :name="getFieldName(name)" :field="field" :state="!hasError(name)" :id="getFieldId(name)" />
-          </div>
-        </b-form-group>
+        <template v-for="(field, name) in fields">
+          <b-form-group
+            :class="getClass(field)"
+            v-if="isShowField(field) && model"
+            :state="!hasError(name)"
+            :key="[id,subForm,name].join()"
+            v-bind="field"
+            :label-for="getFieldId(name)"
+            :label="field.label !== false ? (field.label || $inflection.titleize(name)) : ''"
+          >
+            <div class>
+              <b-form-field
+                :languages="languages"
+                :class="getInputClass(field)"
+                :parent="parent || model"
+                @input="setValue(name, arguments[0], arguments[1])"
+                :value="model[name]"
+                :name="getFieldName(name)"
+                :field="field"
+                :state="!hasError(name)"
+                :id="getFieldId(name)"
+              />
+            </div>
+          </b-form-group>
+        </template>
       </div>
-      
 
       <slot name="actions" v-if="!subForm">
         <b-button type="submit" variant="primary" class="mr-1" ref="submitButton">{{submitText}}</b-button>
-        <b-button type="button" variant="secondary" @click="$router.go(-1)" v-if="backText">{{backText}}</b-button>
+        <b-button
+          type="button"
+          variant="secondary"
+          @click="$router.go(-1)"
+          v-if="backText"
+        >{{backText}}</b-button>
       </slot>
     </component>
   </div>
@@ -278,14 +358,16 @@ export default {
       }
     }
 
-    this.$watch("value", (val) => {
-      this.model = Object.assign({}, val);
-    }, { deep: true });
+    this.$watch(
+      "value",
+      val => {
+        this.model = Object.assign({}, val);
+      },
+      { deep: true }
+    );
     // global.console.log(this.fields, this.model)
   },
-  created() {
-    
-  }
+  created() {}
 };
 </script>
 

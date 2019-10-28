@@ -141,7 +141,7 @@
               :id="`input_${row.index}_${k}`"
             />
           </template>
-          <template slot="HEAD__actions" slot-scope="row">
+          <template slot="HEAD__actions">
             <b-btn size="sm" @click="addRow">
               <i class="icon-plus"></i>
               {{$t('actions.add')}}

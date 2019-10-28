@@ -50,7 +50,6 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    BHeader,
     BSidebar,
     BFooter
     // BFileManager

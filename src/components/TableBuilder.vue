@@ -1,6 +1,6 @@
 <template>
   <b-table class="table-builder" :fields="fields" :items="items">
-    <template v-for="(field, key) in _.omit(fields, '_actions')"  :slot="`HEAD_${key}`" slot-scope="row">
+    <template v-for="(field, key) in _.omit(fields, '_actions')"  :slot="`HEAD_${key}`">
       <div :key="key" :class="{'text-right': ['number'].includes(field.type)}">
         {{field.label || key}}
       </div>

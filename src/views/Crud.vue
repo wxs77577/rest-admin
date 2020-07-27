@@ -23,7 +23,7 @@
 import Vue from "vue"
 import Avue from "@smallwei/avue"
 import "@smallwei/avue/lib/index.css"
-import $api from "../crud-api"
+import $api from "../api"
 
 Vue.use(Avue)
 
@@ -99,9 +99,16 @@ export default {
       }
       this.loading = false
     },
+    async findOne(row) {
+      try {
+        this.form = await $api.findOne(this.resource, row[this.pk])
+      } catch (e) {
+        this.$message.error(e.message)
+      }
+    },
     async create(row, done, loading) {
       try {
-        await $api.create(row)
+        await $api.create(this.resource, row)
         done()
         this.$message.success(`创建成功`)
         await this.find(true)
@@ -131,6 +138,7 @@ export default {
         await this.find()
       } catch (e) {
         // 已取消
+        console.log(e)
       }
     },
     async search(where, done) {

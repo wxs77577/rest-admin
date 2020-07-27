@@ -3,11 +3,11 @@
     <el-aside width="200px">
       <el-menu router mode="vertical" :default-active="$route.path">
         <el-menu-item
-          v-for="item in menu.items"
-          :key="item.path"
-          :index="item.path"
+          v-for="item in settings.menu"
+          :key="item.url"
+          :index="item.url"
         >
-          {{ item.text }}
+          {{ item.name }}
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -23,22 +23,24 @@
 </template>
 
 <script>
+import $api from '../api'
 export default {
   data() {
     return {
-      menu: {
-        items: [],
-      },
+      settings: {
+        menu: {
+          items: []
+        }
+      }
+    }
+  },
+  methods: {
+    async getSettings(){
+      this.settings = await $api.getSettings()
     }
   },
   created() {
-    this.menu.items = Object.entries({
-      courses: "专栏",
-      users: "用户",
-      posts: "课程",
-      groups: "班级",
-      group_words: "班级文案",
-    }).map(([path, text]) => ({ text, path: `/crud/${path}` }))
+    this.getSettings()
   },
 }
 </script>

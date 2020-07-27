@@ -2,8 +2,12 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+
 import { Message } from 'element-ui'
 import get from 'lodash/get'
+
+
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -17,6 +21,8 @@ let config = {
 };
 
 const _axios = axios.create(config);
+
+// const mock = new MockAdapter(_axios)
 
 _axios.interceptors.request.use(
   function (config) {

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
     "@smallwei/avue": "^2.6.13",
@@ -12,6 +13,7 @@
     "element-ui": "^2.3.6",
     "lodash": "^4.17.19",
     "vue": "^2.6.11",
+    "vue-i18n": "^8.17.3",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },
@@ -26,6 +28,7 @@
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-axios": "~0.0.4",
     "vue-cli-plugin-element-ui": "~1.1.4",
+    "vue-cli-plugin-i18n": "~1.0.1",
     "vue-template-compiler": "^2.6.11"
   }
 }

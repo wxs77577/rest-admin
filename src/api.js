@@ -40,7 +40,7 @@ export default {
     return res.data
   },
   async delete(resource, id) {
-    await request.put(`${resource}/${id}`, data)
+    await request.delete(`${resource}/${id}`)
     return true
   }
 }

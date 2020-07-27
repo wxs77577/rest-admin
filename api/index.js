@@ -1,13 +1,12 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const app = express();
 const _ = require("lodash");
 const faker = require("faker");
 
 const config = require("./config");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(__dirname + "/static"));
 app.get("/", (req, res) => {
   res.send({

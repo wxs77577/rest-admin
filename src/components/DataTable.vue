@@ -140,7 +140,6 @@
       <template
         v-for="(field, key) in _.omit(fields, '_actions')"
         :slot="`HEAD_${key}`"
-        slot-scope="row"
       >
         <div
           :key="key"

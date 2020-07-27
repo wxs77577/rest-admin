@@ -15,22 +15,12 @@
       :id="id"
       :options="options"
       v-bind="field"
-      :value="selectedValue"
-      @input="handleSelect"
+      v-model="model"
+      
       :name="name"
     ></b-form-select>
     <div v-else-if="['select2'].includes(field.type)">
-      <b-select
-        :name="name"
-        @search="getAjaxOptions"
-        label="text"
-        v-bind="field"
-        :options="options"
-        :value="selectedValue"
-        @input="handleSelect"
-        :placeholder="field.placeholder || ''"
-        selectLabel
-      />
+      <b-select v-model="model" v-bind="field" :parent="parent"></b-select>
     </div>
     <b-tree-select
       :normalizer="treeSelectNormalizer"
@@ -91,7 +81,15 @@
       :parent="parent"
     />
     <div v-else-if="['switch', 'checkbox'].includes(field.type)">
-      <b-form-checkbox variant="success" v-bind="field" size="lg" pill type="3d" :id="id" v-model="model"/>
+      <b-form-checkbox
+        variant="success"
+        v-bind="field"
+        size="lg"
+        pill
+        type="3d"
+        :id="id"
+        v-model="model"
+      />
     </div>
     <!-- <b-ueditor :state="state" v-else-if="['wysiwyg', 'html'].includes(field.type)" :id="id" v-bind="field" v-model="model" /> -->
 
@@ -143,7 +141,7 @@
               :id="`input_${row.index}_${k}`"
             />
           </template>
-          <template slot="HEAD__actions" slot-scope="row">
+          <template slot="HEAD__actions">
             <b-btn size="sm" @click="addRow">
               <i class="icon-plus"></i>
               {{$t('actions.add')}}
@@ -162,7 +160,12 @@
         </b-table>
         <b-draggable v-model="model" v-else>
           <transition-group tag="div" class="row">
-            <b-col v-for="(item, i) in model" :key="`draggable-${name}-${i}`" cols="" :lg="field.item_cols || 6">
+            <b-col
+              v-for="(item, i) in model"
+              :key="`draggable-${name}-${i}`"
+              cols
+              :lg="field.item_cols || 6"
+            >
               <b-card class="mb-4">
                 <b-row slot="header" class="justify-content-between">
                   <b-col>No. {{i + 1}}</b-col>
@@ -190,7 +193,7 @@
               </b-card>
             </b-col>
             <b-col
-              cols=""
+              cols
               :lg="field.item_cols || 6"
               :key="-1"
               class="d-flex align-items-center justify-content-center"
@@ -214,6 +217,7 @@
             v-model="model"
             :languages="languages"
             :fields="myFields"
+            :parent="parent"
             ref="subForm"
           ></b-form-builder>
           <!-- <b-form-group v-for="(child, key) in myFields" :key="key" v-bind="child" :label-for="`input_${name}_${key}`">
@@ -278,7 +282,8 @@ import BDraggable from "vuedraggable";
 import BTreeSelect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.min.css";
 // import BSelect from "vue-multiselect"
-import BSelect from "vue-select";
+import BSelect from "./FormSelect2";
+// import BSelect from "@alfsnd/vue-bootstrap-select";
 // import "vue-multiselect/dist/vue-multiselect.min.css"
 import BDatePicker from "vue2-datepicker";
 // import BUeditor from "./UEditor"
@@ -393,6 +398,18 @@ export default {
     isIntl() {
       return this.field.intl || this.field.multilingual;
     },
+    selectedValue1() {
+      let value = this.initSelectedValue
+      if (this.isArrayValue) {
+        value = _.filter(
+          this.options,
+          v => this.value && this.value.includes(v.value)
+        );
+      } else {
+        value = _.find(this.options, v => this.value == v.value);
+      }
+      return value;
+    },
     model: {
       get() {
         const isArray =
@@ -410,7 +427,7 @@ export default {
           }
         }
         if (this.isIntl) {
-          console.log(this.name, ret, this.currentLanguage);
+          // console.log(this.name, ret, this.currentLanguage);
           return _.get(ret, this.currentLanguage, "");
         }
         return ret;
@@ -429,17 +446,18 @@ export default {
     return {
       currentLanguage: this.field.currentLanguage || "en",
       options: this.field.options || [],
-      selectedValue: isArray && !this.value ? [] : this.value
+      initSelectedValue: isArray && !this.value ? [] : this.value,
+      selectedValue: isArray && !this.value ? [] : this.value,
     };
   },
   methods: {
     addRow() {
       if (!this.parent[this.name]) {
-        this.$set(this.parent, this.name, [])
+        this.$set(this.parent, this.name, []);
       }
       this.$nextTick(() => {
-        this.model.push({})
-      })
+        this.model.push({});
+      });
     },
     initEditor() {
       const language = "zh-cn";
@@ -563,16 +581,6 @@ export default {
         label: row.text
       };
     },
-    handleSelect(val) {
-      if (this.isSelect2) {
-        if (this.isArrayValue) {
-          val = _.uniq(_.map(val, "value"));
-        } else {
-          val = val ? val.value : null;
-        }
-      }
-      this.$emit("input", val, this.currentLanguage);
-    },
     getFormatter(field) {
       if (field.format) {
         return eval(field.format);
@@ -580,28 +588,19 @@ export default {
       return v => v;
     },
 
-    getAjaxOptions(q) {
-      if (!this.field.ajaxOptions) {
-        return;
+    fetchAjaxOptions(query = {}) {
+      const params = this.field.ajaxOptions;
+      const { url, resource, where = {}, text, depends } = params;
+      params.where = Object.assign({}, where, query);
+      if (this.q) {
+        params.q = this.q;
       }
-      const options = this.field.ajaxOptions;
-      if (!options.where) {
-        options.where = {};
-      }
-      options.where[options.text] = q;
-      this.$http
-        .get(options.resource + "/options", {
-          params: options
-        })
-        .then(({ data }) => {
-          this.options = data;
-        });
-    },
-    initOptionsForSelect2() {
-      const parentOptions = this.parent[this.name + "_data"];
-      if (parentOptions) {
-        this.options = this.options.concat(parentOptions);
-      }
+      const apiUrl = url
+        ? _.template(url)({ item: this.parent })
+        : resource + "/options";
+      this.$http.get(apiUrl, { params }).then(({ data }) => {
+        this.options = data;
+      });
     }
   },
   mounted() {
@@ -622,18 +621,14 @@ export default {
       this.initEditor();
     }
     if (this.field.ajaxOptions && this.field.ajaxOptions.search !== true) {
-      this.getAjaxOptions();
+      this.fetchAjaxOptions();
     }
     if (this.isSelect2) {
-      this.initOptionsForSelect2();
-      if (this.isArrayValue) {
-        this.selectedValue = _.filter(
-          this.options,
-          v => this.value && this.value.includes(v.value)
-        );
-      } else {
-        this.selectedValue = _.find(this.options, v => this.value == v.value);
-      }
+      // this.initOptionsForSelect2();
+
+      // this.$watch("options", () => {
+
+      // });
     }
   }
 };

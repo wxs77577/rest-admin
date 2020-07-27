@@ -19,7 +19,7 @@ export default {
 </script>
 <style lang="scss">
 .app-footer {
-  position: fixed;
+  // position: fixed;
   bottom: 0;
   right: 0;
   width: 100%;
@@ -27,7 +27,7 @@ export default {
   letter-spacing: 1px;
 
   & > footer {
-    margin-left: 215px;
+    // margin-left: 215px;
     padding: 0.5em;
     text-align: right;
   }

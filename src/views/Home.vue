@@ -1,18 +1,50 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <avue-data-panel v-bind="config"></avue-data-panel>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+  name: "Home",
+  components: {},
+  data() {
+    return {
+      config: {
+        is: "avue-data-panel",
+        option: {
+          span: 6,
+          data: [
+            {
+              title: "Users",
+              count: 19000,
+              icon: "el-icon-user",
+              color: "#00a7d0",
+            },
+            {
+              title: "Users",
+              count: 19000,
+              icon: "el-icon-user",
+              color: "#00a7d0",
+            },
+            {
+              title: "Users",
+              count: 19000,
+              icon: "el-icon-user",
+              color: "#00a7d0",
+            },
+            {
+              title: "Users",
+              count: 19000,
+              icon: "el-icon-user",
+              color: "#00a7d0",
+            },
+          ],
+        },
+      },
+    }
+  },
 }
 </script>

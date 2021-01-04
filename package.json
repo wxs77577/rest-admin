@@ -12,7 +12,7 @@
   "dependencies": {
     "@alfsnd/vue-bootstrap-select": "^0.4.4",
     "@riophae/vue-treeselect": "0.4.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bootstrap": ">=4.3.1",
     "bootstrap-vue": "^2.0.4",
     "bootswatch": "^4.3.1",

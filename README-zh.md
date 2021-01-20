@@ -366,7 +366,7 @@ API_URI=http://localhost:5555/admin/api/ npm run build
 
 ## i18n
 
-> 参考 [vu-i18n](https://github.com/kazupon/vue-i18n/)
+> 参考 [vue-i18n](https://github.com/kazupon/vue-i18n/)
 
 REST-ADMIN 默认支持 `en-US` 和 `zh-CN`, 你可以修改`/src/i18n/*.json`中的翻译文件。
 

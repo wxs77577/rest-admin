@@ -369,7 +369,7 @@ There are two apis for a custom form:
 
 ## i18n
 
-> Check [vu-i18n](https://github.com/kazupon/vue-i18n/) for detailed documentation.
+> Check [vue-i18n](https://github.com/kazupon/vue-i18n/) for detailed documentation.
 
 REST-ADMIN gives built-in support for `en-US` and `zh-CN`, you can change translation files in `/src/i18n/*.json`.
 

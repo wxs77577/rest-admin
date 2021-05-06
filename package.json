@@ -21,7 +21,7 @@
     "dayjs": "^1.8.16",
     "font-awesome": "^4.7.0",
     "inflection": "^1.12.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "simple-line-icons": "^2.4.1",
     "vue": "^2.6.10",
     "vue-element-loading": "^1.1.5",
